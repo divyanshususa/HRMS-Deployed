@@ -1,0 +1,97 @@
+import React from "react";
+import { NavLink } from "react-router-dom";
+
+const ForgetPassword = () => {
+    return (
+      <div className="container mx-auto my-auto bg-white overflow-hidden text-center text-smi text-relia-energy-black font-heading-4 grid md:grid-cols-2  grid-cols-1 ">
+        <div className="p-10 ">
+          <div className=" bg-white " />
+          <div className=" ">
+            <div className=" flex flex-row items-center justify-between">
+              <div className="">
+                <img
+                  className=" max-w-full overflow-hidden max-h-full object-cover hidden"
+                  alt=""
+                  src="/logo@2x.png"
+                />
+                <div className=" flex flex-col items-center justify-start gap-[4px_0px]">
+                  <img
+                    className=""
+                    alt=""
+                    src="/group-13.svg"
+                  />
+                  <div className=" ">
+                    <p className="m-0">
+                      <b className="[background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]">
+                        UiUxOtor
+                      </b>
+                    </p>
+                    <p className="m-0">ERP System</p>
+                  </div>
+                </div>
+              </div>
+              <div className="w-[101px] rounded-3xs box-border h-[47px] flex flex-row items-center justify-center p-2.5 text-left text-sm border-[1px] border-solid border-relia-energy-gradient">
+                <div className="  text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]">
+                  Sign Up
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col items-start justify-start gap-[48px_0px] text-left text-sm text-grey-80 mt-10">
+              <div className="flex flex-col items-start justify-start">
+                <div className=" ">Password recovery.</div>
+                <div className=" text-9xl font-extrabold text-relia-energy-black">
+                  Forgot your password?
+                </div>
+                <div className="   inline-block">
+                  Kindly enter the email address linked to this account and we
+                  will send you a code to enable you change your password.
+                </div>
+              </div>
+              <div className="flex flex-col items-start justify-start gap-[48px_0px] text-grey-100">
+                <div className=" flex flex-col items-start justify-start gap-[16px_0px]">
+                  <div className="flex flex-col items-start justify-start gap-[24px_0px]">
+                    <div className=" flex flex-col items-start justify-start gap-[5px_0px]">
+                      <div className=" flex flex-col items-start justify-start gap-[8px_0px]">
+                        <div className=" ">
+                          Email address
+                        </div>
+                        <input
+                type="text"
+                className="w-full h-12 px-4 border border-gray-300 rounded focus:outline-none focus:border-relia-energy-primary-color"
+              />
+                      </div>
+                  
+                    </div>
+                
+                 
+                  </div>
+           
+                </div>
+                <NavLink to='/verify-email' className='no-underline'>
+                <button className=" rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[50px] flex flex-row items-center justify-center p-2.5 box-border text-white">
+                  <div className=" ">Send</div>
+                </button>
+                </NavLink>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div className="hidden md:block">
+          <div className=" bg-relia-energy-primary-color " />
+          <img
+            className=" object-cover"
+            alt=""
+            src="/images/imgforget.png"
+          />
+        </div>
+      </div>
+    );
+  };
+  
+  export default ForgetPassword;
+  
