@@ -123,26 +123,41 @@ export  const salcolumns = [
         title: "Basic Salary",
         dataIndex: "basicSalary",
         key: "basicSalary",
+        sorter:(record1, record2)=>{
+            return record1.basicSalary > record2.basicSalary
+        }
     },
     {
         title: "Allowance",
         dataIndex: "allowance",
         key: "allowance",
+        sorter:(record1, record2)=>{
+            return record1.allowance > record2.allowance
+        }
     },
     {
         title: "Gross Salary",
         dataIndex: "grossSalary",
         key: "grossSalary",
+        sorter:(record1, record2)=>{
+            return record1.grossSalary > record2.grossSalary
+        }
     },
     {
         title: "Deductions",
         dataIndex: "deductions",
         key: "deductions",
+        sorter:(record1, record2)=>{
+            return record1.deductions > record2.deductions
+        }
     },
     {
         title: "Net Salary",
         dataIndex: "netSalary",
         key: "netSalary",
+        sorter:(record1, record2)=>{
+            return record1.netSalary > record2.netSalary
+        }
     },
     {
         title: "Action",
