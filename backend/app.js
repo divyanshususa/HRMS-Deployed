@@ -38,7 +38,7 @@ const port = process.env.PORT || 5000;
 
 
 
-app.use('/api/user',require('./api/user'));
+app.use('/api/user',require('./api/Employee'));
 
 
 
