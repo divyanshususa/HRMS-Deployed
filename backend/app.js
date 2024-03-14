@@ -1,51 +1,75 @@
-const express_ = require('express');
-const app = express_();
-const bodyparser = require("body-parser")
+const express = require("express");
+const app = express();
+const bodyparser = require("body-parser");
 const helmet = require("helmet");
-var cors = require('cors');
+const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const xss = require("xss-clean");
-const mongoose = require('mongoose');
-require('dotenv').config();
-
-// const uri = 'mongodb+srv://susalabs:susalabs@cluster0.xn0yck9.mongodb.net/?retryWrites=true&w=majority';
-const uri = "mongodb+srv://susalabs:susalabs@cluster0.xn0yck9.mongodb.net/hrms?retryWrites=true&w=majority"
-
-const connectToDatabase = async () => {
-    try {
-        await mongoose.connect(uri, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true
-        })
-        console.log("MongoDB is connected");
-    } catch (error) {
-        console.log(error);
-        process.exit(1);
-    }
-}
-connectToDatabase();
+const mongoose = require("mongoose");
+require("dotenv").config();
+const mongoconnect = require("./Config");
+const DashboardCardsRoute = require("./Routes/DashboardCardsRoute");
+const dashboardMemoRoutes=require("./Routes/dashboardMemoRoutes")
+const dashboardStaffRoutes = require("./Routes/dashboardStaffRoutes")
+const staffRoutes = require("./Routes/staffRoutes")
+const memoTitleRoutes = require("./Routes/memoTitleRoutes")
+const circularRoutes = require("./Routes/circularRoutes")
+const requestRoutes = require("./Routes/requestRoutes")
+const LogisticCardsRoute = require("./Routes/LogisticCardsRoute")
+const budgetRoutes = require("./Routes/budgetRoutes")
 
 
-app.use(cors());//to follow cors policy
-app.use(xss());//safety against XSS attack or Cross Site Scripting attacks
-app.use(helmet());//safety against XSS attack
-app.use(express_.json({ extended: false }));
-app.use(express_.static('.'));
-app.use(bodyparser.urlencoded({ extended: true }))
-app.use(bodyparser.json())
+
+
+
+
+app.use(cors()); // to follow cors policy
+app.use(xss()); // safety against XSS attack or Cross Site Scripting attacks
+app.use(helmet()); // safety against XSS attack
+app.use(express.json({ extended: false }));
+app.use(express.static("."));
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.json());
 
 const port = process.env.PORT || 5000;
 
+try {
+  mongoconnect
+    .connectToDatabase()
+    .then(() => {
+      app.listen(port, () =>
+        console.log(`Server is up and running at ${port}`)
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+} catch (err) {
+  console.log(err);
+}
+
+// Use DashboardCardsRoute with the '/dashboard' prefix
+app.use("/dashboardcards", DashboardCardsRoute);
+
+app.use("/dashboardmemos", dashboardMemoRoutes);
+
+app.use("/dashboardstaf", dashboardStaffRoutes);
+
+app.use("/staff", staffRoutes);
+
+app.use("/memo", memoTitleRoutes);
+
+app.use("/api/circulars", circularRoutes);
+app.use("/request", requestRoutes);
+app.use("/LogisticCards", LogisticCardsRoute);
+
+app.use("/budget", budgetRoutes);
 
 
-app.use('/api/user',require('./api/Employee'));
+// Assuming the Employee routes are mounted correctly
+// app.use("/api/user", require("./api/Employee"));
 
-
-
-app.get('/', (req, res) => {
-    console.log("hello")
-    res.json('working')
-})
-
-
-app.listen(port, () => console.log(`Server is up and running at ${port}`));
+app.get("/", (req, res) => {
+  console.log("hello");
+  res.json("working");
+});
