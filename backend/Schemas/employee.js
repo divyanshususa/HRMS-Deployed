@@ -47,7 +47,7 @@ let EmployeeSchemas = mongoose.Schema({
   
     address: {
         type: String,
-        required: true
+        required: false,
     },
 
   
@@ -70,7 +70,7 @@ let EmployeeSchemas = mongoose.Schema({
 
     doj: {
         type: Date,
-        required: false
+        default: Date.now
 
     },
     otp:{
@@ -82,18 +82,10 @@ let EmployeeSchemas = mongoose.Schema({
         type: String,
         required: false
     },
-    mobile: [
-        {
-            mob1: {
-                type: String,
-                required: false,
-            },
-            mob2: {
-                type: String,
-                required: false,
-            },
-        },
-    ],
+    mobile: {
+type: String,
+required: false
+    },
 
     documents: { type: mongoose.Schema.Types.ObjectId, ref: 'Documents' },
 

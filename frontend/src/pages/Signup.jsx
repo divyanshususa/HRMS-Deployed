@@ -1,9 +1,76 @@
-import React from "react";
-import { TEInput, TERipple } from "tw-elements-react";
+import React, { useState } from "react";
 
- const Signup=()=> {
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
+
+const Signup = () => {
+
+  const navigate=useNavigate();
+  const [imageURL, setImageURL] = useState("");
+  const [offerLetterURL, setOfferLetterURL] = useState("");
+  const [Data, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    gender: "",
+    email: "",
+    mobile: "",
+    aadhar: "",
+    pan: "",
+    resume: "",
+    offer_letter: "",
+    experience: "",
+    education: ""
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log('this is working')
+    try {
+      const formData = new FormData();
+      formData.append('firstname', Data.firstname);
+      formData.append('lastname', Data.lastname);
+      formData.append('gender', Data.gender);
+      formData.append('email', Data.email);
+      formData.append('mobile', Data.mobile);
+      formData.append('aadhar', Data.aadhar);
+      formData.append('pan', Data.pan);
+      formData.append('experience', Data.experience);
+      formData.append('education', Data.education);
+
+      // Append files to FormData
+      formData.append('image', Data.image);
+      formData.append('resume', Data.resume);
+      formData.append('offer_letter', Data.offer_letter);
+
+      console.log("this is form data ",  Data)
+
+      const res = await axios.post('http://localhost:5000/api/user/request-form', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log(res.data.response); 
+      navigate("/thankyou")
+      setOfferLetterURL(res.data.response.offer_letter)// Handle success
+    } catch (error) {
+      console.error(error); // Handle error
+    }
+  };
+
+  const handleChange = (e) => {
+    if (e.target.type === 'file') {
+      setFormData({ ...Data, [e.target.id]: e.target.files[0] });
+    } else {
+      setFormData({ ...Data, [e.target.id]: e.target.value });
+    }
+  };
+
+
+
   return (
     <section className="mt-10">
+
       <div className="container h-full px-6 py-24">
         <div className="g-6 flex h-full flex-wrap items-center justify-center lg:justify-between">
           {/* <!-- Left column container with background--> */}
@@ -17,161 +84,227 @@ import { TEInput, TERipple } from "tw-elements-react";
 
           {/* <!-- Right column container with form --> */}
           <div className="md:w-8/12 lg:ml-6 lg:w-5/12">
-            <form>
-            <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3 '>
+            <form onSubmit={handleSubmit}>
+              <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3 '>
 
 
 
 
 
 
-<div className="mt-4 text-left">
-    <label htmlFor="firstName" className="block text-sm text-gray-700 text-left">
-        First name
-    </label>
-    <input
-        type="text"
-        id="firstName"
-        className="mt-2  h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-        placeholder="Enter first name"
-    />
-</div>
+                <div className="mt-4 text-left">
+                  <label htmlFor="firstName" className="block text-sm text-gray-700 text-left">
+                    First name
+                  </label>
+                  <input
+                    type="text"
+                    id="firstname"
+                    className="mt-2  h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter first name"
+                    onChange={handleChange}
+                  />
+                </div>
 
 
-<div className="mt-4 text-left">
-    <label htmlFor="lastName" className="block text-sm text-gray-700 text-left">
-        Last name
-    </label>
-    <input
-        type="text"
-        id="lastName"
-        className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-        placeholder="Enter last name"
-    />
-</div>
-
-
-
-
-<div className="mt-4 text-left">
-    <label htmlFor="email" className="block text-sm text-gray-700 text-left">
-        Email
-    </label>
-    <input
-        type="email"
-        id="email"
-        className=" mt-2  h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-        placeholder="Enter email"
-    />
-</div>
-
-
-<div className="mt-4 text-left">
-    <label htmlFor="mobile" className="block text-sm text-gray-700 text-left">
-       Mobile
-    </label>
-    <input
-        type="text"
-        id="mobile"
-        className=" mt-2  h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-        placeholder="Enter your number"
-    />
-</div>
-<div className="mt-4 text-left">
-    <label htmlFor="adhaa" className="block text-sm text-gray-700 text-left">
-      Adhaar Number
-    </label>
-    <input
-        type="text"
-        id="adhaar"
-        className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-        placeholder="Enter adhaar no."
-    />
-</div>
-
-<div className="mt-4 text-left">
-    <label htmlFor="Education" className="block text-sm text-gray-700 text-left">
-        Education
-    </label>
-    <input
-        type="text"
-        id="Education"
-        className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-        placeholder="Enter  your education"
-    />
-</div>
-
-
-
-<div className="mt-4">
-    <label htmlFor="Gender" className="block text-sm text-gray-700 text-left">
-    Gender
-    </label>
-    <select
-        id="sentTo"
-        className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-    >
-        <option value="" disabled selected>
-            Select
-        </option>
-        <option value="Male">Male </option>
-        <option value="Female">Female</option>
-    </select>
-</div>
+                <div className="mt-4 text-left">
+                  <label htmlFor="lastName" className="block text-sm text-gray-700 text-left">
+                    Last name
+                  </label>
+                  <input
+                    type="text"
+                    id="lastname"
+                    className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter last name"
+                    onChange={handleChange}
+                  />
+                </div>
 
 
 
 
+                <div className="mt-4 text-left">
+                  <label htmlFor="email" className="block text-sm text-gray-700 text-left">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    className=" mt-2  h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter email"
+                    onChange={handleChange}
+                  />
+                </div>
 
 
-</div>
+                <div className="mt-4 text-left">
+                  <label htmlFor="mobile" className="block text-sm text-gray-700 text-left">
+                    Mobile
+                  </label>
+                  <input
+                    type="text"
+                    id="mobile"
+                    className=" mt-2  h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter your number"
+                    onChange={handleChange}
+                  />
+                </div>
 
-<div className="mt-4">
-          <label
-            htmlFor="formFile"
-            className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
-          >
-        Offer letter
-          </label>
-          <input
-            className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
-            type="file"
-           id="formFile"
-          />
-      </div>
 
-              {/* <!-- Email input --> */}
-              {/* <TEInput
-                type="email"
-                label="Email address"
-                size="lg"
-                className="mb-6"
-              ></TEInput> */}
+                <div className="mt-4 text-left">
+                  <label htmlFor="aadhar" className="block text-sm text-gray-700 text-left">
+                    Aadhar Number
+                  </label>
+                  <input
+                    type="text"
+                    id="aadhar"
+                    className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter  your aadhar"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="mt-4 text-left">
+                  <label htmlFor="pan" className="block text-sm text-gray-700 text-left">
+                    Pan number
+                  </label>
+                  <input
+                    type="text"
+                    id="pan"
+                    className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter  your pan"
+                    onChange={handleChange}
+                  />
+                </div>
 
-              {/* <!--Password input--> */}
-              {/* <TEInput
-                type="password"
-                label="Password"
-                className="mb-6"
-                size="lg"
-              ></TEInput> */}
+
+
+                <div className="mt-4">
+                  <label htmlFor="Gender" className="block text-sm text-gray-700 text-left">
+                    Gender
+                  </label>
+                  <select
+                    id="gender"
+                    className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    onChange={handleChange}
+                 >
+                    <option value="" disabled selected>
+                      Select
+                    </option>
+                    <option value="Male">Male </option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+
+
+
+
+
+
+              </div>
+
+              <div className="mt-4">
+                <label
+                  htmlFor="image"
+                  className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+                >
+                  Upload Image
+                </label>
+                <input
+                  className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                  type="file"
+                  id="image"
+                  onChange={handleChange}
+                //  onChange={handleImageUpload}
+                />
+              </div>
+              <div className="mt-4">
+                <label
+                  htmlFor="resume"
+                  className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+                >
+                  Resume
+                </label>
+                <input
+                  className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                  type="file"
+                  id="resume"
+                  onChange={handleChange}
+                //  onChange={handleOfferLetterUpload}
+                />
+              </div>
+
+
+              <div className="mt-4">
+                <label
+                  htmlFor="offer_letter"
+                  className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+                >
+                  Offer letter
+                </label>
+                <input
+                  className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                  type="file"
+                  id="offer_letter"
+                  onChange={handleChange}
+                //  onChange={handleOfferLetterUpload}
+                />
+              </div>
+
+              <div className="mt-4">
+                <label
+                  htmlFor="experience"
+                  className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+                >
+                  Experience
+                </label>
+                <input
+                  className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                  type="file"
+                  id="experience"
+                  onChange={handleChange}
+                //  onChange={handleOfferLetterUpload}
+                />
+              </div>
+              <div className="mt-4">
+                <label
+                  htmlFor="education"
+                  className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+                >
+                  Education and other docs
+                </label>
+                <input
+                  className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                  type="file"
+                  id="education"
+                  onChange={handleChange}
+                //  onChange={handleOfferLetterUpload}
+                />
+              </div>
+
+
+
 
               {/* <!-- Remember me checkbox --> */}
-          
+
 
               {/* <!-- Submit button --> */}
 
               <div className="w-full mt-5  flex justify-center">
                 <button
-                  type="button"
+                  type="submit"
                   className=" cursor-pointer w-40  focus:outline-none focus:ring focus:ring-violet-300 md:hover:bg-sky-700 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[46px] flex flex-row items-center justify-center p-2.5 box-border text-white"
+                   
                 >
                   Sign up
                 </button>
               </div>
-
+              {/* <iframe
+              src={offerLetterURL}
+          width="100%"
+          height="500px"
+        ></iframe> */}
+              {/* {offerLetterURL && <img src={offerLetterURL}/>} */}
               {/* <!-- Divider --> */}
-          
+
             </form>
           </div>
         </div>

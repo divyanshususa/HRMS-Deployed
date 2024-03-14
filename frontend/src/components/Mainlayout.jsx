@@ -63,6 +63,11 @@ const MainLayout = () => {
                 label: "Staff",
               },
               {
+                key: "employee-forms",
+                icon: <AiOutlineUser className="fs-4" />,
+                label: "Employee Form",
+              },
+              {
                 key: "paymentvoucher",
                 icon: <IoWalletOutline  className="fs-4" />,
                 label: "Payment Voucher",

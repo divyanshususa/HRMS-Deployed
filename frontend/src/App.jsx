@@ -32,6 +32,8 @@ import TrainingRequest from './components/TrainingRequest';
 import Procurement from './pages/Procurement';
 import ProcurementReq from './components/ProcurementReq';
 import Signup from './pages/Signup';
+import Thankyou from './pages/Thankyou';
+import Employeeform from './pages/Employeeform';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -53,6 +55,7 @@ function App() {
         <Route path='/verify-email' element={<VerifyEmail/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
         <Route path='/signup' element={<Signup/>}/>
+        <Route path='/thankyou' element={<Thankyou/>}/>
         <Route
           path="/admin"
           element={
@@ -63,6 +66,7 @@ function App() {
           }
         >
           <Route index element={<Dashbaord />} />
+          <Route path='/admin/employee-forms' element={<Employeeform/>} />
           <Route path='/admin/staff' element={<Staff/>} />
           <Route path='/admin/staff/add-staff' element={<AddStaffForm/>} />
           <Route path='/admin/paymentvoucher' element={<PaymentVoucherTable/>} />

@@ -1,11 +1,29 @@
 const mongoose = require('mongoose');
 
-const documentsSchema = new mongoose.Schema({
-
-    employee: { type: mongoose.Schema.Types.ObjectId, ref: 'employees' },
-    image:{
- type: String,
- required : false 
+let EmpRequestSchemas= mongoose.Schema({
+    firstname: {
+        type: String,
+        required: true
+    },
+    lastname: {
+        type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    mobile:{
+        type:String,
+        required: false
+    },
+    image: {
+        type: String,
+        required: false
     },
     aadhar_number: {
         type: String,
@@ -15,31 +33,7 @@ const documentsSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    experience: {
-        type: String,
-        required: false
-    },
-    pan_card:
-    {
-        type: String,
-        required: false
-    },
-    identity_proof:
-    {
-        type: String,
-        required: false
-    },
     resume:
-    {
-        type: String,
-        required: false
-    },
-    certificate_10th:
-    {
-        type: String,
-        required: false
-    },
-    certificate_12th:
     {
         type: String,
         required: false
@@ -53,8 +47,13 @@ const documentsSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-});
+    education: {
+        type: String,
+        required: false
+    },
 
-const Documents = mongoose.model('Documents', documentsSchema);
+})
 
-module.exports = Documents;
+
+
+module.exports = EmpRequestSchemas = mongoose.model('RequestForm', EmpRequestSchemas);

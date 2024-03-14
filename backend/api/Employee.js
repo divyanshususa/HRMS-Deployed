@@ -3,10 +3,14 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const EmployeeSchemas = require('../Schemas/employee')
+
+const DocumentSchemas= require('../Schemas/document')
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/emailCtrl')
 const randomstring = require("randomstring")
-
+const EmpRequest= require('../Schemas/employeeRequest')
+const uploadOnCloudinary = require('../utils/cloudinary')
+const upload = require('../middleware/multerMiddleware')
 const jwtkey = process.env.JWT_KEY
 
 router.post('/signup', async (req, res) => {
@@ -158,5 +162,131 @@ router.post('/reset-password', async (req, res) => {
   }
 })
 
+
+router.post('/request-form', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'resume', maxCount: 1 },
+  { name: 'offer_letter', maxCount: 1 },
+  { name: 'experience', maxCount: 1 },
+  { name: 'education', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const { image, resume, offer_letter, experience, education } = req.files;
+
+    // Upload files to Cloudinary
+    const urls = await uploadOnCloudinary([image[0], resume[0], offer_letter[0], experience[0], education[0]]);
+
+    // Create new EmpRequest object
+    const empRequest = new EmpRequest({
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      gender: req.body.gender,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      image: urls[0],
+      resume: urls[1],
+      offer_letter: urls[2],
+      experience: urls[3],
+      education: urls[4],
+      aadhar_number: req.body.aadhar,
+      pan_number: req.body.pan,
+    });
+
+    // Save to MongoDB
+    const response= await empRequest.save();
+
+    res.status(201).json({ message: 'Form Signup successful', response:response });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+router.get('/employee-requests', async (req, res) => {
+  try {
+   
+    const requests = await EmpRequest.find();
+
+    res.status(200).json({ success: true, data: requests });
+  } catch (error) {
+    console.error('Error fetching employee requests:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+
+
+router.post('/create-employee', async (req, res) => {
+  try {
+    
+    const {
+      firstname,
+      lastname,
+      gender,
+      email,
+      mobile,
+      image,
+      aadhar_number,
+      pan_number,
+      resume,
+      offer_letter,
+      experience,
+      education
+    } = req.body;
+
+    const hashedPassword = await bcrypt.hash("pass", 10);
+
+    // Create a new employee using data from EmpRequestForm
+    const newEmployeeData = {
+      firstname,
+      lastname,
+      gender,
+      email,
+      mobile,
+      photo: image,
+      approved:true ,
+      password:hashedPassword,
+      role:"employee",
+      createdAt: new Date().toISOString(),
+      
+    };
+      const checkuser= await EmployeeSchemas.findOne({ email: email });
+      if(checkuser){
+       return  res.status(400).send("employee already exists")
+      }
+    // Create a new employee document
+    const newEmployee = new EmployeeSchemas(newEmployeeData);
+
+    // Save the new employee to the database
+   const emp= await newEmployee.save();
+
+    // Create a new document entry in the Documents table
+    const newDocument = new DocumentSchemas({
+      employee: emp._id, // Reference the newly created employee's ID
+      aadhar_number,
+      pan_number,
+      resume,
+      offer_letter,
+      experience,
+      education
+    });
+
+    // Save the new document entry to the database
+   const doc=  await newDocument.save();
+   const updatedEmployee = await EmployeeSchemas.findOneAndUpdate(
+    { email: email },
+    { $set: { documents: doc._id } },
+    { new: true }
+  );
+   await EmpRequest.findOneAndDelete({ email });
+
+    res.status(201).json({ success: true, message: 'Employee created successfully', employee: updatedEmployee });
+  } catch (error) {
+    console.error('Error creating employee:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
 
 module.exports = router;
