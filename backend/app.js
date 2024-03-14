@@ -17,6 +17,14 @@ const circularRoutes = require("./Routes/circularRoutes")
 const requestRoutes = require("./Routes/requestRoutes")
 const LogisticCardsRoute = require("./Routes/LogisticCardsRoute")
 const budgetRoutes = require("./Routes/budgetRoutes")
+const stockRoutes = require("./Routes/stockRoutes")
+const capacityBuildingRoutes = require("./Routes/capacityBuildingRoutes")
+const payrollRoutes = require("./Routes/payrollRoutes")
+const procurementRequestRoutes=require("./Routes/procurementRequestRoutes")
+const salaryBreakdownRoutes = require("./Routes/salaryBreakdownRoutes")
+const taxDefinitionRoutes = require("./Routes/taxDefinitionRoutes")
+const paySlipRoutes = require("./Routes/paySlipRoutes")
+const paymentRoutes = require("./Routes/paymentRoutes")
 
 
 
@@ -65,10 +73,21 @@ app.use("/LogisticCards", LogisticCardsRoute);
 
 app.use("/budget", budgetRoutes);
 
-
+app.use("/stocks", stockRoutes);
 // Assuming the Employee routes are mounted correctly
 // app.use("/api/user", require("./api/Employee"));
+app.use("/capacitybuilding", capacityBuildingRoutes);
 
+app.use("/procurementRequestRoutes", procurementRequestRoutes);
+
+
+app.use("/payrollRoutes", payrollRoutes);
+app.use("/salarybreakdowns", salaryBreakdownRoutes);
+app.use("/taxdefinitions", taxDefinitionRoutes);
+app.use("/payslips", paySlipRoutes);
+
+
+app.use("/paymenthistory", paymentRoutes);
 app.get("/", (req, res) => {
   console.log("hello");
   res.json("working");
