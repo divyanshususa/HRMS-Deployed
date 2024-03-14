@@ -10,7 +10,7 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
 
     try {
       if (token) {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
         // console.log(decoded);
         const user = await EmployeeSchemas.findById(decoded?.id);
         req.user = user;

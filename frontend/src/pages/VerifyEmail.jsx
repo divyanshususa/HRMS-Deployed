@@ -1,8 +1,35 @@
-import React,{useState} from "react";
-import { NavLink } from "react-router-dom";
+import React,{useEffect, useState} from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 import OtpInput from "react-otp-input";
 const VerifyEmail = () => {
+  const navigate = useNavigate()
     const [otp, setOtp] = useState('');
+const [email, setEmail]= useState('')
+
+    const [errorMsg, setErrorMsg] = useState('');
+    useEffect(()=>{
+   setEmail((localStorage.getItem('verifiedEmail')))   
+    },[])
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const response = await axios.post("http://localhost:5000/api/user/verify-otp", { email, otp });
+        const data = response.data;
+        if (response.status === 200 && data.success) {
+          // Redirect to password reset page or display success message
+          console.log("OTP verified successfully");
+          navigate('/reset-password')
+
+        } else {
+          setErrorMsg(data.msg);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setErrorMsg("Internal Server Error");
+      }
+    };
     return (
       <>
 
@@ -45,6 +72,7 @@ const VerifyEmail = () => {
                 <div className=" text-9xl font-extrabold text-relia-energy-black">
                 Please enter the 2FA code sent to your mail.
                 </div>
+                <form onSubmit={handleSubmit}>
                    <div className="flex flex-col items-start justify-start gap-[48px_0px] text-grey-100">
            <OtpInput
                          value={otp}
@@ -55,12 +83,13 @@ const VerifyEmail = () => {
                          inputStyle="h-14 w-35 p-5 text-center text-6xl active:text-gray-500 bg-sky-100  shadow-sm ring-gray-300  outline-none"
                          containerStyle="flex gap-10"
                        />
-             <NavLink to='/reset-password' className='no-underline'>
+             {/* <NavLink to='/reset-password' className='no-underline'> */}
              <button className="w-[350px] rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[50px] flex flex-row items-center justify-center p-2.5 box-border text-white">
                <div className="no-underline relative leading-[24px]">Verify</div>
              </button>
-             </NavLink>
+             {/* </NavLink> */}
            </div>
+           </form>
 
               </div>
               {/* <div className="flex flex-col items-start justify-start gap-[48px_0px] text-grey-100">

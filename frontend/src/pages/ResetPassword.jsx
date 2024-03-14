@@ -1,9 +1,37 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 const ResetPassword = () => {
-    const [visibility1, setVisibility1] = useState(false);
-    const [visibility2, setVisibility2] = useState(false);
+  const navigate=useNavigate();
+    const[resetToken,setresetToken]=useState('')
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [message, setMessage] = useState("");
+
+useEffect(()=>{
+  setresetToken(localStorage.getItem("resetToken"))
+},[])
+const handleResetPassword = async () => {
+  try {
+    const response = await axios.post(`http://localhost:5000/api/user/reset-password?token=${resetToken}`, {
+      password: newPassword
+    });
+
+    if (response.data.success) {
+      setMessage(response.data.msg);
+      // Reset form fields
+      setNewPassword("");
+      setConfirmPassword("");
+      navigate('/')
+
+    } else {
+      setMessage(response.data.msg);
+    }
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    setMessage("An error occurred while resetting your password.");
+  }
+};
     return (
       <div>
         <div className="flex justify-around">
@@ -59,7 +87,8 @@ const ResetPassword = () => {
                     type='password'
                     required
                     className="h-14 w-full block p-2 text-xl outline-none"
-             
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
                     // onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   </div>
@@ -77,7 +106,8 @@ const ResetPassword = () => {
                     type="password"
                     required
                     className="h-14 w-full block p-2 text-xl outline-none"
-                   
+                    value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
                     // onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   <div className="mr-2 cursor-pointer">
@@ -95,9 +125,11 @@ const ResetPassword = () => {
               </div>
           <div className="flex flex-col items-start justify-start gap-[48px_0px] text-grey-100">
           
-            <div className="w-[350px] rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[50px] flex flex-row items-center justify-center p-2.5 box-border text-white">
+            <button className="w-[350px] rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[50px] flex flex-row items-center justify-center p-2.5 box-border text-white"
+             onClick={handleResetPassword}
+            >
               <div className="relative leading-[24px]">Reset</div>
-            </div>
+            </button>
           </div>
         </div>
         </div>

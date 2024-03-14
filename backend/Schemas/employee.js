@@ -73,6 +73,10 @@ let EmployeeSchemas = mongoose.Schema({
         required: false
 
     },
+    otp:{
+        type: String,
+        required:false
+    },
 
     resetToken: {
         type: String,

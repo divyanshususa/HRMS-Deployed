@@ -1,12 +1,50 @@
-import { useCallback } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 const Login = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-  //   const onIForgotMy1Click = useCallback(() => {
-  //     navigate("/forget-password");
-  //   }, [navigate]);
+  const handleLogin = async () => {
+    try {
+
+      const response = await axios.post("http://localhost:5000/api/user/login", {
+        email,
+        password,
+      });
+
+      const data = response.data;
+      console.log(data)
+      if (response.status === 200) {
+        // Login successful, store token and user data
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", data.user);
+        // Redirect to dashboard or desired route
+        if (data.user.role.toLowerCase() === 'admin') {
+          navigate("/admin");
+        } else if (data.user.role.toLowerCase() == 'manager') {
+          navigate("/manager");
+        } else if (data.user.role.toLowerCase() == 'hr') {
+          navigate("/hr");
+        } else if (data.user.role.toLowerCase() == 'employee') {
+          if (data.user.approved) {
+            navigate("/employee");
+          }
+
+        }
+
+      } else {
+        setError(data.error);
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+      setError("Internal Server Error");
+    }
+  };
+
 
   return (
     <>
@@ -32,7 +70,7 @@ const Login = () => {
               </div>
 
               <button className="border-[1px] h-[40px] rounded-3xs p-3 border-solid border-relia-energy-gradient  text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]"
-              onClick={()=>navigate('/signup')}
+                onClick={() => navigate('/signup')}
               >
                 Sign Up
               </button>
@@ -57,6 +95,8 @@ const Login = () => {
                 <input
                   type="text"
                   className="w-[50%] mt-2 h-12 px-4 border border-gray-300 rounded focus:outline-none focus:border-relia-energy-primary-color"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
 
               </div>
@@ -66,6 +106,9 @@ const Login = () => {
                 <input
                   type="password"
                   className="w-[50%] mt-2 h-12 px-4 border border-gray-300 rounded focus:outline-none focus:border-relia-energy-primary-color"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+
                 />
               </div>
 
@@ -89,7 +132,9 @@ const Login = () => {
                 </NavLink>
               </div>
 
-              <button className="w-[50%] mt-4 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[50px] flex flex-row items-center justify-center p-2.5 box-border text-white">
+              <button className="w-[50%] mt-4 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[50px] flex flex-row items-center justify-center p-2.5 box-border text-white"
+                onClick={handleLogin}
+              >
                 <div className="relative leading-[24px]">Sign In</div>
               </button>
 
