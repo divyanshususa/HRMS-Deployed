@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import { FaLongArrowAltDown, FaLongArrowAltUp } from "react-icons/fa"
 import { logisticColumns, procurementColumns, stockColumns, trainingColumns } from "../utils/columns";
 import { dummyLogisticData, dummyProcurementData, dummyStockData, dummyTrainingData } from "../utils/dummyData";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import config from "../configuration/config";
 
 const  Procurement=()=>{
+    const[procure , setprocurement]= useState();
+    
+    useEffect(()=>{
+        fetchdata()
+    },[])
+
     const navigate= useNavigate()
+
+    const fetchdata = async()=>{
+       const res = await axios.get(`${config.baseURL}/procurement/getallProcurements`)
+       setprocurement(res.data)
+    }
 return(
     <div>
 
@@ -143,7 +156,7 @@ return(
               <div className=" text-xs text-grey-70">
                 <Table
                   columns={procurementColumns}
-                  dataSource={dummyProcurementData}
+                  dataSource={procure}
                   pagination={{ pageSize: 7 }}
                   size="middle"
                 />

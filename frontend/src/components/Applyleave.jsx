@@ -47,6 +47,10 @@ const ApplyLeave = () => {
     setCurrUser(JSON.parse(localStorage.getItem('user')))
     fetchleaveHistory()
   }, []);
+  useEffect(() => {
+    
+    fetchleaveHistory()
+  }, []);
 
   const fetchleaveHistory =async()=>{
      const  response = await axios.get(`${config.baseURL}/api/leave/empleave/${currUser?._id}`)

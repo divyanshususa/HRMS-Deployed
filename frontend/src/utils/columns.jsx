@@ -313,17 +313,17 @@ export  const procurementColumns = [
     {
         title: "Items",
         dataIndex: "item",
-        key: "description",
+        key: "item",
     },
     {
         title: "Qty",
-        dataIndex: "qty",
-        key: "qty",
+        dataIndex: "quantity",
+        key: "quantity",
     },
     {
         title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
+        dataIndex: "totalPrice",
+        key: "totalPrice",
     },
     {
         title: "Requested By",
@@ -332,8 +332,8 @@ export  const procurementColumns = [
     },
     {
         title: "Send to",
-        dataIndex: "sendTo",
-        key: "sendTo",
+        dataIndex: "sentTo",
+        key: "sentTo",
     },
     {
         title: "Date",
