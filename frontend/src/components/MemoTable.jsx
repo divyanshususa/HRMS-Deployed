@@ -42,6 +42,7 @@ const columns = [
     title: "S/N",
     dataIndex: "sn",
     key: "sn",
+    render: (_, __, index) => index + 1,  
   },
   {
     title: "Memo Title",
@@ -71,7 +72,8 @@ const columns = [
   },
 ];
 
-const MemoTable = () => {
+const MemoTable = ({memoList}) => {
+  console.log("memeo", memoList)
   return (
    
      
@@ -80,7 +82,7 @@ const MemoTable = () => {
       <div className="flex flex-col items-start justify-start gap-4 p-4">
         <div className="font-extrabold">Memo</div>
         <div className=" overflow-y-auto text-xs text-grey-70 h-[300px]">
-          <Table columns={columns} dataSource={dataSource} pagination={false}
+          <Table columns={columns} dataSource={memoList} pagination={false}
         
            />
         </div>

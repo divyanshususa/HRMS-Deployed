@@ -1,12 +1,29 @@
-import React from "react";
+import React ,{ useEffect, useState }from "react";
 import { circularColumns } from "../utils/columns";
 import { Table } from "antd";
 import { dummyCircularData } from "../utils/dummyData";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import config from "../configuration/config";
 const Circular = () => {
-
+    const[circularList, setcircularList]= useState();
+    const [searchText, setSearchText] = useState("");
     const navigate= useNavigate();
+
+    useEffect(()=>{
+        fetchcircular()
+    },[])
+    const handleSearch = (e) => {
+        setSearchText(e.target.value);
+     
+      };
+
+    const fetchcircular=async()=>{
+     const res = await axios.get(`${config.baseURL}/circulars/getCircular`)
+    
+    setcircularList(res.data)
+
+    }
     return (
         <div className="w-full">
 
@@ -26,7 +43,7 @@ const Circular = () => {
                 </div>
 
                 <div className="flex flex-col  justify-start items-baseline text-5xl text-relia-energy-black">
-                    <div className=" font-extrabold text-3xl">25</div>
+                    <div className=" font-extrabold text-9xl">{circularList?.length}</div>
                     <div className=" text-sm leading-[24px] text-grey-70">
                         Total Circular
                     </div>
@@ -41,7 +58,7 @@ const Circular = () => {
                     <div className="flex flex-col items-start justify-start gap-[8px_0px]">
                         <div className=" leading-[24px]">Filter circular</div>
 
-                        <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">All memo <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">All circular <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                         </svg>
                         </button>
@@ -89,7 +106,14 @@ onClick={()=>{navigate('/admin/circular/create-circular')}}
           <div className=" text-xs text-grey-70">
             <Table
               columns={circularColumns}
-              dataSource={dummyCircularData}
+              dataSource={circularList?.filter((circular) => {
+                const search = searchText?.toLowerCase();
+                return (
+                  circular.circularTitle?.toLowerCase().includes(search) ||
+                  circular.circularType?.toLowerCase().includes(search) 
+            
+                );
+              })}
               pagination={{ pageSize: 7 }}
               size="middle"
             />

@@ -7,6 +7,7 @@ const PaymentVouchersTable = () => {
       title: "S/N",
       dataIndex: "serialNumber",
       key: "serialNumber",
+      render: (_, __, index) => index + 1,  
     },
     {
       title: "Subject",

@@ -2,6 +2,7 @@ import React,{useEffect, useState} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import OtpInput from "react-otp-input";
+import config from "../configuration/config";
 const VerifyEmail = () => {
   const navigate = useNavigate()
     const [otp, setOtp] = useState('');
@@ -15,7 +16,7 @@ const [email, setEmail]= useState('')
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post("http://localhost:5000/api/user/verify-otp", { email, otp });
+        const response = await axios.post(`${config.baseURL}/api/user/verify-otp`, { email, otp });
         const data = response.data;
         if (response.status === 200 && data.success) {
           // Redirect to password reset page or display success message

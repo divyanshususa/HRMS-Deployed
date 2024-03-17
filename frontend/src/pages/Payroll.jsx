@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "antd";
-import { salcolumns, taxcolumns, payrollcolumns,staffDetailsCol } from "../utils/columns";
+import { salcolumns,  payrollcolumns,staffDetailsCol } from "../utils/columns";
+import {  toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
-  saldummyData,
-  taxDummyData,
+
   payrollDummyData,
   dummyStaffDetailsData
 } from "../utils/dummyData";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import config from "../configuration/config";
 
 const DynamicTable = ({ columns, dataSource }) => {
   return (
@@ -23,43 +26,117 @@ const DynamicTable = ({ columns, dataSource }) => {
 
 const Payroll = () => {
   const [currColumn, setCurrColumn] = useState([]);
+  const [refreshFlag, setrefreshFlag]= useState(false)
   const [currData, setcurrData] = useState([]);
   const [activeTab, setActiveTab] = useState("salary");
   const navigate = useNavigate();
 
-  const handleDynamicTable = (val) => {
-    console.log(val);
-    if (val === "salary") {
-      setActiveTab(val);
-      setCurrColumn(salcolumns);
-      setcurrData(saldummyData);
-    } else if (val === "tax") {
-      setActiveTab(val);
-      setCurrColumn(taxcolumns);
-      setcurrData(taxDummyData);
-    } else if (val === "payslip") {
-      setActiveTab(val);
-      setCurrColumn(staffDetailsCol);
-      setcurrData(dummyStaffDetailsData);
-    } else if (val === "payroll") {
-      setActiveTab(val);
-      setCurrColumn(payrollcolumns);
-      setcurrData(payrollDummyData);
+ const taxcolumns=[
+    {
+        title: "S/N",
+        dataIndex: "serialNumber",
+        key: "serialNumber", 
+        render: (_, __, index) => index + 1,  
+        
+    },
+    {
+        title: "Tax Type",
+        dataIndex: "taxType",
+        key: "taxType",   
+    },
+    {
+        title: "% value ",
+        dataIndex: "percentValue",
+        key: "percentValue",   
+    },
+
+    {
+      title: 'Action ',
+      dataIndex: 'action',
+      key: 'action',
+      render: (_, record) => (
+        <>
+          {/* <span
+            className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
+            onClick={() => handleEdit(record._id)}
+          >
+            Edit
+          </span> */}
+          <span
+            className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
+            onClick={() => handleDelete(record._id)}
+          >
+            Delete
+          </span>
+        </>
+      ),
+    },
+]
+
+
+const fetchtaxdata=async()=>{
+  const res=  await axios.get(`${config.baseURL}/taxdefinitions/get`)
+  setcurrData(res.data)
+
+}
+const handleDelete = async (id) => {
+  // Implement delete functionality
+  try {
+    // Send delete request to the server
+    await axios.delete(`${config.baseURL}/taxdefinitions/${id}`);
+    toast.success('Successfully deleted..')
+    // Optionally, you can update the state or reload the data to reflect the changes in the UI
+  } catch (error) {
+    console.error(error);
+    // Handle error
+    toast.error("Something went wrong ..")
+  }
+};
+
+
+  const handleDynamicTable = async(val) => {
+    try {
+      if (val === "salary") {
+      const res=  await axios.get(`${config.baseURL}/salarybreakdowns/getsalarybreakdown`)
+        setActiveTab(val);
+        setCurrColumn(salcolumns);
+        setcurrData(res.data);
+      } else if (val === "tax") {
+        fetchtaxdata()
+        setActiveTab(val);
+        setCurrColumn(taxcolumns);
+        setcurrData(res.data);
+      } else if (val === "payslip") {
+        const res=  await axios.get(`${config.baseURL}/payslips/getAllPayslips`)
+        setActiveTab(val);
+        setCurrColumn(staffDetailsCol);
+        setcurrData(res.data);
+      } else if (val === "payroll") {
+        const res=  await axios.get(`${config.baseURL}/payroll/getAllPayroll`)
+        setActiveTab(val);
+
+        setCurrColumn(payrollcolumns);
+        setcurrData(res.data);
+      }
+    } catch (error) {
+      
     }
+
   };
 
+  
   return (
     <div>
       {/* Upper div starts  */}
 
-      <div className="flex max-xl:flex-col  flex-row gap-4">
+      <div className="flex max-xl:flex-col  flex-row gap-3">
         {/* left div starts*/}
         <div>
-          <div className="flex  flex-wrap md:flex-wrap gap-2">
+          <div className="flex  flex-wrap md:flex-wrap gap-1">
             <div className=" rounded-xl shadow-md">
-              <div className="flex gap-3 p-5 items-start justify-start ">
+              <div className="flex gap-2 p-5 items-start justify-start ">
                 <div>
-                  <div className=" font-extrabold text-base">25785890</div>
+                  <div className=" font-extrabold text-base">2578584</div>
                   <div className=" text-base leading-[24px]">
                     Gross Salary this month
                   </div>
@@ -84,7 +161,7 @@ const Payroll = () => {
             {/* total application */}
 
             <div className=" rounded-xl shadow-md">
-              <div className="flex gap-3 p-5 items-start justify-start ">
+              <div className="flex gap-2 p-5 items-start justify-start ">
                 <div>
                   <div className=" font-extrabold text-base">1089787680</div>
                   <div className=" text-base leading-[24px]">
@@ -111,7 +188,7 @@ const Payroll = () => {
             {/* Total projects */}
 
             <div className=" rounded-xl shadow-md">
-              <div className="flex gap-3 p-5 items-start justify-start ">
+              <div className="flex gap-2 p-5 items-start justify-start ">
                 <div>
                   <div className=" font-extrabold text-base">56878700</div>
                   <div className=" text-base leading-[24px]">
@@ -138,7 +215,7 @@ const Payroll = () => {
             {/* Total departments */}
 
             <div className=" rounded-xl shadow-md">
-              <div className="flex gap-3 p-5 items-start justify-start ">
+              <div className="flex gap-2 p-5 items-start justify-start ">
                 <div>
                   <div className=" font-extrabold text-base">9877860</div>
                   <div className=" text-base leading-[24px]">
@@ -165,9 +242,9 @@ const Payroll = () => {
 
         {/* left div ends */}
         {/* right div starts  */}
-        <div className="bg-white rounded-xl shadow-md md:w-[800px] overflow-auto ">
+        {/* <div className="bg-white rounded-xl shadow-md md:w-[800px] overflow-auto ">
          <img src="/images/graph.png" alt="" className="md:h-[300px] md:w-[350px] mt-5" />
-        </div>
+        </div> */}
         {/* right div ends  */}
       </div>
 

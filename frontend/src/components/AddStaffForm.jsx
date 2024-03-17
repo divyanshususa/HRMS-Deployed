@@ -1,6 +1,69 @@
-import React from 'react';
+import React,{useState} from 'react';
+import axios from 'axios';
+import config from '../configuration/config';
+import { toast } from 'react-toastify';
 
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 const AddStaffForm = () => {
+  const navigate= useNavigate()
+  const [Data, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    gender: "",
+    email: "",
+    mobile: "",
+    role: "",
+    designation: "",
+    staffId: "",
+    officialEmail: "",
+    image: null // Store the selected image file
+  });
+
+  // Handle input change
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...Data, [id]: value });
+  };
+
+  // Handle image upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    console.log("this is file path", file)
+    setFormData({ ...Data, image: file });
+  };
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('firstname', Data.firstname);
+      formData.append('lastname', Data.lastname);
+      formData.append('gender', Data.gender);
+      formData.append('email', Data.email);
+      formData.append('mobile', Data.mobile);
+      formData.append('role', Data.role);
+      formData.append('designation', Data.designation);
+      // formData.append('staffId', formData.staffId);
+      formData.append('officialEmail', Data.officialEmail);
+      formData.append('image', Data.image);
+
+      // Make a POST request to the backend API endpoint
+      const response = await axios.post(`${config.baseURL}/api/user/add-staff`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      // Handle success response
+      console.log('New staff added:', response.data);
+      toast.success("staff added successfully..")
+      navigate('/admin/staff')
+    } catch (error) {
+      // Handle error
+      console.error('Error adding staff:', error);
+      toast.error("something went wrong..")
+    }
+  };
   return (
     <div className="w-full   mt-16">
         <div className="mt-4 text-xl font-extrabold text-black p-4 mb-4">Add a New Staff</div>
@@ -13,6 +76,12 @@ const AddStaffForm = () => {
             alt="Upload photo"
             src="/images/img4.png"
           />
+              <input
+        type="file"
+        id='image'
+        accept="image/*"
+        onChange={handleImageChange}
+      />
         </div>
         <div className="flex flex-col items-center gap-4 text-sm text-gray-500">
           <div className="flex items-center gap-2">
@@ -37,9 +106,11 @@ const AddStaffForm = () => {
         </label>
         <input
           type="text"
-          id="firstName"
+          id="firstname"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter first name"
+          onChange={handleChange}
+          value={Data.firstname}
         />
       </div>
 
@@ -50,9 +121,11 @@ const AddStaffForm = () => {
         </label>
         <input
           type="text"
-          id="lastName"
+          id="lastname"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter last name"
+          onChange={handleChange}
+          value={Data.lastname}
         />
       </div>
 
@@ -63,7 +136,9 @@ const AddStaffForm = () => {
         <select
           id="gender"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-        >
+          onChange={handleChange}
+          value={Data.gender}
+       >
           <option value="" disabled selected>
             Select Gender
           </option>
@@ -83,18 +158,22 @@ const AddStaffForm = () => {
           id="email"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter email address"
+          onChange={handleChange}
+          value={Data.email}
         />
       </div>
 
       <div className="mt-4">
-        <label htmlFor="phoneNumber" className="block text-sm text-gray-700 text-left">
+        <label htmlFor="mobile" className="block text-sm text-gray-700 text-left">
           Phone Number
         </label>
         <input
           type="tel"
-          id="phoneNumber"
+          id="mobile"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter phone number"
+          onChange={handleChange}
+          value={Data.mobile}
         />
       </div>
       
@@ -105,6 +184,8 @@ const AddStaffForm = () => {
         <select
           id="role"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+          onChange={handleChange}
+          value={Data.role}
         >
           <option value="" disabled selected>
             Select role
@@ -124,9 +205,11 @@ const AddStaffForm = () => {
           id="designation"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter Designation"
+          onChange={handleChange}
+          value={Data.designation}
         />
       </div>
-
+{/* 
       <div className="mt-4">
         <label htmlFor="staffId" className="block text-sm text-gray-700 text-left">
        Staff ID
@@ -136,8 +219,9 @@ const AddStaffForm = () => {
           id="staffId"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter StaffID"
+          
         />
-      </div>
+      </div> */}
       
 
       
@@ -147,9 +231,11 @@ const AddStaffForm = () => {
         </label>
         <input
           type="text"
-          id="officalEmail"
+          id="officialEmail"
           className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter Offical Email"
+          onChange={handleChange}
+          value={Data.officialEmail}
         />
       </div>
 
@@ -161,7 +247,8 @@ const AddStaffForm = () => {
 
       </div>
       <div className="mt-6">
-        <button className="w-full h-10 bg-gradient-to-br from-[#14add5] to-[#384295] text-white rounded-md">
+        <button className="w-full h-10 bg-gradient-to-br from-[#14add5] to-[#384295] text-white rounded-md"
+         onClick={handleSubmit}>
           Add Staff
         </button>
       </div>

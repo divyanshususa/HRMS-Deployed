@@ -2,7 +2,7 @@ import React from "react";
 import SalaryTable from "../components/SalaryTable";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-const PaySlip =()=>{
+const PaySlip =({payslip})=>{
     const navigate= useNavigate();
     return(
         <div className="w-full">
@@ -32,7 +32,7 @@ const PaySlip =()=>{
 </div>
             </div>
             </div>
-            <SalaryTable/>
+            <SalaryTable payslip={payslip}/>
 
         </div>
     )

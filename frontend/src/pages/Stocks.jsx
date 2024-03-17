@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import { FaLongArrowAltDown, FaLongArrowAltUp } from "react-icons/fa"
 import { logisticColumns, stockColumns } from "../utils/columns";
-import { dummyLogisticData, dummyStockData } from "../utils/dummyData";
+
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import config from "../configuration/config";
 
 const  Stocks=()=>{
     const navigate= useNavigate()
+    const[stockList, setstockList]=useState();
+useEffect(()=>{
+    fetchStock()
+},[])
+
+
+  const  fetchStock=async()=>{
+const res = await axios.get(`${config.baseURL}/stocks/getStocks`)
+setstockList(res.data)
+  }
 return(
     <div>
 
@@ -143,7 +155,7 @@ return(
               <div className=" text-xs text-grey-70">
                 <Table
                   columns={stockColumns}
-                  dataSource={dummyStockData}
+                  dataSource={stockList}
                   pagination={{ pageSize: 7 }}
                   size="middle"
                 />

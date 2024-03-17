@@ -2,7 +2,14 @@
 import React from "react";
 import { Table } from "antd";
 
-const columns = [
+
+const SalaryTable = ({payslip}) => {
+
+  console.log("this is inside ",payslip)
+  const { salaryStructure, deductions, grossSalary, netSalary } = payslip;
+  const totalGrossSalary = data.reduce((total, item) => total + item.amount, 0);
+
+  const columns = [
   {
     title: "Salary Structure",
     dataIndex: "allowanceType",
@@ -26,9 +33,6 @@ const data = [
   { key: "7", allowanceType: "Inconvenience Allowance", amount: 66800 },
 ];
 
-const SalaryTable = () => {
-  const totalGrossSalary = data.reduce((total, item) => total + item.amount, 0);
-
   const taxColumns = [
     {
       title: "Deductions",
@@ -49,7 +53,7 @@ const SalaryTable = () => {
   ];
 
   const totalDeductions = taxData.reduce((total, item) => total + item.amount, 0);
-  const netSalary = totalGrossSalary - totalDeductions;
+  const netsalary = totalGrossSalary - totalDeductions;
 
   return (
     <div>
@@ -67,7 +71,7 @@ const SalaryTable = () => {
         <Table columns={columns} dataSource={data} pagination={false} />
       <div className="mt-4">
         <b className="mr-4">Gross Salary: {totalGrossSalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>
-        <b>Net Salary: {netSalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>
+        <b>Net Salary: {netsalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>
       </div>
         </div>
 
@@ -78,7 +82,7 @@ const SalaryTable = () => {
         <b>Total Deductions: {totalDeductions.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>
       </div>
       <div className="mt-4">
-        <b>Net Salary in Words: {convertToWords(netSalary)} Rupees Only</b>
+        <b>Net Salary in Words: {convertToWords(netsalary)} Rupees Only</b>
       </div>
         </div>
      

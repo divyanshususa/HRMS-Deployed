@@ -4,7 +4,9 @@ export const taxcolumns=[
     {
         title: "S/N",
         dataIndex: "serialNumber",
-        key: "serialNumber",   
+        key: "serialNumber", 
+        render: (_, __, index) => index + 1,  
+        
     },
     {
         title: "Tax Type",
@@ -47,6 +49,7 @@ export const staffDetailsCol=[
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Staff Name",
@@ -65,28 +68,40 @@ export const staffDetailsCol=[
     },
     {
         title: "Basic Salary",
-        dataIndex: "basicSalary",
+        dataIndex: ["salaryStructure", "basicSalary"],
         key: "basicSalary",
+        render: (basicSalary) => `₹${basicSalary.toFixed(2)}`, // Format the salary as needed
     },
     {
         title: "Allowance",
-        dataIndex: "allowance",
+        dataIndex: "salaryStructure", // Display all allowance fields together
         key: "allowance",
+        render: (salaryStructure) => {
+            const allowances = Object.values(salaryStructure).reduce((total, allowance) => total + allowance, 0);
+            return `₹${allowances.toFixed(2)}`; // Format the total allowance as needed
+        },
     },
     {
         title: "Gross Salary",
         dataIndex: "grossSalary",
         key: "grossSalary",
+        render: (grossSalary) => `₹${grossSalary}`,
+       
     },
     {
         title: "Deductions",
-        dataIndex: "deductions",
+        dataIndex: "deductions", // Display all deduction fields together
         key: "deductions",
+        render: (deductions) => {
+            const totalDeductions = Object.values(deductions).reduce((total, deduction) => total + deduction, 0);
+            return `₹${totalDeductions.toFixed(2)}`; // Format the total deductions as needed
+        },
     },
     {
         title: "Net Salary",
         dataIndex: "netSalary",
         key: "netSalary",
+        render: (netSalary) => `₹${netSalary.toFixed(2)}`, // Format the net salary as needed
     },
     {
         title: "Action",
@@ -108,6 +123,7 @@ export  const salcolumns = [
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Title",
@@ -180,10 +196,11 @@ export  const memoColumns = [
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Memo Title",
-        dataIndex: "title",
+        dataIndex: "memoTitle",
         key: "title",
     },
     {
@@ -198,12 +215,12 @@ export  const memoColumns = [
     },
     {
         title: "Date",
-        dataIndex: "date",
+        dataIndex: "generatedDate",
         key: "date",
     },
     {
         title: "Attachment?",
-        dataIndex: "attachment",
+        dataIndex: "addAttachment",
         key: "attachment",
     },
     {
@@ -227,11 +244,14 @@ export  const memoColumns = [
     },
 ];
 
+
+
 export  const trainingColumns = [
     {
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Training Description ",
@@ -288,6 +308,7 @@ export  const procurementColumns = [
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Items",
@@ -343,6 +364,7 @@ export  const logisticColumns = [
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Title",
@@ -372,8 +394,8 @@ export  const logisticColumns = [
     },
     {
         title: "Date",
-        dataIndex: "date",
-        key: "date",
+        dataIndex: "generatedDate",
+        key: "generatedDate",
     },
     {
         title: "Status",
@@ -400,6 +422,7 @@ export  const budgetColumns = [
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Budget No.",
@@ -408,17 +431,17 @@ export  const budgetColumns = [
     },
     {
         title: "Budget Description",
-        dataIndex: "description",
+        dataIndex: "budgetDescription",
         key: "description",
     },
-    {
-        title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
-    },
+    // {
+    //     title: "Amount",
+    //     dataIndex: "amount",
+    //     key: "amount",
+    // },
     {
         title: "Budgeted Amount",
-        dataIndex: "budgetAmount",
+        dataIndex: "budgetedAmount",
         key: "budgetAmount",
     },
 
@@ -434,7 +457,7 @@ export  const budgetColumns = [
     },
     {
         title: "Date",
-        dataIndex: "date",
+        dataIndex: "generatedDate",
         key: "date",
     },
     
@@ -445,6 +468,7 @@ export  const stockColumns = [
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: 'Image',
@@ -500,10 +524,11 @@ export  const circularColumns = [
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Cirular Title",
-        dataIndex: "title",
+        dataIndex: "circularTitle",
         key: "title",
     },
     {
@@ -518,14 +543,14 @@ export  const circularColumns = [
     },
     {
         title: "Date",
-        dataIndex: "date",
+        dataIndex: "generatedDate",
         key: "date",
     },
-    {
-        title: "Attachment?",
-        dataIndex: "attachment",
-        key: "attachment",
-    },
+    // {
+    //     title: "Attachment?",
+    //     dataIndex: "attachment",
+    //     key: "attachment",
+    // },
     {
         title: "Circular Type",
         dataIndex: "circularType",
@@ -551,6 +576,7 @@ export  const payrollcolumns = [
         title: "S/N",
         dataIndex: "serialNumber",
         key: "serialNumber",
+        render: (_, __, index) => index + 1,
     },
     {
         title: "Payment Name",
@@ -564,18 +590,18 @@ export  const payrollcolumns = [
     },
     {
         title: "Date Generated",
-        dataIndex: "dateGenerated",
-        key: "dateGenerated",
+        dataIndex: "generatedDate",
+        key: "generatedDate",
     },
     {
         title: "Payment Month",
-        dataIndex: "paymentMonth",
-        key: "paymentMonth",
+        dataIndex: "month",
+        key: "month",
     },
     {
         title: "Payment Year",
-        dataIndex: "paymentYear",
-        key: "paymentYear",
+        dataIndex: "year",
+        key: "year",
     },
     {
         title: "Status",

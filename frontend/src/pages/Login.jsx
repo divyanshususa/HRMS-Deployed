@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from 'axios'
+import config from "../configuration/config";
+import { toast } from 'react-toastify';
+
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,7 +15,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
 
-      const response = await axios.post("http://localhost:5000/api/user/login", {
+      const response = await axios.post(`${config.baseURL}/api/user/login`, {
         email,
         password,
       });
@@ -19,9 +23,11 @@ const Login = () => {
       const data = response.data;
       console.log(data)
       if (response.status === 200) {
+        toast.success("login successfully")
+        console.log("when login",data.user)
         // Login successful, store token and user data
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user", data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
         // Redirect to dashboard or desired route
         if (data.user.role.toLowerCase() === 'admin') {
           navigate("/admin");
@@ -38,9 +44,11 @@ const Login = () => {
 
       } else {
         setError(data.error);
+        toast.error("Something went wrong")
       }
     } catch (error) {
       console.error("Error logging in:", error);
+      toast.error("Something went wrong")
       setError("Internal Server Error");
     }
   };

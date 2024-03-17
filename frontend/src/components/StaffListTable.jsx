@@ -3,7 +3,7 @@ import { Table, Input, Button, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
-const StaffListTable = () => {
+const StaffListTable = ({stafflist}) => {
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -70,23 +70,24 @@ const StaffListTable = () => {
       title: "S/N",
       dataIndex: "serialNumber",
       key: "serialNumber",
+      render: (_, __, index) => index + 1,  
     },
     {
       title: "Staff Name",
-      dataIndex: "staffName",
-      key: "staffName",
-      ...getColumnSearchProps("staffName", "Search by Staff Name"),
+      dataIndex: "firstname",
+      key: "firstname",
+      ...getColumnSearchProps("firstname", "Search by Staff Name"),
       
     },
     {
       title: "Staff Role",
-      dataIndex: "staffRole",
-      key: "staffRole",
+      dataIndex: "role",
+      key: "role",
     },
     {
-      title: "Designation",
-      dataIndex: "designation",
-      key: "designation",
+      title: "Employee ID",
+      dataIndex: "empId",
+      key: "empId",
     },
   ];
 
@@ -129,7 +130,7 @@ const StaffListTable = () => {
         <div className=" overflow-y-auto text-xs text-grey-70 h-[300px]">
           <Table columns={columns} 
           
-          dataSource={data} pagination={false} 
+          dataSource={stafflist} pagination={false} 
           />
         </div>
       </div>

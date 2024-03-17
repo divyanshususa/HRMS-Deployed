@@ -1,10 +1,68 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import axios from 'axios';
+import config from '../configuration/config';
+import { toast } from 'react-toastify';
 
-
+import "react-toastify/dist/ReactToastify.css";
 const UpdateStock = () => {
     const navigate=useNavigate();
+    const [Data, setFormData] = useState({
+      productName: "",
+      productId: "",
+      category: "",
+      quantityPurchased: null,
+      unitPrice: null,
+      totalAmount: "",
+      supplier: "",
+      status: "",
+      image: null // Store the selected image file
+    });
+    const handleChange = (e) => {
+      const { id, value } = e.target;
+      setFormData({ ...Data, [id]: value });
+    };
+  
+    // Handle image upload
+    const handleImageChange = (e) => {
+      const file = e.target.files[0];
+      console.log("this is file path", file)
+      setFormData({ ...Data, image: file });
+    };
+  
+    // Handle form submission
+    const handleSubmit = async () => {
+      try {
+        const formData = new FormData();
+        formData.append('productName', Data.productName);
+        formData.append('productId', Data.productId);
+        formData.append('category', Data.category);
+        formData.append('quantityPurchased', Data.quantityPurchased);
+        formData.append('unitPrice', Data.unitPrice);
+        formData.append('totalAmount', Data.totalAmount);
+        formData.append('supplier', Data.supplier);
+        // formData.append('staffId', formData.staffId);
+        formData.append('status', Data.status);
+        formData.append('image', Data.image);
+  
+        // Make a POST request to the backend API endpoint
+        const response = await axios.post(`${config.baseURL}/stocks/add-stock`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        // Handle success response
+        console.log('New Stock added:', response.data);
+        toast.success("Stock added successfully..")
+        navigate('/admin/stock')
+      } catch (error) {
+        // Handle error
+        console.error('Error adding staff:', error);
+        toast.error("something went wrong..")
+      }
+    };
+
   return (
     <div className="w-full   mt-7">
  <div className="flex items-center cursor-pointer">
@@ -23,10 +81,17 @@ const UpdateStock = () => {
             alt="Upload photo"
             src="/images/img4.png"
           />
+                     <input
+        type="file"
+        id='image'
+        accept="image/*"
+        className='mt-5'
+        onChange={handleImageChange}
+      />
         </div>
         <div className="flex flex-col items-center gap-4 text-sm text-gray-500">
-          <div className="flex items-center gap-2">
-            <img className="w-4 h-4" alt="Add photo" src="/add-photo.svg" />
+          <div className="mt-5 flex items-center gap-2">
+            {/* <img className="mt-5 w-4 h-4" alt="Add photo" src="/add-photo.svg" /> */}
             <span>Upload photo</span>
           </div>
           <div>
@@ -50,6 +115,8 @@ const UpdateStock = () => {
           id="productName"
           className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter product name"
+          onChange={handleChange}
+          value={Data.productName}
         />
       </div>
 
@@ -63,6 +130,8 @@ const UpdateStock = () => {
           id="productId"
           className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter product id"
+          onChange={handleChange}
+          value={Data.productId}
         />
       </div>
 
@@ -72,8 +141,11 @@ const UpdateStock = () => {
         </label>
         <select
           id="category"
+       
           className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-        >
+          onChange={handleChange}
+          value={Data.category}
+       >
           <option value="" disabled selected>
             Select category
           </option>
@@ -85,14 +157,16 @@ const UpdateStock = () => {
 
 
       <div className="mt-4">
-        <label htmlFor="qtyPurchase" className="block text-sm text-gray-700 text-left">
+        <label htmlFor="quantityPurchased" className="block text-sm text-gray-700 text-left">
          QTY Purchased
         </label>
         <input
-          type="number"
-          id="qtyPurchase"
+          type="Number"
+          id="quantityPurchased"
           className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter quantity"
+          onChange={handleChange}
+          value={Data.quantityPurchased}
         />
       </div>
 
@@ -101,10 +175,13 @@ const UpdateStock = () => {
          Unit Price
         </label>
         <input
-          type="tel"
+          type="Number"
           id="unitPrice"
           className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter amount"
+          onChange={handleChange}
+          value={Data.unitPrice}
+
         />
       </div>
       
@@ -118,6 +195,8 @@ const UpdateStock = () => {
           id="totalAmount"
           className="mt-2 md:w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter amount"
+          onChange={handleChange}
+          value={Data.totalAmount}
         />
       </div>
 
@@ -130,6 +209,8 @@ const UpdateStock = () => {
           id="supplier"
           className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Enter supplier"
+          onChange={handleChange}
+          value={Data.supplier}
         />
       </div>
       
@@ -145,7 +226,9 @@ const UpdateStock = () => {
 
       </div>
       <div className="mt-6">
-        <button className="w-full h-10 bg-gradient-to-br from-[#14add5] to-[#384295] text-white rounded-md">
+        <button className="w-full h-10 bg-gradient-to-br from-[#14add5] to-[#384295] text-white rounded-md"
+        onClick={handleSubmit}
+        >
         Add item
         </button>
       </div>

@@ -1,10 +1,45 @@
-import React from "react";
+import React,{useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from "antd";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import config from "../configuration/config";
+import { toast } from "react-toastify";
+import moment from "moment";
 const LogisticRequest=()=>{
     const navigate= useNavigate()
+    const [formData, setFormData] = useState({
+        title: "",
+        purpose: "",
+        sentTo: "",
+        generatedDate: null,
+        requestBy: "",
+        amount: "",
+       
+    });
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setFormData({ ...formData, [id]: value });
+    };
+
+    const handleDateChange = (date, dateString) => {
+        setFormData({ ...formData, generatedDate: dateString });
+      };
+
+      const handleSubmit = async () => {
+        try {
+            const response = await axios.post(`${config.baseURL}/Logistic/create`, formData);
+            console.log(" created successfully:", response.data);
+            toast.success("Logistic created successfully")
+            navigate('/admin/logistics')
+            // Redirect or show success message
+        } catch (error) {
+            toast.error("something went wrong")
+            console.error("Error creating Logistic:", error);
+            // Handle error (show error message, log, etc.)
+        }
+    };
     return(
         <div className="w-full overflow-auto">
 
@@ -29,9 +64,11 @@ const LogisticRequest=()=>{
                     </label>
                     <input
                         type="text"
-                        id="requestTitle"
+                        id="title"
                         className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Enter title"
+                        value={formData.title}
+                        onChange={handleChange}
                     />
                 </div>
 
@@ -45,6 +82,8 @@ const LogisticRequest=()=>{
                         id="purpose"
                         className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Enter purpose"
+                        value={formData.purpose}
+                        onChange={handleChange}
                     />
                 </div>
 
@@ -57,6 +96,8 @@ const LogisticRequest=()=>{
                         id="amount"
                         className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Enter amount"
+                        value={formData.amount}
+                        onChange={handleChange}
                     />
                 </div>
 
@@ -66,9 +107,12 @@ const LogisticRequest=()=>{
                     </label>
                     <input
                         type="text"
-                        id="requestedBy"
+                        id="requestBy"
                         className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Enter name"
+                        onChange={handleChange}
+                        value={formData.requestBy}
+                       
                     />
                 </div>
 
@@ -82,23 +126,28 @@ const LogisticRequest=()=>{
                         id="sentTo"
                         className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Enter name"
+                        value={formData.sentTo}
+                        onChange={handleChange}
                     />
                 </div>
 
               
 
                 <div className="mt-4">
-                    <label htmlFor="dateFrom" className="block text-sm text-gray-700 text-left">
+                    <label htmlFor="generatedDate" className="block text-sm text-gray-700 text-left">
                          Date from
                     </label>
                     <DatePicker
-                        id="dateFrom"
+                        id="generatedDate"
                         className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Select  Date"
+                        onChange={handleDateChange}
+                        value={formData.generatedDate ? moment(formData.generatedDate, 'YYYY-MM-DD') : null}
+
                     />
                 </div>
 
-                <div className="mt-4">
+                {/* <div className="mt-4">
                     <label htmlFor="dateTo" className="block text-sm text-gray-700 text-left">
                          Date to
                     </label>
@@ -107,7 +156,7 @@ const LogisticRequest=()=>{
                         className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Select  Date"
                     />
-                </div>
+                </div> */}
                
 
 
@@ -123,7 +172,9 @@ const LogisticRequest=()=>{
             <div>
                    
                 <div className="flex md:items-end items-end mt-4 flex-wrap gap-4">
-                    <button className="w-[205px] cursor-pointer  focus:outline-none focus:ring focus:ring-violet-300 md:hover:bg-sky-700 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[46px] flex flex-row items-center justify-center p-2.5 box-border text-white" >Attach Payment Voucher</button>
+                    <button className="w-[205px] cursor-pointer  focus:outline-none focus:ring focus:ring-violet-300 md:hover:bg-sky-700 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[46px] flex flex-row items-center justify-center p-2.5 box-border text-white" 
+                   onClick={handleSubmit}
+                   >Create</button>
 
                 </div>
             </div>

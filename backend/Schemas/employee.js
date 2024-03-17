@@ -6,7 +6,7 @@ let EmployeeSchemas = mongoose.Schema({
         type: String,
         required: false,
         unique: true,
-      },
+    },
     photo: {
         type: String,
         required: false
@@ -44,19 +44,24 @@ let EmployeeSchemas = mongoose.Schema({
         type: String,
         required: true
     },
-  
+
     address: {
         type: String,
         required: false,
     },
 
-  
+    officialEmail: {
+        type: String,
+        required: false
+    },
+
+
 
     createdAt: {
         type: String,
         required: false
     },
-   
+
 
     reporting_manager: {
         type: String,
@@ -66,16 +71,16 @@ let EmployeeSchemas = mongoose.Schema({
         type: String,
         required: false
     },
-  
+
 
     doj: {
         type: Date,
         default: Date.now
 
     },
-    otp:{
+    otp: {
         type: String,
-        required:false
+        required: false
     },
 
     resetToken: {
@@ -83,30 +88,34 @@ let EmployeeSchemas = mongoose.Schema({
         required: false
     },
     mobile: {
-type: String,
-required: false
+        type: String,
+        required: false
     },
 
     documents: { type: mongoose.Schema.Types.ObjectId, ref: 'Documents' },
-
+    payslip: { type: mongoose.Schema.Types.ObjectId, ref: 'PaySlip' },
+    leaves: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Leave'
+    }]
 });
 
 
 EmployeeSchemas.pre('save', async function (next) {
     if (!this.empId) {
         try {
-          const maxEmpId = await this.constructor.findOne({}, { empId: 1 }, { sort: { empId: -1 } });
-          const lastEmpId = maxEmpId ? maxEmpId.empId : 'susa999'; // Default value if no document exists
-          const newCounter = parseInt(lastEmpId.replace('susa', ''), 10) + 1;
-          this.empId = `susa${newCounter}`;
-          next();
+            const maxEmpId = await this.constructor.findOne({}, { empId: 1 }, { sort: { empId: -1 } });
+            const lastEmpId = maxEmpId ? maxEmpId.empId : 'susa999'; // Default value if no document exists
+            const newCounter = parseInt(lastEmpId.replace('susa', ''), 10) + 1;
+            this.empId = `susa${newCounter}`;
+            next();
         } catch (error) {
-          next(error);
+            next(error);
         }
-      } else {
+    } else {
         next();
-      }
-    });
+    }
+});
 
 
 module.exports = EmployeeSchemas = mongoose.model('employees', EmployeeSchemas);

@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import {
   AiOutlineDashboard,
-
   AiOutlineUser,
-
   AiOutlineLogout,
 } from "react-icons/ai";
 import { IoWalletOutline } from "react-icons/io5";
@@ -23,11 +21,141 @@ import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
+
+  const [currUser, setCurrUser] = useState();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
+useEffect(()=>{
+  setCurrUser(JSON.parse(localStorage.getItem('user')))
+},[])
+
+console.log("this is ", currUser)
+const [adminitem, setadminitem]=useState(
+  [
+    {
+      key: "",
+      icon: <AiOutlineDashboard className="fs-4" />,
+      label: "Dashboard",
+    },
+    {
+      key: "staff",
+      icon: <AiOutlineUser className="fs-4" />,
+      label: "Staff",
+    },
+    {
+      key: "employee-forms",
+      icon: <AiOutlineUser className="fs-4" />,
+      label: "Employee Form",
+    },
+    {
+      key: "leaves-status",
+      icon: <RiCouponLine className="fs-4" />,
+      label: "Leaves status",
+    },
+    // {
+    //   key: "paymentvoucher",
+    //   icon: <IoWalletOutline  className="fs-4" />,
+    //   label: "Payment Voucher",
+
+    // },
+    {
+      key: "payroll",
+      icon: <FaMoneyBills  className="fs-4" />,
+      label: "Payroll",
+    },
+    {
+      key: "memo",
+      icon: <RiCouponLine className="fs-4" />,
+      label: "Memo",
+
+    },
+    {
+      key: "circular",
+      icon: <FaBloggerB className="fs-4" />,
+      label: "Circulars",
+
+    },
+    // {
+    //   key: "maintenance",
+    //   icon: <FaClipboardList className="fs-4" />,
+    //   label: "Maintenance",
+    // },
+
+    {
+      key: "logistics",
+      icon: <BsPersonVcard  className="fs-4" />,
+      label: "Logistics",
+    },
+    {
+      key: "budget",
+      icon: <GrMoney  className="fs-4" />,
+      label: "Office Budget",
+    },
+    {
+      key: "stockandinventory",
+      icon: <MdOutlineInventory  className="fs-4" />,
+      label: "Stocks and Inventory",
+      children: [
+        {
+          key: "stock",
+          icon: <FaClipboardList className="fs-4" />,
+          label: "Stocks",
+
+        },
+        // {
+        //   key: "inventory",
+        //   icon: <MdOutlineInventory   className="fs-4" />,
+        //   label: "Inventory",
+
+        // }
+      ]
+    },
+    // {
+    //   key: "notification",
+    //   icon: <FaClipboardList className="fs-4" />,
+    //   label: "Notification",
+    // },
+    {
+      key: "capacity",
+      icon: <MdOutlineReduceCapacity className="fs-4" />,
+      label: "Capacity Building",
+    },
+    {
+      key: "procurement",
+      icon: <FaClipboardList className="fs-4" />,
+      label: "Procurements",
+    },
+    {
+      key: "signout",
+      icon: <AiOutlineLogout className="fs-4" />,
+      label: "Sign Out",
+    },
+  ]
+)
+
+
+const[empitem, setempitem]=useState([
+  {
+    key: "",
+    icon: <AiOutlineDashboard className="fs-4" />,
+    label: "Profile",
+  },
+  {
+    key: "apply-leaves",
+    icon: <AiOutlineUser className="fs-4" />,
+    label: "Apply Leaves",
+  },
+  {
+    key: "signout",
+    icon: <AiOutlineLogout className="fs-4" />,
+    label: "Sign Out",
+  },
+
+
+])
   return (
     <div>
       <Layout  >
@@ -46,106 +174,18 @@ const MainLayout = () => {
             onClick={({ key }) => {
               if (key === "signout") {
                 localStorage.clear();
-                window.location.reload();
+                navigate('/');
               } else {
                 navigate(key);
               }
             }}
-            items={[
-              {
-                key: "",
-                icon: <AiOutlineDashboard className="fs-4" />,
-                label: "Dashboard",
-              },
-              {
-                key: "staff",
-                icon: <AiOutlineUser className="fs-4" />,
-                label: "Staff",
-              },
-              {
-                key: "employee-forms",
-                icon: <AiOutlineUser className="fs-4" />,
-                label: "Employee Form",
-              },
-              {
-                key: "paymentvoucher",
-                icon: <IoWalletOutline  className="fs-4" />,
-                label: "Payment Voucher",
 
-              },
-              {
-                key: "payroll",
-                icon: <FaMoneyBills  className="fs-4" />,
-                label: "Payroll",
-              },
-              {
-                key: "memo",
-                icon: <RiCouponLine className="fs-4" />,
-                label: "Memo",
+            
+            items={
+             currUser?.role?.toLowerCase()==='admin'? adminitem : empitem
+          }
 
-              },
-              {
-                key: "circular",
-                icon: <FaBloggerB className="fs-4" />,
-                label: "Circulars",
 
-              },
-              // {
-              //   key: "maintenance",
-              //   icon: <FaClipboardList className="fs-4" />,
-              //   label: "Maintenance",
-              // },
-
-              {
-                key: "logistics",
-                icon: <BsPersonVcard  className="fs-4" />,
-                label: "Logistics",
-              },
-              {
-                key: "budget",
-                icon: <GrMoney  className="fs-4" />,
-                label: "Office Budget",
-              },
-              {
-                key: "stockandinventory",
-                icon: <MdOutlineInventory  className="fs-4" />,
-                label: "Stocks and Inventory",
-                children: [
-                  {
-                    key: "stock",
-                    icon: <FaClipboardList className="fs-4" />,
-                    label: "Stocks",
-
-                  },
-                  {
-                    key: "inventory",
-                    icon: <MdOutlineInventory   className="fs-4" />,
-                    label: "Inventory",
-
-                  }
-                ]
-              },
-              // {
-              //   key: "notification",
-              //   icon: <FaClipboardList className="fs-4" />,
-              //   label: "Notification",
-              // },
-              {
-                key: "capacity",
-                icon: <MdOutlineReduceCapacity className="fs-4" />,
-                label: "Capacity Building",
-              },
-              {
-                key: "procurement",
-                icon: <FaClipboardList className="fs-4" />,
-                label: "Procurements",
-              },
-              {
-                key: "signout",
-                icon: <AiOutlineLogout className="fs-4" />,
-                label: "Sign Out",
-              },
-            ]}
           />
         </Sider>
         <Layout className="site-layout" style={{ width: "100%" }}>
@@ -169,10 +209,11 @@ const MainLayout = () => {
                   <img
                     width={36}
                     height={36}
-                    src="https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-4-64x64.jpg"
+                   src={currUser?.photo}
+                    // src="https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-4-64x64.jpg"
                     alt=""
                   />
-                  <h5 className="mb-0">Ajay</h5>
+                  <h5 className="mb-0">{currUser?.firstname}</h5>
                 </div>
                 <div
                   role="button"

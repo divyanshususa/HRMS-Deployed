@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Button } from 'antd';
 import axios from 'axios';
+import config from '../configuration/config';
 
 const Employeeform=()=>{
     const[tableData , setTableData]= useState([])
@@ -54,8 +55,7 @@ const Employeeform=()=>{
       ];
 
       const fetchData= async()=>{
-            const response = await axios.get('http://localhost:5000/api/user/employee-requests')
-            // console.log("this is response", response)
+            const response = await axios.get(`${config.baseURL}/api/user/employee-requests`)
             setTableData(response.data.data)
       }
 
@@ -66,7 +66,7 @@ const Employeeform=()=>{
       const handleRegister = async (record) => {
         try {
             console.log("this is record", record)
-          const response = await axios.post('http://localhost:5000/api/user/create-employee', record);
+          const response = await axios.post(`${config.baseURL}/api/user/create-employee`, record);
         //   message.success('Employee registered successfully');
           // Update the table data if necessary
 

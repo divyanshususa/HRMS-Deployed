@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -203,6 +202,33 @@ router.post('/request-form', upload.fields([
 });
 
 
+router.post('/add-staff', upload.single('image'), async (req, res) => {
+  try {
+    const  image  = req.file;
+    // console.log(req)
+    console.log(image)
+    const url = await uploadOnCloudinary([image]);
+
+    // Create a new employee object with data from the request body
+    const newEmployee = new EmployeeSchemas({
+      ...req.body, // Form data
+      photo: url[0] ,
+      approved: true,
+     
+    });
+
+    // Save the new employee to the database
+    const savedEmployee = await newEmployee.save();
+
+    // Send a success response with the saved employee data
+    res.status(201).json(savedEmployee);
+  } catch (error) {
+    // If an error occurs, send a 500 Internal Server Error response
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 router.get('/employee-requests', async (req, res) => {
   try {
@@ -210,6 +236,18 @@ router.get('/employee-requests', async (req, res) => {
     const requests = await EmpRequest.find();
 
     res.status(200).json({ success: true, data: requests });
+  } catch (error) {
+    console.error('Error fetching employee requests:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+router.get('/getAllEmployees', async (req, res) => {
+  try {
+   
+    const response = await EmployeeSchemas.find({approved:true});
+
+    res.status(200).json({ success: true, response });
   } catch (error) {
     console.error('Error fetching employee requests:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });

@@ -1,12 +1,29 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { Table } from "antd";
 import { FaLongArrowAltDown, FaLongArrowAltUp } from "react-icons/fa"
-import { logisticColumns, stockColumns, trainingColumns } from "../utils/columns";
+import {  trainingColumns } from "../utils/columns";
 import { dummyLogisticData, dummyStockData, dummyTrainingData } from "../utils/dummyData";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import config from "../configuration/config";
 
 const  Capacity=()=>{
     const navigate= useNavigate()
+    const[trainingList, settrainingList]= useState();
+    useEffect(()=>{
+        fetchtraining()
+    },[])
+    const handleSearch = (e) => {
+        setSearchText(e.target.value);
+     
+      };
+
+    const fetchtraining=async()=>{
+     const res = await axios.get(`${config.baseURL}/capacitybuilding/gettraining`)
+    
+    settrainingList(res.data)
+
+    }
 return(
     <div>
 
@@ -143,7 +160,7 @@ return(
               <div className=" text-xs text-grey-70">
                 <Table
                   columns={trainingColumns}
-                  dataSource={dummyTrainingData}
+                  dataSource={trainingList}
                   pagination={{ pageSize: 7 }}
                   size="middle"
                 />

@@ -1,12 +1,25 @@
-import React from "react";
+
+import React ,{ useEffect, useState }from "react";
 import { Table } from "antd";
 import { FaLongArrowAltUp } from "react-icons/fa"
 import { logisticColumns } from "../utils/columns";
-import { dummyLogisticData } from "../utils/dummyData";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
+import config from "../configuration/config";
 
 const  Logistics=()=>{
+    const[logisticList, setlogisticList]= useState();
     const navigate= useNavigate()
+    
+    useEffect(()=>{
+        fetchlogistic()
+    },[])
+    const fetchlogistic=async()=>{
+        const res = await axios.get(`${config.baseURL}/Logistic/getAllLogistics`)
+       console.log("fetching...")
+       setlogisticList(res.data)
+   
+       }
 return(
     <div>
 
@@ -147,7 +160,7 @@ return(
               <div className=" text-xs text-grey-70">
                 <Table
                   columns={logisticColumns}
-                  dataSource={dummyLogisticData}
+                  dataSource={logisticList}
                   pagination={{ pageSize: 7 }}
                   size="middle"
                 />

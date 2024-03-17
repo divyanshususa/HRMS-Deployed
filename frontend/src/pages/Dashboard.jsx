@@ -1,16 +1,45 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import UserDropdown from "./UserDropdown";
 import MemoTable from "../components/MemoTable";
 import StaffListTable from "../components/StaffListTable";
 import PaymentVouchersTable from "../components/PaymentVouchersTable";
 import { FaLongArrowAltDown, FaLongArrowAltUp } from "react-icons/fa";
+import axios from "axios";
+import config from "../configuration/config";
 // import PortalPopup from "./portal-popup";
 
 const Dashbaord = () => {
     const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
+    const [memoList , setMemoList]=useState()
+    const [stafflist , setStafflist]=useState()
+    const [empApplications , setempApplication]=useState()
 
+    useEffect(()=>{
+        fetchmemo();
+        fetchstaff();
+        fetchApplication()
+    },[])
 
+     const fetchmemo=async()=>{
+        const res = await axios.get(`${config.baseURL}/memo/getMemo`)
+    
+        setMemoList(res.data)
+     }
+     const fetchApplication=async()=>{
+        const res = await axios.get(`${config.baseURL}/api/user/employee-requests`)
+    
+        setempApplication(res.data)
+     }
+     const fetchstaff=async()=>{
+        const res = await axios.get(`${config.baseURL}/api/user/getAllEmployees`)
+        console.log("djkfhsk", res.data)
+        setStafflist(res.data.response)
+     }
+     
+     const fetchpaymentvoucher=()=>{
 
+     }
+console.log("inside..", memoList)
     return (
         <>
             <div className="wd:mx-5  bg-ghostwhite  overflow-hidden text-left text-9xl text-grey-100 font-body-3-small">
@@ -21,7 +50,7 @@ const Dashbaord = () => {
                     <div className=" rounded-xl shadow-md">
                         <div className="flex gap-3 p-5 items-start justify-start ">
                             <div>
-                                <div className=" font-extrabold">250</div>
+                                <div className=" font-extrabold text-9xl">{stafflist?.length}</div>
                                 <div className=" text-base leading-[24px]">
                                     Total number of staff
                                 </div>
@@ -48,7 +77,7 @@ const Dashbaord = () => {
                     <div className=" rounded-xl shadow-md">
                         <div className="flex gap-3 p-5 items-start justify-start ">
                             <div>
-                                <div className=" font-extrabold">100</div>
+                                <div className=" font-extrabold">{empApplications ? 0 : empApplications?.length}</div>
                                 <div className=" text-base leading-[24px]">
                                     Total Application
                                 </div>
@@ -127,8 +156,8 @@ const Dashbaord = () => {
                 {/* close */}
                 <div className="w-full overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2 md:mt-5 md:justify-items-stretch gap-5  mt-5 ">
-                        <MemoTable />
-                        <StaffListTable />
+                        <MemoTable memoList={memoList} />
+                        <StaffListTable stafflist={stafflist} />
                         <PaymentVouchersTable />
 
                         <div className=" text-xl text-relia-energy-black mt-8">

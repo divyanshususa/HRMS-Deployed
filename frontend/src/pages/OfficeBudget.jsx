@@ -1,12 +1,26 @@
-import React from "react";
+
+import React ,{ useEffect, useState }from "react";
 import { Table } from "antd";
 import { FaLongArrowAltUp } from "react-icons/fa"
 import { budgetColumns, logisticColumns } from "../utils/columns";
 import { dummyBudgetData, dummyLogisticData } from "../utils/dummyData";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
+import config from "../configuration/config";
 
 const  OfficeBudget=()=>{
+    const[budgetList, setbudgetList]= useState();
     const navigate= useNavigate()
+    
+    useEffect(()=>{
+        fetchbudget()
+    },[])
+    const fetchbudget=async()=>{
+        const res = await axios.get(`${config.baseURL}/budget/getAllbudget`)
+       console.log("fetching...")
+       setbudgetList(res.data)
+   
+       }
 return(
     <div>
 
@@ -142,7 +156,7 @@ return(
               <div className=" text-xs text-grey-70">
                 <Table
                   columns={budgetColumns}
-                  dataSource={dummyBudgetData}
+                  dataSource={budgetList}
                   pagination={{ pageSize: 7 }}
                   size="middle"
                 />

@@ -34,9 +34,12 @@ import ProcurementReq from './components/ProcurementReq';
 import Signup from './pages/Signup';
 import Thankyou from './pages/Thankyou';
 import Employeeform from './pages/Employeeform';
+import ApplyLeave from './components/Applyleave';
+import LeavesStatus from './pages/LeavesStatus';
 
 function App() {
   const [count, setCount] = useState(0)
+  const[payslip, setpayslip]=useState()
 
   return (
     <>
@@ -56,6 +59,19 @@ function App() {
         <Route path='/reset-password' element={<ResetPassword/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/thankyou' element={<Thankyou/>}/>
+        <Route path='/applyleaves' element={<ApplyLeave/>}/>
+        <Route
+          path="/employee"
+          element={
+            // <PrivateRoutes>
+              <MainLayout />
+              // <Dashbaord/>
+            // </PrivateRoutes>
+          }
+        >
+  <Route index element={<Dashbaord />} />
+  <Route path='/employee/apply-leaves' element={<ApplyLeave/>} />  
+        </Route>
         <Route
           path="/admin"
           element={
@@ -67,6 +83,7 @@ function App() {
         >
           <Route index element={<Dashbaord />} />
           <Route path='/admin/employee-forms' element={<Employeeform/>} />
+          <Route path='/admin/leaves-status' element={<LeavesStatus/>} />
           <Route path='/admin/staff' element={<Staff/>} />
           <Route path='/admin/staff/add-staff' element={<AddStaffForm/>} />
           <Route path='/admin/paymentvoucher' element={<PaymentVoucherTable/>} />
@@ -74,8 +91,8 @@ function App() {
           <Route path='/admin/payroll' element={<Payroll/>} />
           <Route path='/admin/payroll/salary-defination' element={<SalaryDefination/>} />
           <Route path='/admin/payroll/tax-defination' element={<TaxDefination/>} />
-          <Route path='/admin/payroll/create-payslip' element={<CreatePayslip/>} />
-          <Route path='/admin/payroll/created-payslip' element={<PaySlip/>} />
+          <Route path='/admin/payroll/create-payslip' element={<CreatePayslip  setpayslip={setpayslip}/>} />
+          <Route path='/admin/payroll/created-payslip' element={<PaySlip payslip={payslip}/>} />
           <Route path='/admin/payroll/create-payroll' element={<CreatePayroll/>} />
           <Route path='/admin/memo' element={<Memo/>} />
           <Route path='/admin/memo/create-memo' element={<CreateMemo/>} />
@@ -95,6 +112,8 @@ function App() {
       </Routes>
     </Router>
     </>
+
+    
   )
 }
 

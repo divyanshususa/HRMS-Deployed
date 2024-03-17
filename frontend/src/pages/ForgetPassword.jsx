@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import config from "../configuration/config";
 const ForgetPassword = () => {
   const navigate= useNavigate()
   const [email, setEmail] = useState("");
@@ -10,7 +11,7 @@ const ForgetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/user/forget-password", { email });
+      const response = await axios.post(`${config.baseURL}/api/user/forget-password`, { email });
       const data = response.data;
       console.log(data)
       if (response.status === 200 && data.success) {

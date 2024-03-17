@@ -1,17 +1,175 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker } from 'antd';
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 import { Table } from "antd";
-import { staffDetailsCol } from "../utils/columns";
-import {
-    dummyStaffDetailsData,
-
-} from "../utils/dummyData";
+import moment from "moment";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import config from "../configuration/config";
+import { toast } from "react-toastify";
 
 const CreatePayroll = () => {
+
+
+    const staffDetailsCol=[
+        {
+            title: "S/N",
+            dataIndex: "serialNumber",
+            key: "serialNumber",
+            render: (_, __, index) => index + 1,
+        },
+        {
+            title: "Staff Name",
+            dataIndex: "staffName",
+            key: "staffName",
+        },
+        {
+            title: "Title",
+            dataIndex: "title",
+            key: "title",
+        },
+        {
+            title: "Level",
+            dataIndex: "level",
+            key: "level",
+        },
+        {
+            title: "Basic Salary",
+            dataIndex: ["salaryStructure", "basicSalary"],
+            key: "basicSalary",
+            render: (basicSalary) => `₹${basicSalary.toFixed(2)}`, // Format the salary as needed
+        },
+        {
+            title: "Allowance",
+            dataIndex: "salaryStructure", // Display all allowance fields together
+            key: "allowance",
+            render: (salaryStructure) => {
+                const allowances = Object.values(salaryStructure).reduce((total, allowance) => total + allowance, 0);
+                return `₹${allowances.toFixed(2)}`; // Format the total allowance as needed
+            },
+        },
+        {
+            title: "Gross Salary",
+            dataIndex: "grossSalary",
+            key: "grossSalary",
+            render: (grossSalary) => `₹${grossSalary}`,
+           
+        },
+        {
+            title: "Deductions",
+            dataIndex: "deductions", // Display all deduction fields together
+            key: "deductions",
+            render: (deductions) => {
+                const totalDeductions = Object.values(deductions).reduce((total, deduction) => total + deduction, 0);
+                return `₹${totalDeductions.toFixed(2)}`; // Format the total deductions as needed
+            },
+        },
+        {
+            title: "Net Salary",
+            dataIndex: "netSalary",
+            key: "netSalary",
+            render: (netSalary) => `₹${netSalary.toFixed(2)}`, // Format the net salary as needed
+        },
+        {
+            title: "Action",
+            dataIndex: "action",
+            key: "action",
+            render: (_, record) => (
+                <span
+                    className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
+                    // onClick={() => onViewMoreTextClick(record)}
+                >
+                    View more
+                </span>
+            ),
+        },
+    ]
+
+    const[StaffDetailsData, setStaffDetailsData]=useState()
     const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        paymentName: '',
+        designation: '',
+        generatedDate: null,
+        month: '',
+        year: '',
+      });
+
+      const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+      };
+    
+      const handleFormSubmit = async () => {
+        try {
+          // Send the form data to the backend API endpoint
+          const response = await axios.post(`${config.baseURL}/payroll/create-payroll`, formData);
+          console.log('Payroll created:', response.data);
+          
+          toast.success('payroll generated sucessfully ')
+          // Optionally, you can handle the response here, such as showing a success message or navigating to another page
+        } catch (error) {
+          console.error('Error creating payroll:', error);
+          // Handle error, such as displaying an error message to the user
+        }
+      };
+
+    useEffect(()=>{
+        fetchData()
+    },[])
+    
+
+    const fetchData=async()=>{
+        try {
+            const res=  await axios.get(`${config.baseURL}/payslips/getAllPayslips`)
+           console.log(res.data)
+            setStaffDetailsData(res.data)
+            
+        } catch (error) {
+            
+        }
+    }
+
+    // const transformedData = StaffDetailsData?.map((item, index) => ({
+    //     key: index, // Assuming the index can be used as the key
+    //     serialNumber: index + 1, // Generate a serial number based on the index
+    //     staffName: item.staffName,
+    //     title: item.title,
+    //     level: item.level,
+    //     basicSalary: item.salaryStructure.basicSalary,
+    //     allowance: { ...item.salaryStructure }, // Allowances object
+    //     grossSalary: item.grossSalary,
+    //     deductions: { ...item.deductions }, // Deductions object
+    //     netSalary: item.netSalary,
+    //     action: null, // No action specified
+    //   }));
+
+    //   console.log("this is tran",transformedData)
+
+    const months = [
+        { value: 'January', label: 'January' },
+        { value: 'February', label: 'February' },
+        { value: 'March', label: 'March' },
+        { value: 'April', label: 'April' },
+        { value: 'May', label: 'May' },
+        { value: 'June', label: 'June' },
+        { value: 'July', label: 'July' },
+        { value: 'August', label: 'August' },
+        { value: 'September', label: 'September' },
+        { value: 'October', label: 'October' },
+        { value: 'November', label: 'November' },
+        { value: 'December', label: 'December' },
+    ];
+
+    const currentYear = new Date().getFullYear();
+    const handleDate = (date, dateString) => {
+        setFormData({ ...formData, generatedDate: dateString });
+      };
+    
+
+    console.log(formData)
+
     return (
         <div>
 
@@ -39,6 +197,8 @@ const CreatePayroll = () => {
                             id="paymentName"
                             className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                             placeholder="Enter payment name"
+                            onChange={handleChange}
+                            value={formData.paymentName}
                         />
                     </div>
 
@@ -49,14 +209,15 @@ const CreatePayroll = () => {
                         <select
                             id="designation"
                             className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                        >
+                            onChange={handleChange}
+                            value={formData.designation}
+                      >
                             <option value="" disabled selected>
                                 Select designation
                             </option>
-                            <option value="male">MD/CEO</option>
-                            <option value="female">CEO</option>
-                            <option value="other">DGM</option>
-                            <option value="other">ED</option>
+                            <option value="Manager">Manager</option>
+                            <option value="HR">HR</option>
+                            <option value="Developer">Developer</option>
                         </select>
                     </div>
 
@@ -68,7 +229,9 @@ const CreatePayroll = () => {
                             id="generatedDate"
                             className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                             placeholder="Select Generated Date"
-                        />
+                            onChange={handleDate}
+                            value={formData.generatedDate ? moment(formData.generatedDate, 'YYYY-MM-DD') : null}
+                       />
                     </div>
 
                     <div className="mt-4">
@@ -78,14 +241,15 @@ const CreatePayroll = () => {
                         <select
                             id="month"
                             className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                        >
+                            onChange={handleChange}
+                            value={formData.month}
+                       >
                             <option value="" disabled selected>
                                 Select Month
                             </option>
-                            <option value="January">January</option>
-                            <option value="febuary">febuary</option>
-                            <option value="March">March</option>
-                            <option value="April">April</option>
+                             {months.map((month, index) => (
+                                <option key={index} value={month.value}>{month.label}</option>
+                            ))}
                         </select>
                     </div>
 
@@ -95,15 +259,17 @@ const CreatePayroll = () => {
                         </label>
                         <select
                             id="year"
+                       
                             className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                        >
+                            onChange={handleChange}
+                            value={formData.year}
+                       >
                             <option value="" disabled selected>
                                 Select Year
                             </option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
+                            {[currentYear - 1, currentYear, currentYear + 1].map((year, index) => (
+                                <option key={index} value={year}>{year}</option>
+                            ))}
                         </select>
                     </div>
 
@@ -124,7 +290,8 @@ const CreatePayroll = () => {
                 </div>
                 <div className="flex md:items-end items-end mt-4">
                     <button className="w-[205px] cursor-pointer  focus:outline-none focus:ring focus:ring-violet-300 md:hover:bg-sky-700 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[46px] flex flex-row items-center justify-center p-2.5 box-border text-white"
-                    >Generate Payroll</button>
+                   onClick={handleFormSubmit}
+                   >Generate Payroll</button>
 
                 </div>
             </div>
@@ -136,7 +303,7 @@ const CreatePayroll = () => {
                     <div className=" text-xs text-grey-70">
                         <Table
                             columns={staffDetailsCol}
-                            dataSource={dummyStaffDetailsData}
+                            dataSource={StaffDetailsData}
                             pagination={{ pageSize: 7 }}
                             size="middle"
                         />

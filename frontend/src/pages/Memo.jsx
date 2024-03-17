@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { memoColumns } from "../utils/columns";
 import { Table } from "antd";
-import { dummyMemoData } from "../utils/dummyData";
+
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import config from "../configuration/config";
 
 const Memo = () => {
+    const [memoList, setMemoList] = useState();
+    const [searchText, setSearchText] = useState("");
+    const navigate = useNavigate();
 
-    const navigate= useNavigate();
+    useEffect(() => {
+        fetchmemo()
+    }, [])
+    const handleSearch = (e) => {
+        setSearchText(e.target.value);
+
+    };
+
+    const fetchmemo = async () => {
+        const res = await axios.get(`${config.baseURL}/memo/getMemo`)
+
+        setMemoList(res.data)
+
+    }
     return (
         <div className="w-full">
 
@@ -16,8 +34,8 @@ const Memo = () => {
             <div className=" grid w-full justify-start items-end gap-[20px_7px] md:grid-cols-4 sm:grid-cols-2  md:auto-cols-auto">
 
 
-                <div className="flex flex-col  justify-start items-baseline text-5xl text-relia-energy-black">
-                    <div className=" font-extrabold">250</div>
+                <div className="flex flex-col  justify-start items-baseline text-9xl text-relia-energy-black">
+                    <div className=" font-extrabold">{memoList?.length}</div>
                     <div className=" text-sm leading-[24px] text-grey-70">
                         Total memo
                     </div>
@@ -29,14 +47,17 @@ const Memo = () => {
                         Quick search a memo
                     </div>
                     <div className="  h-[50px] text-grey-50">
-                        <input className=" h-[102%] w-[100.29%] p-2 rounded-3xs box-border border-[1px] border-solid border-grey-40" placeholder="Enter search word" />
+                        <input className=" h-[102%] w-[100.29%] p-2 rounded-3xs box-border border-[1px] border-solid border-grey-40" placeholder="Enter search word"
+                            value={searchText}
+                            onChange={handleSearch}
+                        />
 
                     </div>
                 </div>
 
 
 
-
+{/* 
                 <div className="flex flex-col items-start justify-start">
                     <div className="flex flex-col items-start justify-start gap-[8px_0px]">
                         <div className=" leading-[24px]">Filter memo</div>
@@ -66,15 +87,15 @@ const Memo = () => {
 
 
                     </div>
+                </div> */}
+                <div className="flex items-baseline">
+                    <button className="w-[180px] rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[46px] flex flex-row items-center justify-center p-2.5 box-border text-white"
+                        onClick={() => { navigate('/admin/memo/create-memo') }}
+                    >
+                        <div className=" leading-[24px]">Create Memo</div>
+                    </button>
                 </div>
-<div className="flex items-baseline">
-<button className="w-[180px] rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[46px] flex flex-row items-center justify-center p-2.5 box-border text-white"
-onClick={()=>{navigate('/admin/memo/create-memo')}}
->
-                    <div className=" leading-[24px]">Create Memo</div>
-                </button>
-</div>
-               
+
 
 
 
@@ -82,20 +103,27 @@ onClick={()=>{navigate('/admin/memo/create-memo')}}
 
 
             <div className="mt-20">
-                
-            <div className="bg-white rounded-xl shadow-md mt-6 p-3">
-            <div className="font-bold md:text-base flex mt-3">All Memo</div>
-            <div className="overflow-auto md:overflow-auto  md:overflow-x-scroll mt-6  text-left text-xl text-black font-body-3-small">
-          <div className=" text-xs text-grey-70">
-            <Table
-              columns={memoColumns}
-              dataSource={dummyMemoData}
-              pagination={{ pageSize: 7 }}
-              size="middle"
-            />
-          </div>
-        </div>
-            </div>
+
+                <div className="bg-white rounded-xl shadow-md mt-6 p-3">
+                    <div className="font-bold md:text-base flex mt-3">All Memo</div>
+                    <div className="overflow-auto md:overflow-auto  md:overflow-x-scroll mt-6  text-left text-xl text-black font-body-3-small">
+                        <div className=" text-xs text-grey-70">
+                            <Table
+                                columns={memoColumns}
+                                dataSource={memoList?.filter((memo) => {
+                                    const search = searchText?.toLowerCase();
+                                    return (
+                                        memo.memoTitle?.toLowerCase().includes(search) ||
+                                        memo.memoType?.toLowerCase().includes(search)
+
+                                    );
+                                })}
+                                pagination={{ pageSize: 7 }}
+                                size="middle"
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
