@@ -63,16 +63,16 @@ const Login = () => {
             <div className=" flex gap-[15rem]">
               <div className="  flex flex-col items-center justify-start gap-[4px_0px]">
                 <img
-                  className="w-[35.5px] relative h-[35.5px]"
+                  className="w-[50.5px] relative h-[50.5px]"
                   alt=""
-                  src="/group-13.svg"
+                  src="/images/logo.png"
                 />
                 <div className="">
-                  <p className="m-0">
+                  {/* <p className="m-0">
                     <b className="[background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]">
                       Susakgjyo
                     </b>
-                  </p>
+                  </p> */}
                   <p className="m-0">ERP System</p>
                 </div>
               </div>
@@ -121,16 +121,16 @@ const Login = () => {
               </div>
 
               <div className=" mt-3 flex flex-row items-start justify-start gap-[0px_76px] text-grey-70">
-                <div className="flex flex-row items-center justify-start gap-[0px_4px]">
+                {/* <div className="flex flex-row items-center justify-start gap-[0px_4px]">
                   <input
                     type="checkbox"
                     id="rememberMe"
                     className="w-4 h-4 text-relia-energy-primary-color"
                   />
                   <div className="relative leading-[24px]">Remember me</div>
-                </div>
+                </div> */}
 
-                <NavLink to='/forget-password'>
+                <NavLink to='/forget-password' className='no-underline'>
                   <div
                     className="relative leading-[24px] text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
                   // onClick={onIForgotMy1Click}

@@ -202,11 +202,41 @@ router.post('/request-form', upload.fields([
 });
 
 
+router.post('/req-form', async(req, res)=>{
+  try {
+    
+    const { firstname, lastname, gender, email, mobile, image, docs, aadhar_number,pan_number } = req.body;
+// console.log("asdf",req.body)
+    // Create a new employee document
+    const newEmployee = new EmpRequest({
+        firstname,
+        lastname,
+        gender,
+        email,
+        mobile,
+        image,
+        docs,
+        aadhar_number,
+        pan_number
+    });
+
+    // Save the new employee document to the database
+    const savedEmployee = await newEmployee.save();
+
+    // Return the saved employee document as the response
+    res.status(201).json(savedEmployee);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+
+
+
 router.post('/add-staff', upload.single('image'), async (req, res) => {
   try {
     const  image  = req.file;
     // console.log(req)
-    console.log(image)
+    // console.log(image)
     const url = await uploadOnCloudinary([image]);
 
     // Create a new employee object with data from the request body
@@ -268,12 +298,10 @@ router.post('/create-employee', async (req, res) => {
       image,
       aadhar_number,
       pan_number,
-      resume,
-      offer_letter,
-      experience,
-      education
+      docs
     } = req.body;
 
+    console.log(docs)
     const hashedPassword = await bcrypt.hash("pass", 10);
 
     // Create a new employee using data from EmpRequestForm
@@ -303,12 +331,7 @@ router.post('/create-employee', async (req, res) => {
     // Create a new document entry in the Documents table
     const newDocument = new DocumentSchemas({
       employee: emp._id, // Reference the newly created employee's ID
-      aadhar_number,
-      pan_number,
-      resume,
-      offer_letter,
-      experience,
-      education
+      docs
     });
 
     // Save the new document entry to the database

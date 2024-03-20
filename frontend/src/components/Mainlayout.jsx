@@ -209,7 +209,7 @@ const[empitem, setempitem]=useState([
                   <img
                     width={36}
                     height={36}
-                   src={currUser?.photo}
+                   src={currUser?.photo ? currUser?.photo :'/images/default.avif'}
                     // src="https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-4-64x64.jpg"
                     alt=""
                   />

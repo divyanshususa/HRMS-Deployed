@@ -87,7 +87,6 @@ app.use("/payslips", paySlipRoutes);
 app.use("/paymenthistory", paymentRoutes);
 app.use('/api/leave',leaveRoutes );
 
-
 app.get("/", (req, res) => {
   console.log("hello");
   res.json("working");

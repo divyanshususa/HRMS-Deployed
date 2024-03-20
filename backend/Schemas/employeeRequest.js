@@ -25,6 +25,8 @@ let EmpRequestSchemas= mongoose.Schema({
         type: String,
         required: false
     },
+    docs:[],
+
     aadhar_number: {
         type: String,
         required: false
@@ -33,24 +35,24 @@ let EmpRequestSchemas= mongoose.Schema({
         type: String,
         required: false
     },
-    resume:
-    {
-        type: String,
-        required: false
-    },
-    offer_letter:
-    {
-        type: String,
-        required: false
-    },
-    experience: {
-        type: String,
-        required: false
-    },
-    education: {
-        type: String,
-        required: false
-    },
+    // resume:
+    // {
+    //     type: String,
+    //     required: false
+    // },
+    // offer_letter:
+    // {
+    //     type: String,
+    //     required: false
+    // },
+    // experience: {
+    //     type: String,
+    //     required: false
+    // },
+    // education: {
+    //     type: String,
+    //     required: false
+    // },
 
 })
 

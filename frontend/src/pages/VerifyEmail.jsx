@@ -40,32 +40,30 @@ const [email, setEmail]= useState('')
           <div className=" ">
             <div className=" flex flex-row items-center justify-between">
               <div className="">
-                <img
-                  className=" max-w-full overflow-hidden max-h-full object-cover hidden"
-                  alt=""
-                  src="/logo@2x.png"
-                />
+              
                 <div className=" flex flex-col items-center justify-start gap-[4px_0px]">
-                  <img
-                    className=""
-                    alt=""
-                    src="/group-13.svg"
-                  />
+                <img
+                  className="w-[50.5px] relative h-[50.5px]"
+                  alt=""
+                  src="/images/logo.png"
+                />
                   <div className=" ">
-                    <p className="m-0">
+                    {/* <p className="m-0">
                       <b className="[background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]">
                         UiUxOtor
                       </b>
-                    </p>
+                    </p> */}
                     <p className="m-0">ERP System</p>
                   </div>
                 </div>
               </div>
-              <div className="w-[101px] rounded-3xs box-border h-[47px] flex flex-row items-center justify-center p-2.5 text-left text-sm border-[1px] border-solid border-relia-energy-gradient">
+              <button className="w-[101px] rounded-3xs box-border h-[47px] flex flex-row items-center justify-center p-2.5 text-left text-sm border-[1px] border-solid border-relia-energy-gradient"
+              onClick={()=>{navigate('/signup')}}
+              >
                 <div className="  text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]">
                   Sign Up
                 </div>
-              </div>
+              </button>
             </div>
             <div className="flex flex-col items-start justify-start gap-[48px_0px] text-left text-sm text-grey-80 mt-10">
               <div className="flex flex-col items-start justify-start">

@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom';
 const AddStaffForm = () => {
   const navigate= useNavigate()
+  const [imagePreview, setImagePreview] = useState(null);
   const [Data, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -29,8 +30,14 @@ const AddStaffForm = () => {
   // Handle image upload
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    console.log("this is file path", file)
     setFormData({ ...Data, image: file });
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Handle form submission
@@ -64,6 +71,7 @@ const AddStaffForm = () => {
       toast.error("something went wrong..")
     }
   };
+
   return (
     <div className="w-full   mt-16">
         <div className="mt-4 text-xl font-extrabold text-black p-4 mb-4">Add a New Staff</div>
@@ -71,11 +79,21 @@ const AddStaffForm = () => {
 
       <div className="  rounded-xl bg-white shadow-md p-8">
         <div className="w-32 h-32 mx-auto mb-6">
+        {imagePreview ? (
           <img
             className="w-full h-full object-cover"
-            alt="Upload photo"
-            src="/images/img4.png"
+            alt="Uploaded photo"
+            src={imagePreview}
           />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full border border-gray-300 rounded-lg">
+            <img
+              className="w-full h-full"
+              alt="Add photo"
+              src="/images/default.avif"
+            />
+          </div>
+        )}
               <input
         type="file"
         id='image'
@@ -84,10 +102,10 @@ const AddStaffForm = () => {
       />
         </div>
         <div className="flex flex-col items-center gap-4 text-sm text-gray-500">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <img className="w-4 h-4" alt="Add photo" src="/add-photo.svg" />
             <span>Upload photo</span>
-          </div>
+          </div> */}
           <div>
             <p className="m-0">Allowed format: JPG, JPEG, and PNG</p>
             <p className="m-0">Max file size: 2MB</p>

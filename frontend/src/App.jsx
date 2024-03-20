@@ -36,6 +36,8 @@ import Thankyou from './pages/Thankyou';
 import Employeeform from './pages/Employeeform';
 import ApplyLeave from './components/Applyleave';
 import LeavesStatus from './pages/LeavesStatus';
+import AdminProtectRoutes from './Globalcomponents/AdminProtectRoutes';
+import EmployeeProtectRoute from './Globalcomponents/EmloyeeProtectRoute';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -63,10 +65,7 @@ function App() {
         <Route
           path="/employee"
           element={
-            // <PrivateRoutes>
-              <MainLayout />
-              // <Dashbaord/>
-            // </PrivateRoutes>
+          <EmployeeProtectRoute Component={MainLayout}/>
           }
         >
   <Route index element={<Dashbaord />} />
@@ -75,10 +74,8 @@ function App() {
         <Route
           path="/admin"
           element={
-            // <PrivateRoutes>
-              <MainLayout />
-              // <Dashbaord/>
-            // </PrivateRoutes>
+            <AdminProtectRoutes Component={MainLayout}/>
+             
           }
         >
           <Route index element={<Dashbaord />} />

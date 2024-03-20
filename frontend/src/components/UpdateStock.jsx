@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 const UpdateStock = () => {
     const navigate=useNavigate();
+    const [imagePreview, setImagePreview] = useState(null);
     const [Data, setFormData] = useState({
       productName: "",
       productId: "",
@@ -27,8 +28,15 @@ const UpdateStock = () => {
     // Handle image upload
     const handleImageChange = (e) => {
       const file = e.target.files[0];
-      console.log("this is file path", file)
+    
       setFormData({ ...Data, image: file });
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
     };
   
     // Handle form submission
@@ -76,11 +84,21 @@ const UpdateStock = () => {
 
       <div className="  rounded-xl bg-white shadow-md p-8">
         <div className="w-32 h-32 mx-auto mb-6">
+        {imagePreview ? (
           <img
             className="w-full h-full object-cover"
-            alt="Upload photo"
-            src="/images/img4.png"
+            alt="Uploaded photo"
+            src={imagePreview}
           />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full border border-gray-300 rounded-lg">
+            <img
+              className="w-full h-full"
+              alt="Add photo"
+              src="/images/defaultStock.jpg"
+            />
+          </div>
+        )}
                      <input
         type="file"
         id='image'

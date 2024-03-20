@@ -37,7 +37,8 @@ const Circular = () => {
                         Quick search a Circular
                     </div>
                     <div className="  h-[50px] text-grey-50">
-                        <input className=" h-[102%] w-[100.29%] p-2 rounded-3xs box-border border-[1px] border-solid border-grey-40" placeholder="Enter search word" />
+                        <input className=" h-[102%] w-[100.29%] p-2 rounded-3xs box-border border-[1px] border-solid border-grey-40" placeholder="Enter search word"
+                        onChange={handleSearch} />
 
                     </div>
                 </div>
