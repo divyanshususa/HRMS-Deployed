@@ -55,23 +55,15 @@ let EmployeeSchemas = mongoose.Schema({
         required: false
     },
 
-
-
     createdAt: {
         type: String,
         required: false
     },
 
-
-    reporting_manager: {
-        type: String,
-        required: false
-    },
     designation: {
         type: String,
         required: false
     },
-
 
     doj: {
         type: Date,
@@ -97,7 +89,12 @@ let EmployeeSchemas = mongoose.Schema({
     leaves: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Leave'
-    }]
+    }],
+    department:{type: mongoose.Schema.Types.ObjectId, ref: 'Departments'},
+    
+    reporting_manager: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'employees'
+    },
 });
 
 

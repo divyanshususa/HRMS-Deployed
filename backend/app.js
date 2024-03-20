@@ -27,12 +27,14 @@ const paySlipRoutes = require("./Routes/paySlipRoutes")
 const paymentRoutes = require("./Routes/paymentRoutes")
 const LogisticRoutes = require("./Routes/LogisticsRoute")
 const  leaveRoutes=require("./Routes/leaveRoute")
-
+const departmentRoute = require("./Routes/deparmentRoute")
+const CsvUploadRoute= require("./Routes/uploadCsvRoute")
+const path = require('path')
 app.use(cors()); // to follow cors policy
 app.use(xss()); // safety against XSS attack or Cross Site Scripting attacks
 app.use(helmet()); // safety against XSS attack
 app.use(express.json({ extended: false }));
-app.use(express.static("."));
+app.use(express.static(path.resolve(__dirname,'public')));
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
@@ -71,12 +73,10 @@ app.use("/Logistic",LogisticRoutes );
 app.use("/budget", budgetRoutes);
 
 app.use("/stocks", stockRoutes);
-// Assuming the Employee routes are mounted correctly
-// app.use("/api/user", require("./api/Employee"));
 app.use("/capacitybuilding", capacityBuildingRoutes);
 
 app.use("/procurement", procurementRequestRoutes);
-
+app.use("/upload", CsvUploadRoute) 
 
 app.use('/api/user',require('./api/Employee'));
 app.use('/api/uploads',require('./api/uploads'));
@@ -86,7 +86,7 @@ app.use("/taxdefinitions", taxDefinitionRoutes);
 app.use("/payslips", paySlipRoutes);
 app.use("/paymenthistory", paymentRoutes);
 app.use('/api/leave',leaveRoutes );
-
+app.use('/department', departmentRoute)
 app.get("/", (req, res) => {
   console.log("hello");
   res.json("working");

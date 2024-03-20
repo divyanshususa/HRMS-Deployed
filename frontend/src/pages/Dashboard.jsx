@@ -12,13 +12,22 @@ const Dashbaord = () => {
     const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
     const [memoList , setMemoList]=useState()
     const [stafflist , setStafflist]=useState()
+    const [depList, setDepList]= useState([])
     const [empApplications , setempApplication]=useState()
 
     useEffect(()=>{
         fetchmemo();
         fetchstaff();
         fetchApplication()
+        fetchdepart()
     },[])
+
+  
+      const fetchdepart= async()=>{
+        const res = await axios.get(`${config.baseURL}/department/all/departments`)
+        setDepList(res.data.departments)
+
+      }
 
      const fetchmemo=async()=>{
         const res = await axios.get(`${config.baseURL}/memo/getMemo`)
@@ -131,7 +140,7 @@ console.log("inside..", memoList)
                     <div className=" rounded-xl shadow-md">
                         <div className="flex gap-3 p-5 items-start justify-start ">
                             <div>
-                                <div className=" font-extrabold">10</div>
+                                <div className=" font-extrabold">{depList?.length}</div>
                                 <div className=" text-base leading-[24px]">
                                     Total Departments
                                 </div>

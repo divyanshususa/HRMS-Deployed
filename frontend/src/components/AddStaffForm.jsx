@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import axios from 'axios';
 import config from '../configuration/config';
 import { toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const AddStaffForm = () => {
   const navigate= useNavigate()
   const [imagePreview, setImagePreview] = useState(null);
+  const [depList, setDepList]= useState([])
   const [Data, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -18,8 +19,19 @@ const AddStaffForm = () => {
     designation: "",
     staffId: "",
     officialEmail: "",
-    image: null // Store the selected image file
+    image: null, // Store the selected image file
+    department:''
   });
+
+  useEffect(()=>{
+    fetchdepart()
+  },[])
+  const fetchdepart= async()=>{
+
+    const res = await axios.get(`${config.baseURL}/department/all/departments`);
+ 
+    setDepList(res.data.departments)
+  }
 
   // Handle input change
   const handleChange = (e) => {
@@ -54,7 +66,7 @@ const AddStaffForm = () => {
       // formData.append('staffId', formData.staffId);
       formData.append('officialEmail', Data.officialEmail);
       formData.append('image', Data.image);
-
+      formData.append('department', Data.department)
       // Make a POST request to the backend API endpoint
       const response = await axios.post(`${config.baseURL}/api/user/add-staff`, formData, {
         headers: {
@@ -215,6 +227,27 @@ const AddStaffForm = () => {
       </div>
 
       <div className="mt-4">
+        <label htmlFor="department" className="block text-sm text-gray-700 text-left">
+          Department
+        </label>
+        <select
+          id="department"
+          className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+          onChange={handleChange}
+          value={Data.department}
+        >
+          <option value="" disabled selected>
+            Select role
+          </option>
+          {depList?.map((department, index) => (
+  <option key={index} value={department._id}>
+    {department.name}
+  </option>
+))}
+        </select>
+      </div>
+
+      <div className="mt-4">
         <label htmlFor="designation" className="block text-sm text-gray-700 text-left">
        Designation
         </label>
@@ -227,6 +260,7 @@ const AddStaffForm = () => {
           value={Data.designation}
         />
       </div>
+     
 {/* 
       <div className="mt-4">
         <label htmlFor="staffId" className="block text-sm text-gray-700 text-left">

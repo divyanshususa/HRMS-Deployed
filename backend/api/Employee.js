@@ -9,7 +9,8 @@ const sendEmail = require('../utils/emailCtrl')
 const randomstring = require("randomstring")
 const EmpRequest= require('../Schemas/employeeRequest')
 const uploadOnCloudinary = require('../utils/cloudinary')
-const upload = require('../middleware/multerMiddleware')
+const upload = require('../middleware/multerMiddleware');
+const Departments = require('../Schemas/department');
 const jwtkey = process.env.JWT_KEY
 
 router.post('/signup', async (req, res) => {
@@ -244,12 +245,16 @@ router.post('/add-staff', upload.single('image'), async (req, res) => {
       ...req.body, // Form data
       photo: url[0] ,
       approved: true,
-     
+      department:req.body.department
     });
 
     // Save the new employee to the database
     const savedEmployee = await newEmployee.save();
-
+    const updatedEmployee = await Departments.findOneAndUpdate(
+      { _id: req.body.department },
+      { $push: { employees: savedEmployee } },
+      { new: true }
+    );
     // Send a success response with the saved employee data
     res.status(201).json(savedEmployee);
   } catch (error) {
@@ -296,8 +301,7 @@ router.post('/create-employee', async (req, res) => {
       email,
       mobile,
       image,
-      aadhar_number,
-      pan_number,
+    
       docs
     } = req.body;
 
@@ -347,6 +351,64 @@ router.post('/create-employee', async (req, res) => {
   } catch (error) {
     console.error('Error creating employee:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+
+router.get('/get-managers', async(req, res)=>{
+  try {
+    const managers = await EmployeeSchemas.find({ role:  { $regex: 'manager', $options: 'i' }  }).populate('department');
+    res.status(200).json({ managers });
+  } catch (error) {
+    console.error('Error finding managers:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+})
+
+router.post('assign-manager', async(req,res)=>{
+  try {
+    const { employeeId, managerId } = req.body;
+
+    const updatedEmployee = await EmployeeSchemas.findByIdAndUpdate(
+      employeeId,
+      { reporting_manager: managerId },
+      { new: true }
+    );
+
+    if (!updatedEmployee) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+  
+    res.status(200).json({  updatedEmployee });
+
+  } catch (error) {
+   
+    res.status(500).json({ error: 'Internal server error' });
+  }
+})
+
+router.post('/assign-designation', async (req, res) => {
+  try {
+    
+    const { employeeId, designation } = req.body;
+
+    
+    const updatedEmployee = await EmployeeSchemas.findByIdAndUpdate(
+      employeeId,
+      { designation },
+      { new: true }
+    );
+
+    if (!updatedEmployee) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+
+    res.status(200).json({ message: 'Designation assigned successfully', employee: updatedEmployee });
+  } catch (error) {
+    console.error('Error assigning designation:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const stockSchema = new mongoose.Schema({
   image: {
     type: String,
-    required: true,
+    required: false,
   },
   productName: {
     type: String,

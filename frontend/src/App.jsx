@@ -38,6 +38,7 @@ import ApplyLeave from './components/Applyleave';
 import LeavesStatus from './pages/LeavesStatus';
 import AdminProtectRoutes from './Globalcomponents/AdminProtectRoutes';
 import EmployeeProtectRoute from './Globalcomponents/EmloyeeProtectRoute';
+import CreateDepartment from './components/CreateDepartment';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -105,6 +106,7 @@ function App() {
           <Route path='/admin/capacity/training-request' element={<TrainingRequest/>} />
           <Route path='/admin/procurement' element={<Procurement/>} />
           <Route path='/admin/procurement/procurement-request' element={<ProcurementReq/>} />
+          <Route path='/admin/departments'element={<CreateDepartment/>}/>
         </Route>
       </Routes>
     </Router>

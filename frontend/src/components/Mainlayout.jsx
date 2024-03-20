@@ -14,7 +14,7 @@ import { GrMoney } from "react-icons/gr";
 import { Outlet } from "react-router-dom";
 import { MdOutlineInventory } from "react-icons/md";
 import { MdOutlineReduceCapacity } from "react-icons/md"
-
+import { FcDepartment } from "react-icons/fc";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
 
 import { Layout, Menu, theme } from "antd";
@@ -54,6 +54,11 @@ const [adminitem, setadminitem]=useState(
       key: "leaves-status",
       icon: <RiCouponLine className="fs-4" />,
       label: "Leaves status",
+    },
+       {
+      key: "departments",
+      icon: <FcDepartment className="fs-4" />,
+      label: "Departments",
     },
     // {
     //   key: "paymentvoucher",
