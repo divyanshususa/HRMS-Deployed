@@ -1,5 +1,6 @@
 const departmentSchema = require('../Schemas/department')
 const Employee = require('../Schemas/employee')
+const EmpRequest= require('../Schemas/employeeRequest')
 exports.createDeparment= async (req, res) => {
     try {
 
@@ -46,6 +47,38 @@ exports.createDeparment= async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
       }
   }
+
+  exports.enrollFormEmployee= async(req, res)=>{
+    try {
+        const { departmentId } = req.params;
+        const { employeeId } = req.body;
+    
+        const department = await departmentSchema.findById(departmentId);
+        if (!department) {
+          return res.status(404).json({ error: 'Department not found' });
+        }
+    
+        const employee = await Employee.findById(employeeId);
+        if (!employee) {
+          return res.status(404).json({ error: 'Employee not found' });
+        }
+    
+        department.employees.push(employee);
+    
+        await department.save();
+        await Employee.findOneAndUpdate(
+            { _id: employeeId },
+            { $set: { department: departmentId } },
+            { new: true }
+          );
+    
+        res.status(200).json({ message: 'Employee added to department successfully', department });
+      } catch (error) {
+        console.error('Error adding employee to department:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+  }
+
 
   exports.getSingleDeparment=async(req, res)=>{
     try {

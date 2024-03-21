@@ -35,6 +35,15 @@ let EmpRequestSchemas= mongoose.Schema({
         type: String,
         required: false
     },
+    department:{type: mongoose.Schema.Types.ObjectId, ref: 'Departments'},
+    
+    reporting_manager: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'employees'
+    },
+    designation: {
+        type: String,
+        required: false
+    },
     // resume:
     // {
     //     type: String,

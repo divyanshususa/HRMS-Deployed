@@ -301,7 +301,7 @@ router.post('/create-employee', async (req, res) => {
       email,
       mobile,
       image,
-    
+      departmentId,
       docs
     } = req.body;
 
@@ -310,11 +310,7 @@ router.post('/create-employee', async (req, res) => {
 
     // Create a new employee using data from EmpRequestForm
     const newEmployeeData = {
-      firstname,
-      lastname,
-      gender,
-      email,
-      mobile,
+    ...req.body,
       photo: image,
       approved:true ,
       password:hashedPassword,
@@ -339,10 +335,17 @@ router.post('/create-employee', async (req, res) => {
     });
 
     // Save the new document entry to the database
-   const doc=  await newDocument.save();
+    const doc=  await newDocument.save();
+    const department= await Departments.findById(departmentId)
+    if (!department) {
+      return res.status(404).json({ error: 'Department not found' });
+    }
+
    const updatedEmployee = await EmployeeSchemas.findOneAndUpdate(
     { email: email },
-    { $set: { documents: doc._id } },
+    { $set: { documents: doc._id ,
+      department: departmentId 
+    } },
     { new: true }
   );
    await EmpRequest.findOneAndDelete({ email });
@@ -365,11 +368,11 @@ router.get('/get-managers', async(req, res)=>{
   }
 })
 
-router.post('assign-manager', async(req,res)=>{
+router.post('/assign-manager', async(req,res)=>{
   try {
     const { employeeId, managerId } = req.body;
 
-    const updatedEmployee = await EmployeeSchemas.findByIdAndUpdate(
+    const updatedEmployee = await EmpRequest.findByIdAndUpdate(
       employeeId,
       { reporting_manager: managerId },
       { new: true }

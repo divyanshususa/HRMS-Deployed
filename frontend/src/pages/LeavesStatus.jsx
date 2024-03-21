@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Button } from 'antd';
+import { Table, Button,  Modal, Input, Form, message  } from 'antd';
 import axios from 'axios';
 import config from '../configuration/config';
 import { toast } from 'react-toastify';
@@ -9,12 +9,15 @@ import "react-toastify/dist/ReactToastify.css";
 const LeavesStatus=()=>{
     const[tableData , setTableData]= useState([])
     const [refreshFlag, setRefreshFlag] = useState(false);
+    const [rejectReason, setRejectReason] = useState('');
+    const [leaveid, setleaveid] = useState('');
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const columns = [
         {
           title: 'Image',
           dataIndex: 'employee',
           render: (employee, record) => (
-            <img src={employee?.photo} style={{ width: '50px', height: '50px' }} alt="Employee" />
+            <img  key={record._id} src={employee?.photo} style={{ width: '50px', height: '50px' }} alt="Employee" />
           )
         },
         {
@@ -46,6 +49,11 @@ const LeavesStatus=()=>{
           title: "Reason",
           dataIndex: "reason",
           key: "reason",
+        },
+        {
+          title: "Reason of Rejection",
+          dataIndex: "reject_reason",
+          key: "reject_reason",
         },
         {
           title: 'Action',
@@ -93,20 +101,49 @@ const LeavesStatus=()=>{
         }
       };
       
+      // const handleReject = async (record) => {
+      //   try {
+      //     const response = await axios.put(`${config.baseURL}/api/leave/reject?leaveId=${record._id}`);
+      //     if (response.status === 200) {
+      //       toast.success('Leave Reject Successfully')
+      //       fetchData();
+      //       setRefreshFlag(!refreshFlag);
+      //     } else {
+      //       toast.error('Something went wrong')
+      //       console.error('Error rejecting leave:', response.statusText);
+      //     }
+      //   } catch (error) {
+      //     console.error('Error rejecting leave:', error.message);
+      //   }
+      // };
       const handleReject = async (record) => {
+        setIsModalVisible(true);
+        setleaveid(record._id)
+      };
+
+      const onFinish = async () => {
         try {
-          const response = await axios.put(`${config.baseURL}/api/leave/reject?leaveId=${record._id}`);
+          console.log("inside")
+          const response = await axios.put(`${config.baseURL}/api/leave/reject?leaveId=${leaveid}`, {
+            reject_reason: rejectReason
+          });
           if (response.status === 200) {
             toast.success('Leave Reject Successfully')
             fetchData();
             setRefreshFlag(!refreshFlag);
+            setIsModalVisible(false);
           } else {
-            toast.error('Something went wrong')
+            toast.error('Something went wrong');
+
             console.error('Error rejecting leave:', response.statusText);
           }
         } catch (error) {
-          console.error('Error rejecting leave:', error.message);
+          toast.error('Error rejecting leave:', error.message);
         }
+      };
+    
+      const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
       };
 
     return(
@@ -122,6 +159,39 @@ const LeavesStatus=()=>{
         />
       </div>
     </div>
+
+    <Modal
+        title="Reason for Rejection"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={[
+          <Button key="cancel" onClick={() => setIsModalVisible(false)}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={onFinish}>
+            Submit
+          </Button>,
+        ]}
+      >
+        <Form
+          name="reasonForm"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item
+            label="Reason"
+            name="reason"
+            rules={[{ required: true, message: 'Please input the reason for rejection!' }]}
+          >
+            <Input.TextArea
+              rows={4}
+              onChange={(e) => setRejectReason(e.target.value)}
+              value={rejectReason}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
         </div>
     )
 }

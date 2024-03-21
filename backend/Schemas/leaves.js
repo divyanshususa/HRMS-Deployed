@@ -26,8 +26,16 @@ const LeaveSchema = mongoose.Schema({
     numberOfDays:{
   type:Number,
   required: false
+    },
+
+    reject_reason:{
+        type:String,
+        required: false
     }
-    
+   
+},
+{
+    timestamps: true // Add timestamps
 });
 
 module.exports = mongoose.model('Leave', LeaveSchema);

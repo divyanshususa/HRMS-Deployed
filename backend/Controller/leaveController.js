@@ -29,6 +29,7 @@ exports.allLeaves = async (req, res) => {
         if (!allLeaves) {
             return res.status(404).json({ error: 'Leave not found' });
         }
+        allLeaves.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
         res.json(allLeaves);
     } catch (error) {
         console.error('Error approving leave:', error);
@@ -44,6 +45,7 @@ exports.Empleave = async (req, res) => {
           if (!leaveRequests || leaveRequests.length === 0) {
               return res.status(404).json({ error: 'Leave requests not found for the employee' });
           }
+          leaveRequests.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
           res.json(leaveRequests);
     } catch (error) {
         console.error('Error approving leave:', error);
@@ -56,10 +58,12 @@ exports.approveLeave = async (req, res) => {
     try {
         const { leaveId } = req.query;
 
-        const updatedLeave = await Leave.findByIdAndUpdate(leaveId, {$set:{status: 'Approved'}  }, { new: true });
+        const updatedLeave = await Leave.findByIdAndUpdate(leaveId, {$set:{status: 'Approved'} , reject_reason:"" }, { new: true });
         if (!updatedLeave) {
             return res.status(404).json({ error: 'Leave not found' });
         }
+        // updatedLeave.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
         res.json(updatedLeave);
     } catch (error) {
         console.error('Error approving leave:', error);
@@ -71,11 +75,12 @@ exports.approveLeave = async (req, res) => {
 exports.rejectLeave = async (req, res) => {
     try {
         const { leaveId } = req.query;
-
-        const updatedLeave = await Leave.findByIdAndUpdate(leaveId, {$set:{status: 'Rejected'}  }, { new: true });
+        const updatedLeave = await Leave.findByIdAndUpdate(leaveId, {$set:{status: 'Rejected', reject_reason:req.body.reject_reason}  }, { new: true });
         if (!updatedLeave) {
             return res.status(404).json({ error: 'Leave not found' });
         }
+        // updatedLeave.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
         res.json(updatedLeave);
     } catch (error) {
         console.error('Error approving leave:', error);
@@ -86,6 +91,8 @@ exports.rejectLeave = async (req, res) => {
 exports.getPendingLeaves = async (req, res) => {
     try {
         const pending = await Leave.find({ status: 'Pending' });
+        pending.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
         res.json(pending);
     } catch (error) {
         console.error('Error fetching pending leaves:', error);
