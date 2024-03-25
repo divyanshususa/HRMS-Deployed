@@ -63,7 +63,7 @@ const Login = () => {
             <div className=" flex gap-[15rem]">
               <div className="  flex flex-col items-center justify-start gap-[4px_0px]">
                 <img
-                  className="w-[50.5px] relative h-[50.5px]"
+                  className="w-[50.5px] relative h-[50.5px] mix-blend-multiply"
                   alt=""
                   src="/images/logo.png"
                 />

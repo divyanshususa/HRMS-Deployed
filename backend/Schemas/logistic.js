@@ -33,9 +33,16 @@ const LogisticSchemas= new mongoose.Schema({
         type: String,
        default:'Pending'
       },
+      reject_reason:{
+        type: String, 
+        required:false
+      },
 
    
-});
+}
+,
+{timestamps:true}
+);
 
 const LogisticSchema = mongoose.model("Logistics", LogisticSchemas);
 

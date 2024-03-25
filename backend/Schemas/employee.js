@@ -95,6 +95,13 @@ let EmployeeSchemas = mongoose.Schema({
     reporting_manager: {
         type: mongoose.Schema.Types.ObjectId, ref: 'employees'
     },
+
+    accountDetails: {
+        bankName:{type : String, required: false} ,
+        bankCode: {type : String, required: false},
+        branchName: {type : String, required: false},
+        accountNumber: {type : Number, required: false}
+    }
 });
 
 

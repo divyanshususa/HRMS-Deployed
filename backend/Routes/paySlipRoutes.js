@@ -4,6 +4,8 @@ const PaySlipController = require("../Controller/PaySlipController");
 
 router.get("/getAllPayslips", PaySlipController.getAllPaySlips);
 router.post("/create-payslip", PaySlipController.createPaySlip);
+router.get('/totals', PaySlipController.payrolldashboardsummary)
+router.get('/pay-slip/:employeeId/:month/:year', PaySlipController.individualPayslip)
 router.put("/:id", PaySlipController.updatePaySlip);
 router.delete("/:id", PaySlipController.deletePaySlip);
 

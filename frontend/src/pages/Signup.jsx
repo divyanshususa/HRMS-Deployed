@@ -24,7 +24,11 @@ const Signup = () => {
     offer_letter: "",
     experience: "",
     education: "",
-    docs:[]
+    docs:[],
+    bankName:'',
+    bankCode:'',
+    branchName:'',
+    accountNumber:'',
   });
 
   const handleSubmit = async (e) => {
@@ -56,13 +60,16 @@ const Signup = () => {
         mobile: Data.mobile,
         image: imageURL,
         aadhar_number: Data.aadhar,
-        pan_number:Data.pan
-
+        pan_number:Data.pan,
+        bankName:Data.bankName,
+        bankCode:Data.bankCode,
+        branchName:Data.branchName,
+        accountNumber:Data.accountNumber,
         // docs:[],
         // Add other user data fields as needed
       };
   
-      console.log("this is files data", files)
+      // console.log("this is files data", files)
       const uploadTasks = files.map(async (file) => {
         const timestamp = new Date().getTime(); // Generate timestamp for uniqueness
         const fileName = `${timestamp}_${file.name}`; // Append timestamp to filename
@@ -254,10 +261,56 @@ const Signup = () => {
                 </div>
 
 
+                <div className="mt-4 text-left">
+                  <label htmlFor="accountNumber" className="block text-sm text-gray-700 text-left">
+                    Account number
+                  </label>
+                  <input
+                    type="Number"
+                    id="accountNumber"
+                    className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter  your account no."
+                    onChange={handleChange}
+                  />
+                </div>
 
+                <div className="mt-4 text-left">
+                  <label htmlFor="bankName" className="block text-sm text-gray-700 text-left">
+                   Bank Name
+                  </label>
+                  <input
+                    type="text"
+                    id="bankName"
+                    className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter Bank name "
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="mt-4 text-left">
+                  <label htmlFor="bankCode" className="block text-sm text-gray-700 text-left">
+                   Bank IFSC code 
+                  </label>
+                  <input
+                    type="text"
+                    id="bankCode"
+                    className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter Bank IFSC code "
+                    onChange={handleChange}
+                  />
+                </div>
 
-
-
+                <div className="mt-4 text-left">
+                  <label htmlFor="branchName" className="block text-sm text-gray-700 text-left">
+                   Branch Name 
+                  </label>
+                  <input
+                    type="text"
+                    id="branchName"
+                    className=" mt-2 h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    placeholder="Enter Branch Name "
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
 
               <div className="mt-4">

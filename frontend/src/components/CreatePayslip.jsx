@@ -8,11 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 const CreatePayslip = ({setpayslip}) => {
     const navigate = useNavigate();
     const [EmployeesList, setEmployeesList] = useState([]);
+    const [titledata, settitledata] = useState();
     const [formData, setFormData] = useState({
         employee:'',
         staffName: "",
         title: "",
         level: "",
+        month:null,
+        year:null,
         salaryStructure: {
             basicSalary: "",
             houseAllowance: "",
@@ -22,17 +25,18 @@ const CreatePayslip = ({setpayslip}) => {
             communicationAllowance: "",
             inconvenienceAllowance: "",
         },
-        grossSalary:"",
+        grossSalary:null,
         deductions: {
             tax: "",
             employeePension: "",
             totalDeduction: "",
         },
-        netSalary: "",
+        netSalary: null,
     });
 
     useEffect(() => {
         fetchEmployeeList();
+        // fetchtitledata()
     }, []);
 
     const fetchEmployeeList = async () => {
@@ -43,6 +47,30 @@ const CreatePayslip = ({setpayslip}) => {
             console.error("Error fetching employee list:", error);
         }
     };
+
+  const   fetchtitledata = async(e)=>{
+    try {
+        setFormData({
+            ...formData,
+            title:e.target.value
+        })
+        const titleforsearch= e.target.value
+        const res= await axios.get(`${config.baseURL}/salarybreakdowns/searchbytitle/${titleforsearch}`)
+        console.log("this is new ", res.data.data)
+        settitledata(res.data.data)
+        setFormData({
+            ...formData,
+            grossSalary:titledata?.grossSalary,
+            netSalary:titledata?.netSalary,
+            salaryStructure: {
+                ...titledata?.salaryStructure,
+               
+            },
+        });
+    } catch (error) {
+        
+    }
+  }
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -55,13 +83,13 @@ const CreatePayslip = ({setpayslip}) => {
 
     const handlesal = (e) => {
         const { id, value } = e.target;
-        setFormData({
-            ...formData,
-            salaryStructure: {
-                ...formData.salaryStructure,
-                [id]: value,
-            },
-        });
+        // setFormData({
+        //     ...formData,
+        //     salaryStructure: {
+        //         ...formData.salaryStructure,
+        //         [id]: value,
+        //     },
+        // });
     };
 
     const handlededuction = (e) => {
@@ -88,8 +116,11 @@ const CreatePayslip = ({setpayslip}) => {
 
     const handleSubmit = async () => {
         try {
+       
+
+            console.log("this is before sub",formData)
             const res = await axios.post(`${config.baseURL}/payslips/create-payslip`, formData);
-            console.log("Pay slip created:", res.data);
+            // console.log("Pay slip created:", res.data);
             toast.success("Salary slip created successfully")
 
                 setpayslip(res.data)
@@ -102,7 +133,24 @@ const CreatePayslip = ({setpayslip}) => {
         }
     };
 
-    console.log(formData)
+    const months = [
+        { value: 1, label: 'January' },
+        { value: 2, label: 'February' },
+        { value: 3, label: 'March' },
+        { value: 4, label: 'April' },
+        { value: 5, label: 'May' },
+        { value: 6, label: 'June' },
+        { value: 7, label: 'July' },
+        { value: 8, label: 'August' },
+        { value: 9, label: 'September' },
+        { value: 10, label: 'October' },
+        { value: 11, label: 'November' },
+        { value: 12, label: 'December' },
+    ];
+
+    const currentYear = new Date().getFullYear();
+
+    // console.log(formData)
     return (
         <div className="w-full">
             <div className="flex items-center cursor-pointer">
@@ -146,8 +194,11 @@ const CreatePayslip = ({setpayslip}) => {
                         <select
                             id="title"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            onChange={handleChange} // Add onChange event handler
-                            value={formData.title} 
+                            onChange={(e)=>{
+                                handleChange(e)
+                            fetchtitledata(e)
+                            }} // Add onChange event handler
+                            value={titledata?.title} 
                         >
                             <option value="" disabled selected>
                                 Select Title
@@ -180,6 +231,48 @@ const CreatePayslip = ({setpayslip}) => {
 
                         </select>
                     </div>
+
+
+                    <div className="mt-4">
+                        <label htmlFor="month" className="block text-sm text-gray-700 text-left">
+                         Month
+                        </label>
+                        <select
+                            id="month"
+                            className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            onChange={handleChange}
+                            value={formData.month}
+                       >
+                            <option value="" disabled selected>
+                                Select Month
+                            </option>
+                             {months.map((month, index) => (
+                                <option key={index} value={month.value}>{month.label}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="year" className="block text-sm text-gray-700 text-left">
+                          Year
+                        </label>
+                        <select
+                            id="year"
+                       
+                            className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            onChange={handleChange}
+                            value={formData.year}
+                       >
+                            <option value="" disabled selected>
+                                Select Year
+                            </option>
+                            {[currentYear - 1, currentYear, currentYear + 1].map((year, index) => (
+                                <option key={index} value={year}>{year}</option>
+                            ))}
+                        </select>
+                    </div>
+
+
                 </div>
 
             </div>
@@ -203,10 +296,11 @@ const CreatePayslip = ({setpayslip}) => {
                             type="Number"
                             id="basicSalary"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter amount"
+                            placeholder={ titledata ? titledata?.salaryStructure?.basicSalary : "Enter Amount"} 
                             onChange={handlesal} // Add onChange event handler
-                            value={formData.salaryStructure.basicSalary} 
+                            value={titledata?.salaryStructure?.basicSalary} 
                         />
+                       
                     </div>
 
 
@@ -215,12 +309,12 @@ const CreatePayslip = ({setpayslip}) => {
                             House  Allowance
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="houseAllowance"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter amount"
+                            placeholder={ titledata ? titledata?.salaryStructure?.houseAllowance : "Enter Amount"} 
                             onChange={handlesal} // Add onChange event handler
-                            value={formData.salaryStructure.houseAllowance} 
+                            value={titledata?.salaryStructure?.houseAllowance} 
                         />
                     </div>
 
@@ -229,12 +323,12 @@ const CreatePayslip = ({setpayslip}) => {
                             Transport Allowance
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="transportAllowance"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter amount"
+                            placeholder={ titledata ? titledata?.salaryStructure?.transportAllowance : "Enter Amount"} 
                             onChange={handlesal} // Add onChange event handler
-                            value={formData.salaryStructure.transportAllowance} 
+                            value={titledata?.salaryStructure?.transportAllowance} 
                         />
                     </div>
 
@@ -243,12 +337,12 @@ const CreatePayslip = ({setpayslip}) => {
                             Utility Allowance
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="utilityAllowance"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter amount"
+                            placeholder={ titledata ? titledata?.salaryStructure?.utilityAllowance : "Enter Amount"} 
                             onChange={handlesal} // Add onChange event handler
-                            value={formData.salaryStructure.utilityAllowance} 
+                            value={titledata?.salaryStructure?.utilityAllowance} 
                         />
                     </div>
 
@@ -257,12 +351,12 @@ const CreatePayslip = ({setpayslip}) => {
                             Productivity Allowance
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="productivityAllowance"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter amount"
+                            placeholder={ titledata ? titledata?.salaryStructure?.productivityAllowance : "Enter Amount"} 
                             onChange={handlesal} // Add onChange event handler
-                            value={formData.salaryStructure.productivityAllowance} 
+                            value={titledata?.salaryStructure?.productivityAllowance} 
                         />
                     </div>
 
@@ -271,12 +365,12 @@ const CreatePayslip = ({setpayslip}) => {
                             Communication Allowance
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="communicationAllowance"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter amount"
+                            placeholder={ titledata ? titledata?.salaryStructure?.communicationAllowance : "Enter Amount"} 
                             onChange={handlesal} // Add onChange event handler
-                            value={formData.salaryStructure.communicationAllowance} 
+                            value={titledata?.salaryStructure?.communicationAllowance} 
                         />
                     </div>
 
@@ -285,12 +379,12 @@ const CreatePayslip = ({setpayslip}) => {
                             Inconvenience Allowance
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="inconvenienceAllowance"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter amount"
+                            placeholder={ titledata ? titledata?.salaryStructure?.inconvenienceAllowance : "Enter Amount"} 
                             onChange={handlesal} // Add onChange event handler
-                            value={formData.salaryStructure.inconvenienceAllowance} 
+                            value={titledata?.salaryStructure?.inconvenienceAllowance} 
                         />
                     </div>
 
@@ -300,12 +394,12 @@ const CreatePayslip = ({setpayslip}) => {
                             Gross Salary
                         </label>
                         <input
-                            type="email"
+                            type="Number"
                             id="grossSalary"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter email address"
+                            placeholder={titledata ? titledata?.grossSalary : "Enter Amount"}
                             onChange={handleChange} // Add onChange event handler
-                            value={formData.grossSalary} 
+                            value={titledata?.grossSalary} 
                         />
                     </div>
 
@@ -341,7 +435,7 @@ const CreatePayslip = ({setpayslip}) => {
                             TAX/PAYE
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="tax"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                             placeholder="Enter amount"
@@ -356,7 +450,7 @@ const CreatePayslip = ({setpayslip}) => {
                             Employee Pension
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="employeePension"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                             placeholder="Enter amount"
@@ -370,7 +464,7 @@ const CreatePayslip = ({setpayslip}) => {
                             Total Deduction
                         </label>
                         <input
-                            type="text"
+                            type="Number"
                             id="totalDeduction"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                             placeholder="Enter amount"
@@ -413,7 +507,7 @@ const CreatePayslip = ({setpayslip}) => {
                             Net Salary
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             id="netSalary"
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                             placeholder="Enter amount"

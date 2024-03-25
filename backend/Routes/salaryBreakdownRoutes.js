@@ -4,8 +4,9 @@ const salaryBreakdownController = require("../Controller/SalaryBreakdownControll
 
 router.post("/create", salaryBreakdownController.createSalaryBreakdown);
 router.get("/getsalarybreakdown", salaryBreakdownController.getAllSalaryBreakdowns);
-router.get("/:id", salaryBreakdownController.getSalaryBreakdownById);
-router.put("/:id", salaryBreakdownController.updateSalaryBreakdown);
+router.get('/searchbytitle/:title', salaryBreakdownController.searchbytitle)
+// router.get("/:id", salaryBreakdownController.getSalaryBreakdownById);
+// router.put("/:id", salaryBreakdownController.updateSalaryBreakdown);
 router.delete("/:id", salaryBreakdownController.deleteSalaryBreakdown);
-
+router.get('/salary-total/:year/:month', salaryBreakdownController.dashboardInfo)
 module.exports = router;

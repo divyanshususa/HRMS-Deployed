@@ -206,8 +206,8 @@ router.post('/request-form', upload.fields([
 router.post('/req-form', async(req, res)=>{
   try {
     
-    const { firstname, lastname, gender, email, mobile, image, docs, aadhar_number,pan_number } = req.body;
-// console.log("asdf",req.body)
+    const { firstname, lastname, gender, email, mobile, image, docs, aadhar_number,pan_number,bankName,bankCode ,branchName,accountNumber} = req.body;
+console.log("asdf",req.body)
     // Create a new employee document
     const newEmployee = new EmpRequest({
         firstname,
@@ -218,7 +218,11 @@ router.post('/req-form', async(req, res)=>{
         image,
         docs,
         aadhar_number,
-        pan_number
+        pan_number,
+        bankName,
+        bankCode,
+        branchName,
+        accountNumber,
     });
 
     // Save the new employee document to the database

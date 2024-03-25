@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const paySlipSchema = new mongoose.Schema({
   employee: { type: mongoose.Schema.Types.ObjectId, ref: 'employees' },
+  month: { type: Number, required: true }, 
+  year: { type: Number, required: true },
   staffName: { type: String, required: true },
   title: { type: String, required: true },
   level: { type: String, required: true },

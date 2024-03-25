@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { memoColumns } from "../utils/columns";
+// import { memoColumns } from "../utils/columns";
 import { Table } from "antd";
 
 import { useNavigate } from "react-router-dom";
@@ -10,21 +10,93 @@ const Memo = () => {
     const [memoList, setMemoList] = useState();
     const [searchText, setSearchText] = useState("");
     const navigate = useNavigate();
-
+    const memoColumns = [
+        {
+            title: "S/N",
+            dataIndex: "serialNumber",
+            key: "serialNumber",
+            render: (_, __, index) => index + 1,
+        },
+        {
+            title: "Memo Title",
+            dataIndex: "memoTitle",
+            key: "title",
+        },
+        {
+            title: "Sent From",
+            dataIndex: "sentFrom",
+            key: "sentFrom",
+        },
+        {
+            title: "Sent To",
+            dataIndex: "sentTo",
+            key: "sentTo",
+        },
+        {
+            title: "Date",
+            dataIndex: "generatedDate",
+            key: "date",
+        },
+        {
+            title: "Attachment?",
+            dataIndex: "addAttachment",
+            key: "attachment",
+        },
+        {
+            title: "Memo Type",
+            dataIndex: "memoType",
+            key: "memoType",
+        },
+    
+        {
+            title: 'Action ',
+            dataIndex: 'action',
+            key: 'action',
+            render: (_, record) => (
+              <>
+                {/* <span
+                  className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
+                  onClick={() => handleEdit(record._id)}
+                >
+                  Edit
+                </span> */}
+                <span
+                  className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
+                  onClick={() => handleDelete(record._id)}
+                >
+                  Delete
+                </span>
+              </>
+            ),
+          },
+    ];
+    
     useEffect(() => {
         fetchmemo()
     }, [])
     const handleSearch = (e) => {
         setSearchText(e.target.value);
-
     };
 
     const fetchmemo = async () => {
         const res = await axios.get(`${config.baseURL}/memo/getMemo`)
-
         setMemoList(res.data)
 
     }
+
+    const handleDelete = async (id) => {
+        try {
+          await axios.delete(`${config.baseURL}/memo/${id}`);
+          toast.success('Successfully deleted..')
+          fetchmemo()
+        //   setrefreshFlag(!refreshFlag)
+        } catch (error) {
+          console.error(error);
+          toast.error("Something went wrong ..")
+        }
+      };
+
+
     return (
         <div className="w-full">
 

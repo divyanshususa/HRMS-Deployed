@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Button,  Modal, Input, Form, message  } from 'antd';
+import { Table, Button,  Modal, Input, Form, Space, Badge } from 'antd';
 import axios from 'axios';
 import config from '../configuration/config';
 import { toast } from 'react-toastify';
@@ -44,6 +44,12 @@ const LeavesStatus=()=>{
             title: "Status",
             dataIndex: "status",
             key: "status",
+            render: (text) => (
+              <Space size="middle">
+                <Badge status={text === "Pending" || text==="Rejected" ? "error" : "success"} />
+                {text}
+              </Space>
+            ),
           },
         {
           title: "Reason",

@@ -27,10 +27,57 @@ const DynamicTable = ({ columns, dataSource }) => {
 const Payroll = () => {
   const [currColumn, setCurrColumn] = useState([]);
   const [refreshFlag, setrefreshFlag]= useState(false)
+  const [dashsummary, setdashsummary]= useState()
+  const [month, setmonth]=useState(null)
+  const [year, setyear]=useState(null)
   const [currData, setcurrData] = useState([]);
   const [activeTab, setActiveTab] = useState("salary");
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currYear = new Date().getFullYear();
+    setmonth(currentMonth)
+    setyear(currYear)
+    // fetchsummary()
+  },[])
+
+  useEffect(() => {
+    fetchsummary(); // Call fetchSummary whenever month or year changes
+  }, [month, year]);
+  
+  const fetchsummary=async()=>{
+    const res= await axios.get(`${config.baseURL}/payslips/totals?month=${month}&year=${year}`)
+  setdashsummary(res.data)
+  }
+
+  const handlechangemonth=(e)=>{
+    console.log(e.target.value)
+     setmonth(e.target.value)
+     fetchsummary()
+  }
+
+  const handlechangeyear=(e)=>{
+    console.log(e.target.value)
+     setyear(e.target.value)
+     fetchsummary()
+  }
+  const months = [
+    { value: '1', label: 'January' },
+    { value: '2', label: 'February' },
+    { value: '3', label: 'March' },
+    { value: '4', label: 'April' },
+    { value: '5', label: 'May' },
+    { value: '6', label: 'June' },
+    { value: '7', label: 'July' },
+    { value: '8', label: 'August' },
+    { value: '9', label: 'September' },
+    { value: '10', label: 'October' },
+    { value: '11', label: 'November' },
+    { value: '12', label: 'December' },
+];
+const currentYear = new Date().getFullYear();
  const taxcolumns=[
     {
         title: "S/N",
@@ -73,26 +120,200 @@ const Payroll = () => {
     },
 ]
 
+const salcolumns = [
+  {
+      title: "S/N",
+      dataIndex: "serialNumber",
+      key: "serialNumber",
+      render: (_, __, index) => index + 1,
+  },
+  {
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+  },
+  {
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
+  },
+  {
+    title: "Basic Salary",
+    dataIndex: "salaryStructure", // Access the salary structure object
+    key: "basicSalary",
+    render: (salaryStructure) => salaryStructure?.basicSalary, // Render the basic salary value
+    sorter: (record1, record2) => record1.salaryStructure?.basicSalary - record2.salaryStructure?.basicSalary
+  },
+  // {
+  //     title: "Allowance",
+  //     dataIndex: "allowance",
+  //     key: "allowance",
+  //     sorter:(record1, record2)=>{
+  //         return record1.allowance > record2.allowance
+  //     }
+  // },
+  {
+      title: "Gross Salary",
+      dataIndex: "grossSalary",
+      key: "grossSalary",
+      sorter:(record1, record2)=>{
+          return record1.grossSalary > record2.grossSalary
+      }
+  },
+  {
+      title: "Deductions",
+      dataIndex: "deductions",
+      key: "deductions",
+      sorter:(record1, record2)=>{
+          return record1.deductions > record2.deductions
+      }
+  },
+  {
+      title: "Net Salary",
+      dataIndex: "netSalary",
+      key: "netSalary",
+      sorter:(record1, record2)=>{
+          return record1.netSalary > record2.netSalary
+      }
+  },
+  {
+    title: 'Action ',
+    dataIndex: 'action',
+    key: 'action',
+    render: (_, record) => (
+      <>
+        {/* <span
+          className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
+          onClick={() => handleEdit(record._id)}
+        >
+          Edit
+        </span> */}
+        <span
+          className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
+          onClick={() => handleDeletesal(record._id)}
+        >
+          Delete
+        </span>
+      </>
+    ),
+  },
+];
 
-const fetchtaxdata=async()=>{
+const staffDetailsCol=[
+  {
+      title: "S/N",
+      dataIndex: "serialNumber",
+      key: "serialNumber",
+      render: (_, __, index) => index + 1,
+  },
+  {
+      title: "Staff Name",
+      dataIndex: "staffName",
+      key: "staffName",
+  },
+  {
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+  },
+  {
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
+  },
+  {
+      title: "Basic Salary",
+      dataIndex: ["salaryStructure", "basicSalary"],
+      key: "basicSalary",
+      render: (basicSalary) => `₹${basicSalary.toFixed(2)}`, // Format the salary as needed
+  },
+  {
+      title: "Allowance",
+      dataIndex: "salaryStructure", // Display all allowance fields together
+      key: "allowance",
+      render: (salaryStructure) => {
+          const allowances = Object.values(salaryStructure).reduce((total, allowance) => total + allowance, 0);
+          return `₹${allowances.toFixed(2)}`; // Format the total allowance as needed
+      },
+  },
+  {
+      title: "Gross Salary",
+      dataIndex: "grossSalary",
+      key: "grossSalary",
+      render: (grossSalary) => `₹${grossSalary}`,
+     
+  },
+  {
+      title: "Deductions",
+      dataIndex: "deductions", // Display all deduction fields together
+      key: "deductions",
+      render: (deductions) => {
+          const totalDeductions = Object.values(deductions).reduce((total, deduction) => total + deduction, 0);
+          return `₹${totalDeductions.toFixed(2)}`; // Format the total deductions as needed
+      },
+  },
+  {
+      title: "Net Salary",
+      dataIndex: "netSalary",
+      key: "netSalary",
+      render: (netSalary) => `₹${netSalary.toFixed(2)}`, // Format the net salary as needed
+  },
+  {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      render: (_, record) => (
+        
+      <span
+              className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
+              
+            onClick={()=>navigate(`/admin/created-payslip/${record.employee}/${record.month}/${record.year}`)}
+          >
+              {console.log("inside view butotn", record)}
+              View more
+          </span>
+         
+  
+      ),
+  },
+]
+const handleDeletesal=async(id)=>{
+  try {
+    await axios.delete(`${config.baseURL}/salarybreakdowns/${id}`);
+    toast.success('Successfully deleted..')
+    fetchsaldef()
+    setrefreshFlag(!refreshFlag)
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong ..")
+  }
+} 
+const fetchtaxdata =async()=>{
   const res=  await axios.get(`${config.baseURL}/taxdefinitions/get`)
   setcurrData(res.data)
 
 }
 const handleDelete = async (id) => {
-  // Implement delete functionality
   try {
-    // Send delete request to the server
     await axios.delete(`${config.baseURL}/taxdefinitions/${id}`);
     toast.success('Successfully deleted..')
-    // Optionally, you can update the state or reload the data to reflect the changes in the UI
+    fetchtaxdata()
+    setrefreshFlag(!refreshFlag)
   } catch (error) {
     console.error(error);
-    // Handle error
     toast.error("Something went wrong ..")
   }
 };
 
+
+const fetchsaldef=async()=>{
+try {
+  const res=  await axios.get(`${config.baseURL}/salarybreakdowns/getsalarybreakdown`)
+  setcurrData(res.data)
+} catch (error) {
+  
+}
+}
 
   const handleDynamicTable = async(val) => {
     try {
@@ -129,14 +350,55 @@ const handleDelete = async (id) => {
     <div>
       {/* Upper div starts  */}
 
-      <div className="flex max-xl:flex-col  flex-row gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 md:gap-3  mt-1 ">
+      <div className="mt-4">
+                        <label htmlFor="month" className="block text-sm text-gray-700 text-left">
+                         Month
+                        </label>
+                        <select
+                            id="month"
+                            className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            onChange={handlechangemonth}
+                            value={month}
+                       >
+                            <option value="" disabled selected>
+                                Select Month
+                            </option>
+                             {months.map((month, index) => (
+                                <option key={index} value={month.value}>{month.label}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="year" className="block text-sm text-gray-700 text-left">
+                          Year
+                        </label>
+                        <select
+                            id="year"
+                       
+                            className=" mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            onChange={handlechangeyear}
+                            value={year}
+                       >
+                            <option value="" disabled selected>
+                                Select Year
+                            </option>
+                            {[currentYear - 1, currentYear, currentYear + 1].map((year, index) => (
+                                <option key={index} value={year}>{year}</option>
+                            ))}
+                        </select>
+                    </div>
+      </div>
+  
+      <div className= "mt-5 flex max-xl:flex-col  flex-row gap-3">
         {/* left div starts*/}
         <div>
           <div className="flex  flex-wrap md:flex-wrap gap-1">
             <div className=" rounded-xl shadow-md">
               <div className="flex gap-2 p-5 items-start justify-start ">
                 <div>
-                  <div className=" font-extrabold text-base">2578584</div>
+                  <div className=" font-extrabold text-base">{dashsummary?.totalGrossSalary}</div>
                   <div className=" text-base leading-[24px]">
                     Gross Salary this month
                   </div>
@@ -163,7 +425,7 @@ const handleDelete = async (id) => {
             <div className=" rounded-xl shadow-md">
               <div className="flex gap-2 p-5 items-start justify-start ">
                 <div>
-                  <div className=" font-extrabold text-base">1089787680</div>
+                  <div className=" font-extrabold text-base">{dashsummary?.totalNetSalary}</div>
                   <div className=" text-base leading-[24px]">
                     Net salary this month
                   </div>
@@ -190,7 +452,7 @@ const handleDelete = async (id) => {
             <div className=" rounded-xl shadow-md">
               <div className="flex gap-2 p-5 items-start justify-start ">
                 <div>
-                  <div className=" font-extrabold text-base">56878700</div>
+                  <div className=" font-extrabold text-base">{dashsummary?.totalTax}</div>
                   <div className=" text-base leading-[24px]">
                     Total Tax this month
                   </div>

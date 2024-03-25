@@ -39,12 +39,24 @@ exports.create = async (req, res) => {
 };
 
 // Update an existing procurement request
-exports.update = async (req, res) => {
+exports.approveRequest = async (req, res) => {
   try {
     const updatedRequest = await ProcurementRequest.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true, runValidators: true }
+      {$set:{status: 'Approved'} , reject_reason:"" }
+    );
+    res.json(updatedRequest);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+exports.rejectRequest = async (req, res) => {
+  try {
+    const updatedRequest = await ProcurementRequest.findByIdAndUpdate(
+      req.params.id,
+      {$set:{status: 'Rejected', reject_reason:req.body.reject_reason} }
     );
     res.json(updatedRequest);
   } catch (error) {
@@ -63,3 +75,37 @@ exports.delete = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+exports.Summary=async(req,res)=>{
+  try {
+    // Total requests made
+    const totalRequests = await ProcurementRequest.countDocuments();
+
+    // Total cost
+    const totalCostResult = await ProcurementRequest.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalCost: { $sum: "$totalPrice" }
+        }
+      }
+    ]);
+    const totalCost = totalCostResult.length > 0 ? totalCostResult[0].totalCost : 0;
+
+    // Pending requests
+    const pendingRequests = await ProcurementRequest.countDocuments({ status: "Pending" });
+
+    // Approved requests
+    const approvedRequests = await ProcurementRequest.countDocuments({ status: "Approved" });
+
+    res.status(200).json({
+      totalRequests,
+      totalCost,
+      pendingRequests,
+      approvedRequests
+    });
+  } catch (error) {
+    console.error("Error calculating procurement summary:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}

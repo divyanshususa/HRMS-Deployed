@@ -7,7 +7,8 @@ import {
   Breadcrumb,
   Statistic,
   Table,
- 
+ Space,
+  Badge,
   Tag,
   Input,
   Col,
@@ -45,15 +46,15 @@ const ApplyLeave = () => {
   useEffect(() => {
     refreshgetAllLeaveType();
     setCurrUser(JSON.parse(localStorage.getItem('user')))
-    fetchleaveHistory()
+   
   }, []);
   useEffect(() => {
-    
     fetchleaveHistory()
   }, []);
 
   const fetchleaveHistory =async()=>{
      const  response = await axios.get(`${config.baseURL}/api/leave/empleave/${currUser?._id}`)
+     console.log(response.data)
      setData(response.data)
     //  console.log("inside leaves", response.data)
   }
@@ -62,11 +63,14 @@ const ApplyLeave = () => {
     // Convert the date to a string with the desired format
     const formattedDate = date ? date.format(dateFormat) : null;
     setStartDate(formattedDate);
+    // calculateNumberOfDays(dateString, endDate);
   };
   const handleEndDateChange = (date) => {
     // Convert the date to a string with the desired format
     const formattedDate = date ? date.format(dateFormat) : null;
     setEndDate(formattedDate);
+    calculateNumberOfDays(startDate, endDate)
+    // calculateNumberOfDays(startDate, dateString);
   };
   // Columns configuration for the leave history table
   const columns = [
@@ -114,6 +118,12 @@ const ApplyLeave = () => {
     {
       title: 'Status',
       dataIndex: 'status',
+      render: (text) => (
+        <Space size="middle">
+          <Badge status={text === "Pending" || text==="Rejected" ? "error" : "success"} />
+          {text}
+        </Space>
+      ),
     },
   ];
   // console.log(currUser)
@@ -144,6 +154,17 @@ const ApplyLeave = () => {
       toast.error("something went wrong")
       console.error('Error requesting leave:', error);
      
+    }
+  };
+
+  const calculateNumberOfDays = (start, end) => {
+    if (start && end) {
+      const startMoment = moment(start, dateFormat);
+      const endMoment = moment(end, dateFormat);
+      const days = endMoment.diff(startMoment, 'days') + 1; // Adding 1 to include the end date
+      setnumberOfDays(days);
+    } else {
+      setnumberOfDays(null); // Reset number of days if either start or end date is not selected
     }
   };
 

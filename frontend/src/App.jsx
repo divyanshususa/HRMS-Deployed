@@ -39,6 +39,8 @@ import LeavesStatus from './pages/LeavesStatus';
 import AdminProtectRoutes from './Globalcomponents/AdminProtectRoutes';
 import EmployeeProtectRoute from './Globalcomponents/EmloyeeProtectRoute';
 import CreateDepartment from './components/CreateDepartment';
+import ProfileView from './components/ProfileView';
+import HrProtectRoutes from './Globalcomponents/HrProtectRoutes';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -62,7 +64,8 @@ function App() {
         <Route path='/reset-password' element={<ResetPassword/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/thankyou' element={<Thankyou/>}/>
-        <Route path='/applyleaves' element={<ApplyLeave/>}/>
+        {/* <Route path='/applyleaves' element={<ApplyLeave/>}/> */}
+        <Route path='/profile' element={<ProfileView/>}/>
         <Route
           path="/employee"
           element={
@@ -71,6 +74,18 @@ function App() {
         >
   <Route index element={<Dashbaord />} />
   <Route path='/employee/apply-leaves' element={<ApplyLeave/>} />  
+  <Route path='/employee/profile' element={<ProfileView/>} />
+        </Route>
+
+        <Route
+          path="/hr"
+          element={
+          <HrProtectRoutes Component={MainLayout}/>
+          }
+        >
+  <Route index element={<Dashbaord />} />
+  <Route path='/hr/apply-leaves' element={<ApplyLeave/>} />  
+  <Route path='/hr/profile' element={<ProfileView/>} />
         </Route>
         <Route
           path="/admin"
@@ -83,6 +98,7 @@ function App() {
           <Route path='/admin/employee-forms' element={<Employeeform/>} />
           <Route path='/admin/leaves-status' element={<LeavesStatus/>} />
           <Route path='/admin/staff' element={<Staff/>} />
+          <Route path='/admin/staff/staff-profile' element={<ProfileView/>} />
           <Route path='/admin/staff/add-staff' element={<AddStaffForm/>} />
           <Route path='/admin/paymentvoucher' element={<PaymentVoucherTable/>} />
           <Route path='/admin/paymentvoucher/create' element={<CreatePaymentVoucher/>} />
@@ -90,7 +106,7 @@ function App() {
           <Route path='/admin/payroll/salary-defination' element={<SalaryDefination/>} />
           <Route path='/admin/payroll/tax-defination' element={<TaxDefination/>} />
           <Route path='/admin/payroll/create-payslip' element={<CreatePayslip  setpayslip={setpayslip}/>} />
-          <Route path='/admin/payroll/created-payslip' element={<PaySlip payslip={payslip}/>} />
+          <Route path='/admin/payroll/created-payslip/:employeeId/:month/:year' element={<PaySlip payslip={payslip}/>} />
           <Route path='/admin/payroll/create-payroll' element={<CreatePayroll/>} />
           <Route path='/admin/memo' element={<Memo/>} />
           <Route path='/admin/memo/create-memo' element={<CreateMemo/>} />

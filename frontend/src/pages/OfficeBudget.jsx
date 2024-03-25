@@ -10,11 +10,18 @@ import config from "../configuration/config";
 
 const  OfficeBudget=()=>{
     const[budgetList, setbudgetList]= useState();
+    const[budgetSummary, setSummary]= useState()
     const navigate= useNavigate()
     
     useEffect(()=>{
         fetchbudget()
+        fetchSummary()
     },[])
+
+    const fetchSummary= async()=>{
+        const res= await axios.get(`${config.baseURL}/budget/budget-summary`)
+        setSummary(res.data)
+    }
     const fetchbudget=async()=>{
         const res = await axios.get(`${config.baseURL}/budget/getAllbudget`)
        console.log("fetching...")
@@ -29,9 +36,9 @@ return(
 <div className=" rounded-xl shadow-md">
     <div className="flex gap-3 p-5 items-start justify-start ">
         <div>
-            <div className=" font-extrabold">25090009</div>
+            <div className=" font-extrabold">{budgetSummary?.totalBudget}</div>
             <div className=" text-base leading-[24px]">
-                Total Annual Budget
+                Total Budget
             </div>
         </div>
         <div>
@@ -42,13 +49,13 @@ return(
             />
         </div>
     </div>
-
+{/* 
     <div className="flex flex-row items-center justify-start text-xs text-grey-70 m-2">
     <FaLongArrowAltUp />
         <div className="relative leading-[20px]">
             12% more than last year
         </div>
-    </div>
+    </div> */}
 </div>
 
 {/* total application */}
@@ -56,7 +63,7 @@ return(
 <div className=" rounded-xl shadow-md">
     <div className="flex gap-3 p-5 items-start justify-start ">
         <div>
-            <div className=" font-extrabold">5000000</div>
+            <div className=" font-extrabold">{budgetSummary?.totalAmountUsed}</div>
             <div className=" text-base leading-[24px]">
                Amount Used
             </div>
@@ -83,7 +90,7 @@ return(
 <div className=" rounded-xl shadow-md">
     <div className="flex gap-3 p-5 items-start justify-start ">
         <div>
-            <div className=" font-extrabold">130000</div>
+            <div className=" font-extrabold">{budgetSummary?.totalBalance}</div>
             <div className=" text-base leading-[24px]">
                 Total budget balance
             </div>
@@ -114,7 +121,7 @@ return(
 <div className=" rounded-xl shadow-md">
     <div className="flex gap-3 p-5 items-start justify-start ">
         <div>
-            <div className=" font-extrabold">48%</div>
+            <div className=" font-extrabold">{budgetSummary?.variancePercentage}%</div>
             <div className=" text-base leading-[24px]">
               Budget % used
             </div>

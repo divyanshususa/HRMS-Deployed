@@ -5,6 +5,7 @@ const uploadOnCloudinary = require("../utils/cloudinary");
 exports.getAllStocks = async (req, res) => {
   try {
     const stocks = await Stock.find();
+    stocks.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     res.json(stocks);
   } catch (error) {
     console.error(error);
@@ -71,3 +72,32 @@ exports.deleteStock = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+exports.stockSummary=async(req, res)=>{
+  try {
+    const totalCategories = await Stock.distinct("category").countDocuments();
+    
+    const totalItems = await Stock.countDocuments();
+
+    const totalCostsResult = await Stock.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalCosts: { $sum: "$totalAmount" }
+        }
+      }
+    ]);
+
+    const totalCosts = totalCostsResult.length > 0 ? totalCostsResult[0].totalCosts : 0;
+
+    res.status(200).json({
+      totalCategories,
+      totalItems,
+      totalCosts
+    });
+  } catch (error) {
+    console.error("Error calculating stock summary:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}

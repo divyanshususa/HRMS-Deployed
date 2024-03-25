@@ -44,7 +44,13 @@ const procurementRequestSchema = new mongoose.Schema({
     default: "Pending",
   },
 
+reject_reason:{
+  type:String,
+  required: false
+}
   
+},{
+  timestamps:true
 });
 
 const ProcurementRequest = mongoose.model(

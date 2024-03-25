@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import { Table , Space, Badge} from "antd";
 import { FaLongArrowAltDown, FaLongArrowAltUp } from "react-icons/fa"
 import { logisticColumns, stockColumns } from "../utils/columns";
 
@@ -11,11 +11,19 @@ import "react-toastify/dist/ReactToastify.css";
 const Stocks = () => {
     const navigate = useNavigate()
     const [stockList, setstockList] = useState();
+    const [stockSummary, setStockSummary]= useState()
     const [file, setFile] = useState(null);
     const[refresflag, setrefreshflag]= useState(false)
     useEffect(() => {
         fetchStock()
+        fetchsummary()
     }, [])
+
+    const fetchsummary=async()=>{
+        const res= await axios.get(`${config.baseURL}/stocks/stock-summary`)
+        // console.log(res.data)
+        setStockSummary(res.data)
+    }
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -57,7 +65,7 @@ const Stocks = () => {
                 <div className=" rounded-xl shadow-md">
                     <div className="flex gap-3 p-5 items-start justify-start ">
                         <div>
-                            <div className=" font-extrabold">10</div>
+                            <div className=" font-extrabold">{stockSummary?.totalCategories}</div>
                             <div className=" text-base leading-[24px]">
                                 Categories
                             </div>
@@ -84,7 +92,7 @@ const Stocks = () => {
                 <div className=" rounded-xl shadow-md">
                     <div className="flex gap-3 p-5 items-start justify-start ">
                         <div>
-                            <div className=" font-extrabold">500</div>
+                            <div className=" font-extrabold">{stockSummary?.totalItems}</div>
                             <div className=" text-base leading-[24px]">
                                 Total items
                             </div>
@@ -111,7 +119,7 @@ const Stocks = () => {
                 <div className=" rounded-xl shadow-md">
                     <div className="flex gap-3 p-5 items-start justify-start ">
                         <div>
-                            <div className=" font-extrabold">50000</div>
+                            <div className=" font-extrabold">{stockSummary?.totalCosts}</div>
                             <div className=" text-base leading-[24px]">
                                 Total item cost
                             </div>

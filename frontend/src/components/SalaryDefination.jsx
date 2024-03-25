@@ -13,10 +13,24 @@ const SalaryDefination = () => {
   const [formData, setFormData] = useState({
     title: "",
     level: "",
-    basicSalary: "",
+    // basicSalary: "",
     allowance: "",
+    salaryStructure: {
+      basicSalary: "",
+      houseAllowance: "",
+      transportAllowance: "",
+      utilityAllowance: "",
+      productivityAllowance: "",
+      communicationAllowance: "",
+      inconvenienceAllowance: "",
+  },
     grossSalary: "",
     deductions: "",
+  //   deductions: {
+  //     tax: "",
+  //     employeePension: "",
+  //     totalDeduction: "",
+  // },
     netSalary: "",
   });
 
@@ -24,6 +38,27 @@ const SalaryDefination = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  const handlesal = (e) => {
+    const { id, value } = e.target;
+    setFormData({
+        ...formData,
+        salaryStructure: {
+            ...formData.salaryStructure,
+            [id]: value,
+        },
+    });
+};
+
+const handlededuction = (e) => {
+    const { id, value } = e.target;
+    setFormData({
+        ...formData,
+        deductions: {
+            ...formData.deductions,
+            [id]: value,
+        },
+    });
+};
   const handleSubmit = async () => {
     try {
 
@@ -105,25 +140,95 @@ console.log(`${config.baseURL}/salarybreakdowns/create`)
             id="basicSalary"
             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
             placeholder="Enter amount"
-            onChange={handleChange}
-            value={formData.basicSalary}
+            onChange={handlesal}
+            value={formData.salaryStructure.basicSalary}
           />
         </div>
-
-
         <div className="mt-4">
-          <label htmlFor="allowance" className="block text-sm text-gray-700 text-left">
-            Allowance
-          </label>
-          <input
-            type="text"
-            id="allowance"
-            className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
-            placeholder="Enter amount"
-            onChange={handleChange}
-            value={formData.allowance}
-          />
-        </div>
+                        <label htmlFor="houseAllowance" className="block text-sm text-gray-700 text-left">
+                            House  Allowance
+                        </label>
+                        <input
+                            type="text"
+                            id="houseAllowance"
+                            className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            placeholder="Enter amount"
+                            onChange={handlesal} // Add onChange event handler
+                            value={formData.salaryStructure.houseAllowance} 
+                        />
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="transportAllowance" className="block text-sm text-gray-700 text-left">
+                            Transport Allowance
+                        </label>
+                        <input
+                            type="text"
+                            id="transportAllowance"
+                            className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            placeholder="Enter amount"
+                            onChange={handlesal} // Add onChange event handler
+                            value={formData.salaryStructure.transportAllowance} 
+                        />
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="utilityAllowance" className="block text-sm text-gray-700 text-left">
+                            Utility Allowance
+                        </label>
+                        <input
+                            type="text"
+                            id="utilityAllowance"
+                            className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            placeholder="Enter amount"
+                            onChange={handlesal} // Add onChange event handler
+                            value={formData.salaryStructure.utilityAllowance} 
+                        />
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="productivityAllowance" className="block text-sm text-gray-700 text-left">
+                            Productivity Allowance
+                        </label>
+                        <input
+                            type="text"
+                            id="productivityAllowance"
+                            className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            placeholder="Enter amount"
+                            onChange={handlesal} // Add onChange event handler
+                            value={formData.salaryStructure.productivityAllowance} 
+                        />
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="communicationAllowance" className="block text-sm text-gray-700 text-left">
+                            Communication Allowance
+                        </label>
+                        <input
+                            type="text"
+                            id="communicationAllowance"
+                            className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            placeholder="Enter amount"
+                            onChange={handlesal} // Add onChange event handler
+                            value={formData.salaryStructure.communicationAllowance} 
+                        />
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="inconvenienceAllowance" className="block text-sm text-gray-700 text-left">
+                            Inconvenience Allowance
+                        </label>
+                        <input
+                            type="text"
+                            id="inconvenienceAllowance"
+                            className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                            placeholder="Enter amount"
+                            onChange={handlesal} // Add onChange event handler
+                            value={formData.salaryStructure.inconvenienceAllowance} 
+                        />
+                    </div>
+
+
 
 
 

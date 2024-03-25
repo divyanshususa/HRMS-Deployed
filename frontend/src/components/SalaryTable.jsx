@@ -5,9 +5,9 @@ import { Table } from "antd";
 
 const SalaryTable = ({payslip}) => {
 
-  console.log("this is inside ",payslip)
-  const { salaryStructure, deductions, grossSalary, netSalary } = payslip;
-  const totalGrossSalary = data.reduce((total, item) => total + item.amount, 0);
+  // console.log("this is inside ",payslip)
+  // const { salaryStructure, deductions, grossSalary, netSalary } = payslip;
+  // const totalGrossSalary = data.reduce((total, item) => total + item.amount, 0);
 
   const columns = [
   {
@@ -53,7 +53,7 @@ const data = [
   ];
 
   const totalDeductions = taxData.reduce((total, item) => total + item.amount, 0);
-  const netsalary = totalGrossSalary - totalDeductions;
+  // const netsalary = totalGrossSalary - totalDeductions;
 
   return (
     <div>
@@ -70,8 +70,8 @@ const data = [
         <div className="overflow-auto">
         <Table columns={columns} dataSource={data} pagination={false} />
       <div className="mt-4">
-        <b className="mr-4">Gross Salary: {totalGrossSalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>
-        <b>Net Salary: {netsalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>
+        {/* <b className="mr-4">Gross Salary: {totalGrossSalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b> */}
+        {/* <b>Net Salary: {netsalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b> */}
       </div>
         </div>
 
@@ -82,7 +82,7 @@ const data = [
         <b>Total Deductions: {totalDeductions.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b>
       </div>
       <div className="mt-4">
-        <b>Net Salary in Words: {convertToWords(netsalary)} Rupees Only</b>
+        {/* <b>Net Salary in Words: {convertToWords(netsalary)} Rupees Only</b> */}
       </div>
         </div>
      

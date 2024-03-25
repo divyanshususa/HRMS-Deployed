@@ -1,4 +1,7 @@
 import { Image } from "antd";
+import { Table , Space, Badge} from "antd";
+import { NavLink } from "react-router-dom";
+
 
 export const taxcolumns=[
     {
@@ -108,12 +111,17 @@ export const staffDetailsCol=[
         dataIndex: "action",
         key: "action",
         render: (_, record) => (
-            <span
+            <NavLink to='/created-payslip'>
+        <span
                 className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
-                // onClick={() => onViewMoreTextClick(record)}
+                
+
             >
+                {console.log("inside view butotn", record)}
                 View more
             </span>
+            </NavLink>
+    
         ),
     },
 ]
@@ -516,6 +524,12 @@ export  const stockColumns = [
         title: "Status",
         dataIndex: "status",
         key: "status",
+        render: (text) => (
+            <Space size="middle">
+              <Badge status={text === "Out of Stock" || text==="Rejected" ? "error" : "success"} />
+              {text}
+            </Space>
+          ),
     },
 ];
 

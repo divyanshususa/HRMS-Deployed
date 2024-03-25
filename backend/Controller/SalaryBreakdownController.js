@@ -4,7 +4,7 @@ const SalaryBreakdown = require("../Schemas/SalaryBreakdown");
 exports.createSalaryBreakdown = async (req, res) => {
   try {
 
-
+console.log(req.body)
     const salaryBreakdown = new SalaryBreakdown(req.body);
     await salaryBreakdown.save();
     res.status(201).json(salaryBreakdown);
@@ -66,3 +66,57 @@ exports.deleteSalaryBreakdown = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+exports.dashboardInfo= async(req, res)=>{
+  try {
+    const { year, month } = req.params;
+
+    // Calculate start and end date of the specified month
+    const startDate = new Date(year, month - 1, 1); // First day of the month
+    const endDate = new Date(year, month, 0); // Last day of the month
+
+    // Fetch salary breakdown records for the specified month and year
+    const salaryBreakdowns = await SalaryBreakdown.find({
+        createdAt: { $gte: startDate, $lte: endDate }
+    });
+
+    // Calculate total gross salary, net salary, and tax deductions
+    let totalGrossSalary = 0;
+    let totalNetSalary = 0;
+    let totalDeductions = 0;
+
+    salaryBreakdowns.forEach(record => {
+        totalGrossSalary += record.grossSalary;
+        totalNetSalary += record.netSalary;
+        totalDeductions += record.deductions;
+    });
+
+    res.json({
+        totalGrossSalary,
+        totalNetSalary,
+        totalDeductions
+    });
+} catch (error) {
+    console.error('Error fetching salary breakdown:', error);
+    res.status(500).json({ error: 'Internal server error' });
+}
+}
+
+
+exports.searchbytitle = async(req, res)=>{
+  try {
+    const title = req.params.title;
+
+    const data = await SalaryBreakdown.findOne({ title: { $regex: new RegExp(title, 'i') } });
+
+    if (data.length === 0) {
+        return res.status(404).json({ message: 'Data not found' });
+    }
+
+    // Return the data as JSON response 
+    res.json({ data });
+} catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+}
+}

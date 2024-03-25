@@ -22,17 +22,13 @@ exports.createLogistic = async (req, res) => {
   }
 };
 
-exports.updateLogistic = async (req, res) => {
+exports.approveLogistic = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    // const updateData = req.body;
     const updatedStats = await Logistic.findByIdAndUpdate(
       id,
-      updateData,
-      {
-        new: true,
-        runValidators: true,
-      }
+      {$set:{status: 'Approved'} , reject_reason:"" }
     );
     res.json(updatedStats);
   } catch (error) {
@@ -40,7 +36,20 @@ exports.updateLogistic = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
+exports.rejectLogistic = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // const updateData = req.body;
+    const updatedStats = await Logistic.findByIdAndUpdate(
+      id,
+      {$set:{status: 'Rejected', reject_reason:req.body.reject_reason} }
+    );
+    res.json(updatedStats);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 exports.deleteLogistic = async (req, res) => {
   try {
     const { id } = req.params;
@@ -51,3 +60,51 @@ exports.deleteLogistic = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+exports.logisticSummary= async(req,res)=>{
+  try {
+    // Calculate total amount
+    const totalAmountResult = await Logistic.aggregate([
+        {
+            $group: {
+                _id: null,
+                totalAmount: { $sum: { $toInt: '$amount' } }
+            }
+        }
+    ]);
+
+    const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
+
+    // Count records with pending and approved statuses
+    const statusCounts = await Logistic.aggregate([
+        {
+            $group: {
+                _id: '$status',
+                count: { $sum: 1 }
+            }
+        }
+    ]);
+
+    let pendingCount = 0;
+    let approvedCount = 0;
+
+    statusCounts.forEach(({ _id, count }) => {
+        if (_id === 'Pending') {
+            pendingCount = count;
+        } else if (_id === 'Approved') {
+            approvedCount = count;
+        }
+    });
+    const totalRequestsCount = await Logistic.countDocuments();
+    res.json({
+        totalAmount,
+        pendingCount,
+        approvedCount,
+        totalRequestsCount
+    });
+} catch (error) {
+    console.error('Error calculating logistics summary:', error);
+    res.status(500).json({ error: 'Internal server error' });
+}
+}

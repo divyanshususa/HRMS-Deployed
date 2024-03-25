@@ -60,12 +60,8 @@ const [adminitem, setadminitem]=useState(
       icon: <FcDepartment className="fs-4" />,
       label: "Departments",
     },
-    // {
-    //   key: "paymentvoucher",
-    //   icon: <IoWalletOutline  className="fs-4" />,
-    //   label: "Payment Voucher",
 
-    // },
+    
     {
       key: "payroll",
       icon: <FaMoneyBills  className="fs-4" />,
@@ -83,11 +79,7 @@ const [adminitem, setadminitem]=useState(
       label: "Circulars",
 
     },
-    // {
-    //   key: "maintenance",
-    //   icon: <FaClipboardList className="fs-4" />,
-    //   label: "Maintenance",
-    // },
+
 
     {
       key: "logistics",
@@ -118,11 +110,7 @@ const [adminitem, setadminitem]=useState(
         // }
       ]
     },
-    // {
-    //   key: "notification",
-    //   icon: <FaClipboardList className="fs-4" />,
-    //   label: "Notification",
-    // },
+  
     {
       key: "capacity",
       icon: <MdOutlineReduceCapacity className="fs-4" />,
@@ -146,7 +134,12 @@ const[empitem, setempitem]=useState([
   {
     key: "",
     icon: <AiOutlineDashboard className="fs-4" />,
-    label: "Profile",
+    label: "Dashboard",
+  },
+  {
+    key: "profile",
+    icon: <AiOutlineUser className="fs-4" />,
+    label: " Profile",
   },
   {
     key: "apply-leaves",
@@ -159,6 +152,30 @@ const[empitem, setempitem]=useState([
     label: "Sign Out",
   },
 
+
+])
+
+const [Hritem, setHRitem]=useState([
+  {
+    key: "",
+    icon: <AiOutlineDashboard className="fs-4" />,
+    label: "Dashboard",
+  },
+  {
+    key: "profile",
+    icon: <AiOutlineUser className="fs-4" />,
+    label: " Profile",
+  },
+  {
+    key: "apply-leaves",
+    icon: <AiOutlineUser className="fs-4" />,
+    label: "Apply Leaves",
+  },
+  {
+    key: "signout",
+    icon: <AiOutlineLogout className="fs-4" />,
+    label: "Sign Out",
+  },
 
 ])
   return (
@@ -187,7 +204,9 @@ const[empitem, setempitem]=useState([
 
             
             items={
-             currUser?.role?.toLowerCase()==='admin'? adminitem : empitem
+              currUser?.role?.toLowerCase() === 'admin' ? adminitem  : 
+              currUser?.role?.toLowerCase() === 'employee' ? empitem :
+              currUser?.role?.toLowerCase() === 'hr' ? Hritem : null
           }
 
 

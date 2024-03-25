@@ -9,10 +9,10 @@ router.post("/create-memo", memoTitleController.createMemoTitle);
 router.get("/getMemo", memoTitleController.getAllMemoTitles);
 
 // Get Memo Title by ID
-router.get("/:id", memoTitleController.getMemoTitleById);
+// router.get("/:id", memoTitleController.getMemoTitleById);
 
 // Update Memo Title
-router.put("/:id", memoTitleController.updateMemoTitle);
+// router.put("/:id", memoTitleController.updateMemoTitle);
 
 // Delete Memo Title
 router.delete("/:id", memoTitleController.deleteMemoTitle);

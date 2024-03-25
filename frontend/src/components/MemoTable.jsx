@@ -65,7 +65,7 @@ const columns = [
     key: "status",
     render: (text) => (
       <Space size="middle">
-        <Badge status={text === "Pending" ? "error" : "success"} />
+        <Badge status={text === "Pending" || text==="Rejected" ? "error" : "success"} />
         {text}
       </Space>
     ),
