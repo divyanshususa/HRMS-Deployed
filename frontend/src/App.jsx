@@ -41,6 +41,7 @@ import EmployeeProtectRoute from './Globalcomponents/EmloyeeProtectRoute';
 import CreateDepartment from './components/CreateDepartment';
 import ProfileView from './components/ProfileView';
 import HrProtectRoutes from './Globalcomponents/HrProtectRoutes';
+import EmpPaySlip from './components/EmpPaySlip';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -75,6 +76,8 @@ function App() {
   <Route index element={<Dashbaord />} />
   <Route path='/employee/apply-leaves' element={<ApplyLeave/>} />  
   <Route path='/employee/profile' element={<ProfileView/>} />
+  <Route path='/employee/payslip' element={<EmpPaySlip/>} />
+  <Route path='/employee/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
         </Route>
 
         <Route
@@ -86,6 +89,8 @@ function App() {
   <Route index element={<Dashbaord />} />
   <Route path='/hr/apply-leaves' element={<ApplyLeave/>} />  
   <Route path='/hr/profile' element={<ProfileView/>} />
+  <Route path='/hr/payslip' element={<EmpPaySlip/>} />
+  <Route path='/hr/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
         </Route>
         <Route
           path="/admin"

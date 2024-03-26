@@ -7,15 +7,16 @@ const documentsSchema = new mongoose.Schema({
  type: String,
  required : false 
     },
+
     docs:[],
-    // aadhar_number: {
-    //     type: String,
-    //     required: false
-    // },
-    // pan_number: {
-    //     type: String,
-    //     required: false
-    // },
+    aadhar_number: {
+        type: String,
+        required: false
+    },
+    pan_number: {
+        type: String,
+        required: false
+    },
     // experience: {
     //     type: String,
     //     required: false

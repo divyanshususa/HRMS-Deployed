@@ -1,10 +1,62 @@
-import React from "react";
+import React, { useEffect, useState , useRef} from "react";
 import SalaryTable from "../components/SalaryTable";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import './payslip.css'
+import axios from "axios";
+import config from "../configuration/config";
+import generatePDF from 'react-to-pdf';
 const PaySlip = ({ payslip }) => {
   const navigate = useNavigate();
+  const targetRef = useRef();
+
+  const { employeeId, month, year } = useParams();
+  const [empData, setEmpData]= useState()
+  const [payslipdata, setpayslipdata]= useState()
+  const[totalGrossSalary, setTotalGrossSalary]= useState();
+  const[totalNetSalary, setTotalNetSalary]= useState();
+  
+  useEffect(()=>{
+    fetchpayslipdata()
+  },[])
+  const fetchpayslipdata = async()=>{
+    const res = await axios.get(`${config.baseURL}/payslips/pay-slip/${employeeId}/${month}/${year}`)
+    const{employee, deductions, salaryStructure}= res.data.paySlip
+    setEmpData(employee);
+    setpayslipdata(res.data.paySlip)
+    // setSalStructure(salaryStructure)
+      console.log(employee)
+
+      let totalGrossSal = 0;
+for (const key in salaryStructure) {
+    if (Object.hasOwnProperty.call(salaryStructure, key)) {
+        totalGrossSal += salaryStructure[key];
+    }
+
+}
+console.log(totalGrossSal-payslipdata?.deductions?.totalDeduction)
+
+setTotalNetSalary(totalGrossSal-payslipdata?.deductions?.totalDeduction)
+
+// let totaldeduct= 0;
+// for(const key in deductions){
+//   if(Object.hasOwnProperty.call(deductions, key)){
+//     totaldeduct +=deductions[key]
+//   }
+// }
+// console.log(totaldeduct)
+setTotalGrossSalary(totalGrossSal)
+   
+  }
+  const getMonthName = (month) => {
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return monthNames[month - 1]; // Month index starts from 0
+  };
+
+  
   return (
     //         <div classNameName="w-full">
     //             <div>
@@ -37,33 +89,33 @@ const PaySlip = ({ payslip }) => {
 
     //         </div>
 
-    <div className="salary-slip" >
-      <table className="empDetail">
+    <div className="salary-slip">
+      <table className="empDetail"  ref={targetRef} >
         <tr height="100px" style={{ backgroundColor: "#c2d69b" }}>
-          <td colspan='4'>
+          <td colSpan='4'>
             <img height="90px" src='/images/logo.png' /></td>
-          <td colspan='4' className="companyName"> Susalabs Pvt Ltd.  </td>
+          <td colSpan='4' className="companyName"> Susalabs Pvt Ltd.  </td>
         </tr>
         <tr>
           <th>
             Name
           </th>
-          <td>
-            Example
+          <td className="capitalize">
+         {empData?.firstname} &nbsp; {empData?.lastname}
           </td>
           <td></td>
           <th>
             Bank Code
           </th>
           <td>
-            ABC123
+            {empData?.accountDetails?.bankCode}
           </td>
           <td></td>
           <th>
             Branch Name
           </th>
           <td>
-            ABC123
+          {empData?.accountDetails?.branchName}
           </td>
         </tr>
         <tr>
@@ -71,14 +123,14 @@ const PaySlip = ({ payslip }) => {
             Employee Code
           </th>
           <td>
-            XXXXXXXXXXX
+          {empData?.empId}
           </td>
           <td></td>
           <th>
             Bank Name
           </th>
           <td>
-            XXXXXXXXXXX
+          {empData?.accountDetails?.bankName}
           </td>
           <td></td>
           <th>
@@ -94,13 +146,13 @@ const PaySlip = ({ payslip }) => {
             Bank Branch
           </th>
           <td>
-            XXXXXXXXXX
+          {empData?.accountDetails?.branchName}
           </td><td></td>
           <th>
             Pay Period
           </th>
           <td>
-            XXXXXXXXXXX
+          {getMonthName(payslipdata?.month)}
           </td>
         </tr>
         <tr>
@@ -109,7 +161,7 @@ const PaySlip = ({ payslip }) => {
             Bank A/C no.
           </th>
           <td>
-            XXXXXXXXXX
+          {empData?.accountDetails?.accountNumber}
           </td>
        
         </tr>
@@ -120,11 +172,11 @@ const PaySlip = ({ payslip }) => {
             PAN No:
           </th>
           <td>
-            MOP72182E
+          {empData?.pan_number}
           </td>
         </tr>
         <tr className="myBackground">
-          <th colspan="2">
+          <th colSpan="2">
             Payments
           </th>
           <th >
@@ -133,7 +185,7 @@ const PaySlip = ({ payslip }) => {
           <th className="table-border-right">
             Amount (Rs.)
           </th>
-          <th colspan="2">
+          <th colSpan="2">
             Deductions
           </th>
           <th >
@@ -144,142 +196,146 @@ const PaySlip = ({ payslip }) => {
           </th>
         </tr>
         <tr>
-          <th colspan="2">
+          <th colSpan="2">
             Basic Salary
           </th>
           <td></td>
           <td className="myAlign">
-            4935.00
+         {payslipdata?.salaryStructure?.basicSalary}
           </td>
-          <th colspan="2" >
+          <th colSpan="2" >
             Provident Fund
           </th >
           <td></td>
 
           <td className="myAlign">
-            00.00
+          {payslipdata?.deductions?.employeePension}
           </td>
         </tr >
         <tr>
-          <th colspan="2">
+          <th colSpan="2">
             House Allowance
           </th>
           <td></td>
 
           <td className="myAlign">
-            00.00
+          {payslipdata?.salaryStructure?.houseAllowance}
           </td>
-          <th colspan="2" >
+          <th colSpan="2" >
             Tax
           </th >
           <td></td>
 
           <td className="myAlign">
-            00.00
+          {payslipdata?.deductions?.tax}
           </td>
         </tr >
         <tr>
-          <th colspan="2">
+          <th colSpan="2">
             Transport Allowance
           </th>
           <td></td>
 
           <td className="myAlign">
-            00.00
+          
+          {payslipdata?.salaryStructure?.transportAllowance}
           </td>
       
         </tr >
         <tr>
-          <th colspan="2">
+          <th colSpan="2">
             Utility Allowance
           </th>
           <td></td>
           <td className="myAlign">
-            00.00
+          {payslipdata?.salaryStructure?.utilityAllowance}
           </td>
        
         </tr >
         <tr>
-          <th colspan="2">
+          <th colSpan="2">
           Productivity Allowance
           </th>
           <td></td>
 
 
           <td className="myAlign">
-            00.00
+          {payslipdata?.salaryStructure?.productivityAllowance}
           </td>
         </tr >
         <tr>
-          <th colspan="2">
+          <th colSpan="2">
            Communication Allowance
           </th> <td></td>
           <td className="myAlign">
-            00.00
+          {payslipdata?.salaryStructure?.communicationAllowance}
           </td>
        
         </tr >
      
         <tr>
-          <th colspan="2">
+          <th colSpan="2">
             Inconvenience Allowance
           </th>
           <td></td>
           <td className="myAlign">
-            00.00
+          {payslipdata?.salaryStructure?.inconvenienceAllowance}
           </td>
       
         </tr >
         <tr>
-          <td colspan="4" className="table-border-right"></td>
+          <td colSpan="4" className="table-border-right"></td>
        
         </tr >
         <tr>
-          <td colspan="4" className="table-border-right"></td>
+          <td colSpan="4" className="table-border-right"></td>
         
         </tr >
         <tr>
-          <td colspan="4" className="table-border-right"></td>
+          <td colSpan="4" className="table-border-right"></td>
        
         </tr >
         <tr className="myBackground">
-          <th colspan="3">
+          <th colSpan="3">
             Total Payments
           </th>
           <td className="myAlign">
-            10000
+          {totalGrossSalary && totalGrossSalary}
           </td>
-          <th colspan="3" >
+          <th colSpan="3" >
             Total Deductions
           </th >
           <td className="myAlign">
-            1000
+        {payslipdata?.deductions?.totalDeduction}
           </td>
         </tr >
         <tr height="40px">
-          <th colspan="2">
-     
+          <th colSpan="2"  className="table-border-bottom">
+          Gross Salary
           </th>
-          <th>
+          <th   className="table-border-bottom" >
+         
           </th>
-          <td className="table-border-right">
+          
+          <td  id="gross salary" className="table-border-right  table-border-bottom myAlign">
+          {totalGrossSalary && totalGrossSalary}
           </td>
-          <th colspan="2" className="table-border-bottom" >
+          <th colSpan="2" className="table-border-bottom" >
             Net Salary
           </th >
-          <td >
+          <td  className="  table-border-bottom">
           </td>
-          <td >
-            XXXXXXXXXX
+          <td  className="table-border-right  table-border-bottom myAlign">
+          {totalNetSalary & totalNetSalary}
           </td>
         </tr >
         <tr>
-          <td colspan="2">
-            Gross Salary
+          <td colSpan="2">
+            {/* Gross Salary    */}
           </td> <td></td>
           <td className="myAlign">
-            00.00
-          </td><td colspan="4"></td>
+            {/* 00.00 */}
+          </td><td colSpan="4"></td>
         </tr >
      
        
@@ -287,13 +343,13 @@ const PaySlip = ({ payslip }) => {
       
         </tr >
         <tr>
-          <td colspan="2">
-            Total Income
+          <td colSpan="2" >
+            {/* Total Income */} &nbsp;
           </td> <td></td>
           <td className="myAlign">
-            00.00
+            {/* 00.00 */}
           </td>
-          <td colspan="4"></td>
+          <td colSpan="4"></td>
         </tr >
         <tbody className="border-center">
           <tr>
@@ -330,7 +386,11 @@ const PaySlip = ({ payslip }) => {
         
         </tbody>
       </table >
-
+      <div className="mt-3 w-full flex content-center justify-center">
+        <button 
+        className="w-[205px] cursor-pointer  focus:outline-none focus:ring focus:ring-violet-300 md:hover:bg-sky-700 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[46px] flex flex-row items-center justify-center p-2.5 box-border text-white"
+        onClick={() => generatePDF(targetRef, {filename: 'payslip.pdf'})}>Download PDF</button>
+        </div>
     </div >
 
   )

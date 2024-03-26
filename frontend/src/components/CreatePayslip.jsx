@@ -58,15 +58,16 @@ const CreatePayslip = ({setpayslip}) => {
         const res= await axios.get(`${config.baseURL}/salarybreakdowns/searchbytitle/${titleforsearch}`)
         console.log("this is new ", res.data.data)
         settitledata(res.data.data)
-        setFormData({
-            ...formData,
-            grossSalary:titledata?.grossSalary,
-            netSalary:titledata?.netSalary,
-            salaryStructure: {
-                ...titledata?.salaryStructure,
+
+        // setFormData({
+        //     ...formData,
+        //     grossSalary:titledata?.grossSalary,
+        //     netSalary:titledata?.netSalary,
+        //     salaryStructure: {
+        //         ...titledata?.salaryStructure,
                
-            },
-        });
+        //     },
+        // });
     } catch (error) {
         
     }
@@ -76,6 +77,12 @@ const CreatePayslip = ({setpayslip}) => {
         const { id, value } = e.target;
         setFormData({
             ...formData,
+            grossSalary:titledata?.grossSalary,
+            netSalary:titledata?.netSalary,
+            salaryStructure: {
+                ...titledata?.salaryStructure,
+               
+            },
             [id]: value,
             
         });
@@ -125,7 +132,7 @@ const CreatePayslip = ({setpayslip}) => {
 
                 setpayslip(res.data)
             // Optionally, you can navigate to another page after successful submission
-            navigate('/admin/payroll/created-payslip');
+            navigate('/admin/payroll');
         } catch (error) {
             console.error("Error creating pay slip:", error);
             toast.error("Something went wrong.")
@@ -512,7 +519,7 @@ const CreatePayslip = ({setpayslip}) => {
                             className="w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
                             placeholder="Enter amount"
                             onChange={handleChange} // Add onChange event handler
-                            value={formData.netSalary} 
+                            value={titledata?.netSalary} 
                         />
                     </div>
                 </div>

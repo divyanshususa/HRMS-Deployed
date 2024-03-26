@@ -44,7 +44,7 @@ const ApplyLeave = () => {
 
   // useEffect hook to run side effects (like data fetching) when the component mounts
   useEffect(() => {
-    refreshgetAllLeaveType();
+  
     setCurrUser(JSON.parse(localStorage.getItem('user')))
    
   }, []);
@@ -138,10 +138,10 @@ const ApplyLeave = () => {
         reason,
          startDate,
          endDate,
-         employeeId: currUser._id,
+         employeeId: currUser?._id,
       }
-
-      // console.log("this is leave data",leavedata)
+   
+      console.log("this is leave data",leavedata)
       const response = await axios.post(`${config.baseURL}/api/leave/apply`, leavedata);
       toast.success("Leave requested successfully")
       // Optionally, you can update the UI or show a success message

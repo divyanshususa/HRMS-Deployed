@@ -100,3 +100,14 @@ exports.individualPayslip  =async(req,res)=>{
     res.status(500).json({ error: 'Internal server error' });
 }
 }
+
+exports.EmployeePayslips= async(req, res)=>{
+  try {
+    const employeeId = req.params.employeeId;
+    const paySlips = await PaySlip.find({ employee: employeeId }).exec();
+    res.json(paySlips);
+  } catch (error) {
+    console.error('Error fetching pay slips:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}

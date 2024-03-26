@@ -267,7 +267,7 @@ const staffDetailsCol=[
       <span
               className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
               
-            onClick={()=>navigate(`/admin/created-payslip/${record.employee}/${record.month}/${record.year}`)}
+            onClick={()=>navigate(`/admin/payroll/created-payslip/${record.employee}/${record.month}/${record.year}`)}
           >
               {console.log("inside view butotn", record)}
               View more

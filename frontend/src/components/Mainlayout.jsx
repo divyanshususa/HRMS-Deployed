@@ -146,6 +146,12 @@ const[empitem, setempitem]=useState([
     icon: <AiOutlineUser className="fs-4" />,
     label: "Apply Leaves",
   },
+      
+  {
+    key: "payslip",
+    icon: <FaMoneyBills  className="fs-4" />,
+    label: "PaySlip",
+  },
   {
     key: "signout",
     icon: <AiOutlineLogout className="fs-4" />,
@@ -170,6 +176,11 @@ const [Hritem, setHRitem]=useState([
     key: "apply-leaves",
     icon: <AiOutlineUser className="fs-4" />,
     label: "Apply Leaves",
+  },
+  {
+    key: "payslip",
+    icon: <FaMoneyBills  className="fs-4" />,
+    label: "PaySlip",
   },
   {
     key: "signout",

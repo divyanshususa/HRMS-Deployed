@@ -419,4 +419,35 @@ router.post('/assign-designation', async (req, res) => {
   }
 });
 
+
+router.put('/:id/account-details', async (req, res) => {
+  const employeeId = req.params.id;
+  const { bankName, bankCode, branchName, accountNumber } = req.body;
+
+  try {
+      // Find the employee by ID
+      let employee = await EmployeeSchemas.findById(employeeId);
+
+      if (!employee) {
+          return res.status(404).json({ message: 'Employee not found' });
+      }
+
+      // Update the account details
+      employee.accountDetails = {
+          bankName: bankName || employee.accountDetails.bankName,
+          bankCode: bankCode || employee.accountDetails.bankCode,
+          branchName: branchName || employee.accountDetails.branchName,
+          accountNumber: accountNumber || employee.accountDetails.accountNumber
+      };
+
+      // Save the updated employee
+      await employee.save();
+
+      res.status(200).json({ message: 'Account details updated successfully', employee: employee });
+  } catch (error) {
+      console.error('Error updating account details:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 module.exports = router;

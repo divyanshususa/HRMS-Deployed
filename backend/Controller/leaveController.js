@@ -11,6 +11,7 @@ exports.applyLeave = async (req, res) => {
             employee: employeeId,
           
         }); 
+        
 
         console.log(newLeave)
 
