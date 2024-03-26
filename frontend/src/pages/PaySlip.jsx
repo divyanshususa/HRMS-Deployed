@@ -34,7 +34,6 @@ for (const key in salaryStructure) {
     }
 
 }
-console.log(totalGrossSal-payslipdata?.deductions?.totalDeduction)
 
 setTotalNetSalary(totalGrossSal-payslipdata?.deductions?.totalDeduction)
 
@@ -137,7 +136,9 @@ setTotalGrossSalary(totalGrossSal)
             Payslip no.
           </th>
           <td>
-            XXXXXXXXXX
+            {/* XXXXXXXXXX */}
+            {payslipdata?.payslipNo}
+            {console.log(payslipdata)}
           </td>
         </tr>
         <tr>

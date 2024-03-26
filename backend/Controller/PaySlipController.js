@@ -1,5 +1,5 @@
 const PaySlip = require("../Schemas/PaySlip");
-
+const { v4: uuidv4 } = require('uuid');
 exports.getAllPaySlips = async (req, res) => {
   try {
     const paySlips = await PaySlip.find();
@@ -12,7 +12,9 @@ exports.getAllPaySlips = async (req, res) => {
 
 exports.createPaySlip = async (req, res) => {
   try {
-    const paySlip = new PaySlip(req.body);
+    const payslipNo = uuidv4();
+    
+    const paySlip = new PaySlip({ ...req.body, payslipNo });
     const savedPaySlip = await paySlip.save();
     res.status(201).json(savedPaySlip);
   } catch (error) {
