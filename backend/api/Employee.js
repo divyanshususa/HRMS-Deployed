@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
 
     console.log(jwtkey)
 
-    const user = await EmployeeSchemas.findOne({ email });
+    const user = await EmployeeSchemas.findOne({ email }).populate('documents');
 
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password' });
@@ -207,7 +207,7 @@ router.post('/req-form', async(req, res)=>{
   try {
     
     const { firstname, lastname, gender, email, mobile, image, docs, aadhar_number,pan_number,bankName,bankCode ,branchName,accountNumber} = req.body;
-console.log("asdf",req.body)
+// console.log("asdf",req.body)
     // Create a new employee document
     const newEmployee = new EmpRequest({
         firstname,

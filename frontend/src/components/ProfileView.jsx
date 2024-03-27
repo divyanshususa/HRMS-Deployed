@@ -49,6 +49,27 @@ const ProfileView=() =>{
               <input type="text" className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500" id="website" placeholder={currUser?.empId} readOnly/>
             </div>
           </div>
+
+          <h6 className="mb-5 text-primary text-[22px]">Account Details</h6>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="d-flex">
+              <label htmlFor="accountNumber.">Account No.</label>
+              <input type="text" className="mt-2  capitalize w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500" id="fullName" placeholder={currUser?.accountDetails?.accountNumber}  readOnly />
+            </div>
+            <div className="d-flex">
+              <label htmlFor="bankName">Bank Name</label>
+              <input type="text" className="mt-2 capitalize w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500" id="fullName" placeholder={currUser?.accountDetails?.bankName} readOnly />
+            </div>
+            <div className="form-group">
+              <label htmlFor="branchName">Branch Name</label>
+              <input type="text" className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500" id="eMail" placeholder={currUser?.accountDetails?.branchName}readOnly />
+            </div>
+            <div className="form-group">
+              <label htmlFor="bankCode">IFSC code</label>
+              <input type="text" className="mt-2 w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500" id="phone" placeholder={currUser?.accountDetails?.bankCode}  readOnly/>
+            </div>
+        
+          </div>
           <h6 className="mt-3 mb-2 text-primary text-[22px]">Address</h6>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="form-group">
@@ -76,6 +97,26 @@ const ProfileView=() =>{
 
         <div>
         <h6 className="mb-5 text-primary text-[22px]">Documents</h6>
+        <div className="mt-2 flex mb-2">
+                {
+                    currUser && currUser?.documents?.docs?.map((doc, index)=>{
+                        return(
+                            
+                                <div className="flex flex-col m-3">
+  
+                                 <iframe  className ="" key={index} src={doc}/>
+       
+                                 <a className="mt-6" href={doc} target="_blank" rel="noopener noreferrer">
+          Click here to view
+        </a>
+                                </div>
+                      
+                    
+                   
+                        )
+                    })
+                }
+              </div>
         </div>
       </div>
     </div>

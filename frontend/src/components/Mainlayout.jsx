@@ -6,6 +6,7 @@ import {
   AiOutlineLogout,
 } from "react-icons/ai";
 import { IoWalletOutline } from "react-icons/io5";
+import { RiPresentationFill } from "react-icons/ri";
 import { FaMoneyBills } from "react-icons/fa6";
 import { RiCouponLine } from "react-icons/ri";
 import { BsPersonVcard } from "react-icons/bs";
@@ -142,6 +143,12 @@ const[empitem, setempitem]=useState([
     label: " Profile",
   },
   {
+    key: "attendance",
+    
+    icon: <RiPresentationFill   className="fs-4" />,
+    label: "Attendance",
+  },
+  {
     key: "apply-leaves",
     icon: <AiOutlineUser className="fs-4" />,
     label: "Apply Leaves",
@@ -152,6 +159,12 @@ const[empitem, setempitem]=useState([
     icon: <FaMoneyBills  className="fs-4" />,
     label: "PaySlip",
   },
+  {
+    key: "policy",
+    icon: <AiOutlineDashboard  className="fs-4" />,
+    label: "Policies",
+  },
+
   {
     key: "signout",
     icon: <AiOutlineLogout className="fs-4" />,
@@ -173,14 +186,25 @@ const [Hritem, setHRitem]=useState([
     label: " Profile",
   },
   {
+    key: "attendance",
+    icon: <RiPresentationFill   className="fs-4" />,
+    label: "Attendance",
+  },
+  {
     key: "apply-leaves",
     icon: <AiOutlineUser className="fs-4" />,
     label: "Apply Leaves",
   },
+ 
   {
     key: "payslip",
     icon: <FaMoneyBills  className="fs-4" />,
     label: "PaySlip",
+  },
+  {
+    key: "policy",
+    icon: <AiOutlineDashboard  className="fs-4" />,
+    label: "Policy",
   },
   {
     key: "signout",

@@ -42,98 +42,105 @@ import CreateDepartment from './components/CreateDepartment';
 import ProfileView from './components/ProfileView';
 import HrProtectRoutes from './Globalcomponents/HrProtectRoutes';
 import EmpPaySlip from './components/EmpPaySlip';
+import UploadPolicy from './components/UploadPolicy';
+import EmployeePolicyView from './pages/EmployeePolicyView';
+import MarkAttendance from './components/MarkAttendance';
 
 function App() {
   const [count, setCount] = useState(0)
-  const[payslip, setpayslip]=useState()
+  const [payslip, setpayslip] = useState()
 
   return (
     <>
-  <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-       
-              <Login />
-          
-          }
-        />
-      
-        <Route path='/forget-password' element={<ForgetPassword/>}/>
-        <Route path='/verify-email' element={<VerifyEmail/>}/>
-        <Route path='/reset-password' element={<ResetPassword/>}/>
-        <Route path='/signup' element={<Signup/>}/>
-        <Route path='/thankyou' element={<Thankyou/>}/>
-        {/* <Route path='/applyleaves' element={<ApplyLeave/>}/> */}
-        <Route path='/profile' element={<ProfileView/>}/>
-        <Route
-          path="/employee"
-          element={
-          <EmployeeProtectRoute Component={MainLayout}/>
-          }
-        >
-  <Route index element={<Dashbaord />} />
-  <Route path='/employee/apply-leaves' element={<ApplyLeave/>} />  
-  <Route path='/employee/profile' element={<ProfileView/>} />
-  <Route path='/employee/payslip' element={<EmpPaySlip/>} />
-  <Route path='/employee/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
-        </Route>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
 
-        <Route
-          path="/hr"
-          element={
-          <HrProtectRoutes Component={MainLayout}/>
-          }
-        >
-  <Route index element={<Dashbaord />} />
-  <Route path='/hr/apply-leaves' element={<ApplyLeave/>} />  
-  <Route path='/hr/profile' element={<ProfileView/>} />
-  <Route path='/hr/payslip' element={<EmpPaySlip/>} />
-  <Route path='/hr/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
-        </Route>
-        <Route
-          path="/admin"
-          element={
-            <AdminProtectRoutes Component={MainLayout}/>
-             
-          }
-        >
-          <Route index element={<Dashbaord />} />
-          <Route path='/admin/employee-forms' element={<Employeeform/>} />
-          <Route path='/admin/leaves-status' element={<LeavesStatus/>} />
-          <Route path='/admin/staff' element={<Staff/>} />
-          <Route path='/admin/staff/staff-profile' element={<ProfileView/>} />
-          <Route path='/admin/staff/add-staff' element={<AddStaffForm/>} />
-          <Route path='/admin/paymentvoucher' element={<PaymentVoucherTable/>} />
-          <Route path='/admin/paymentvoucher/create' element={<CreatePaymentVoucher/>} />
-          <Route path='/admin/payroll' element={<Payroll/>} />
-          <Route path='/admin/payroll/salary-defination' element={<SalaryDefination/>} />
-          <Route path='/admin/payroll/tax-defination' element={<TaxDefination/>} />
-          <Route path='/admin/payroll/create-payslip' element={<CreatePayslip  setpayslip={setpayslip}/>} />
-          <Route path='/admin/payroll/created-payslip/:employeeId/:month/:year' element={<PaySlip payslip={payslip}/>} />
-          <Route path='/admin/payroll/create-payroll' element={<CreatePayroll/>} />
-          <Route path='/admin/memo' element={<Memo/>} />
-          <Route path='/admin/memo/create-memo' element={<CreateMemo/>} />
-          <Route path='/admin/circular' element={<Circular/>} />
-          <Route path='/admin/circular/create-circular' element={<CreateCircular/>} />
-          <Route path='/admin/logistics' element={<Logistics/>} />
-          <Route path='/admin/logistic/logistic-request' element={<LogisticRequest/>} />
-          <Route path='/admin/budget' element={<OfficeBudget/>} />
-          <Route path='/admin/budget/create-budget' element={<CreateBudget/>} />
-          <Route path='/admin/stock' element={<Stocks/>} />
-          <Route path='/admin/stock/update-stock' element={<UpdateStock/>} />
-          <Route path='/admin/capacity' element={<Capacity/>} />
-          <Route path='/admin/capacity/training-request' element={<TrainingRequest/>} />
-          <Route path='/admin/procurement' element={<Procurement/>} />
-          <Route path='/admin/procurement/procurement-request' element={<ProcurementReq/>} />
-          <Route path='/admin/departments'element={<CreateDepartment/>}/>
-        </Route>
-      </Routes>
-    </Router>
+              <Login />
+
+            }
+          />
+
+          <Route path='/forget-password' element={<ForgetPassword />} />
+          <Route path='/verify-email' element={<VerifyEmail />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/thankyou' element={<Thankyou />} />
+          {/* <Route path='/applyleaves' element={<ApplyLeave/>}/> */}
+          <Route path='/profile' element={<ProfileView />} />
+          <Route
+            path="/employee"
+            element={
+              <EmployeeProtectRoute Component={MainLayout} />
+            }
+          >
+            <Route index element={<Dashbaord />} />
+            <Route path='/employee/apply-leaves' element={<ApplyLeave />} />
+            <Route path='/employee/profile' element={<ProfileView />} />
+            <Route path='/employee/payslip' element={<EmpPaySlip />} />
+            <Route path='/employee/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
+            <Route path='/employee/policy' element={<EmployeePolicyView />} />
+            <Route path='/employee/attendance' element={<MarkAttendance />} />
+          </Route>
+
+          <Route
+            path="/hr"
+            element={
+              <HrProtectRoutes Component={MainLayout} />
+            }
+          >
+            <Route index element={<Dashbaord />} />
+            <Route path='/hr/apply-leaves' element={<ApplyLeave />} />
+            <Route path='/hr/profile' element={<ProfileView />} />
+            <Route path='/hr/payslip' element={<EmpPaySlip />} />
+            <Route path='/hr/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
+            <Route path='/hr/policy' element={<UploadPolicy />} />
+            <Route path='/hr/attendance' element={<MarkAttendance />} />
+          </Route>
+          <Route
+            path="/admin"
+            element={
+              <AdminProtectRoutes Component={MainLayout} />
+
+            }
+          >
+            <Route index element={<Dashbaord />} />
+            <Route path='/admin/employee-forms' element={<Employeeform />} />
+            <Route path='/admin/leaves-status' element={<LeavesStatus />} />
+            <Route path='/admin/staff' element={<Staff />} />
+            <Route path='/admin/staff/staff-profile' element={<ProfileView />} />
+            <Route path='/admin/staff/add-staff' element={<AddStaffForm />} />
+            <Route path='/admin/paymentvoucher' element={<PaymentVoucherTable />} />
+            <Route path='/admin/paymentvoucher/create' element={<CreatePaymentVoucher />} />
+            <Route path='/admin/payroll' element={<Payroll />} />
+            <Route path='/admin/payroll/salary-defination' element={<SalaryDefination />} />
+            <Route path='/admin/payroll/tax-defination' element={<TaxDefination />} />
+            <Route path='/admin/payroll/create-payslip' element={<CreatePayslip setpayslip={setpayslip} />} />
+            <Route path='/admin/payroll/created-payslip/:employeeId/:month/:year' element={<PaySlip payslip={payslip} />} />
+            <Route path='/admin/payroll/create-payroll' element={<CreatePayroll />} />
+            <Route path='/admin/memo' element={<Memo />} />
+            <Route path='/admin/memo/create-memo' element={<CreateMemo />} />
+            <Route path='/admin/circular' element={<Circular />} />
+            <Route path='/admin/circular/create-circular' element={<CreateCircular />} />
+            <Route path='/admin/logistics' element={<Logistics />} />
+            <Route path='/admin/logistic/logistic-request' element={<LogisticRequest />} />
+            <Route path='/admin/budget' element={<OfficeBudget />} />
+            <Route path='/admin/budget/create-budget' element={<CreateBudget />} />
+            <Route path='/admin/stock' element={<Stocks />} />
+            <Route path='/admin/stock/update-stock' element={<UpdateStock />} />
+            <Route path='/admin/capacity' element={<Capacity />} />
+            <Route path='/admin/capacity/training-request' element={<TrainingRequest />} />
+            <Route path='/admin/procurement' element={<Procurement />} />
+            <Route path='/admin/procurement/procurement-request' element={<ProcurementReq />} />
+            <Route path='/admin/departments' element={<CreateDepartment />} />
+          </Route>
+        </Routes>
+      </Router>
     </>
 
-    
+
   )
 }
 
