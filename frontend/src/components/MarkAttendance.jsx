@@ -1,13 +1,64 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import config from '../configuration/config';
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from 'react-toastify';
+import { Table, Button , Select, Input} from 'antd';
 
 const MarkAttendance = ()=>{
-    
+    const[tableData , setTableData]= useState([])
 
+    const columns = [
+        {
+            title: "S/N",
+            dataIndex: "serialNumber",
+            key: "serialNumber", 
+            render: (_, __, index) => index + 1,  
+
+         },
     
+        {
+          title: " Name",
+          dataIndex: "employee",
+          key: "firstname",
+          render: (employee) => employee?.firstname,
+        },
+        {
+          title: "Date",
+          dataIndex: "date",
+          key: "lastname",
+        },
+        {
+          title: "Status",
+          dataIndex: "status",
+          key: "status",
+        },
+        {
+          title: "PunchIn Time",
+          dataIndex: "punchIn",
+          key: "punchIn",
+        },
+    
+        {
+          title: "PunchOut Time",
+          dataIndex: "punchOut",
+          key: "punchOut",
+        },
+     
+      
+      
+      ];
+useEffect(()=>{
+    fetchAttendance() 
+},[])
+
+      const fetchAttendance = async()=>{
+        const user = JSON.parse(localStorage.getItem('user'))
+        const res = await axios.get(`${config.baseURL}/attendance/employee-attendance/${user?._id}`)
+        console.log(res.data)
+        setTableData(res.data)
+      }
+
     const handlePunchIn = async () => {
         try {
             const user = JSON.parse(localStorage.getItem('user'))
@@ -54,6 +105,18 @@ const MarkAttendance = ()=>{
                 </button>
 
             </div>
+            <div className="mt-4 text-left text-xl text-black font-body-3-small">
+      <div className="mt-10 text-xs text-grey-70 overflow-auto ">
+        <Table
+          columns={columns}
+          dataSource={tableData}
+          pagination={{ pageSize: 8 }}
+          size="middle"
+        />
+      </div>
+    </div>
+
+
         </div>
     )
 }

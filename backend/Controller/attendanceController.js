@@ -120,3 +120,17 @@ exports.MonthwiseAttendance=async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+
+exports.getAttendanceByEmployeeId = async (req, res) => {
+    try {
+      const { employeeId } = req.params;
+  
+      const attendance = await Attendance.find({ employee: employeeId }).populate('employee');
+  
+      res.status(200).json(attendance);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
