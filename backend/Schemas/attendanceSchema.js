@@ -27,7 +27,7 @@ const attendanceSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-});
+},{timestamps:true});
 
 const Attendance = mongoose.model('Attendance', attendanceSchema);
 

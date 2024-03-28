@@ -7,6 +7,7 @@ import { Table, Button , Select, Input} from 'antd';
 
 const MarkAttendance = ()=>{
     const[tableData , setTableData]= useState([])
+    const[refreshFlag , setRefreshFlag]= useState(false)
 
     const columns = [
         {
@@ -68,6 +69,7 @@ useEffect(()=>{
           });
           console.log(response.data.message);
           toast.success("Attendance Mark Successfully")
+          fetchAttendance()
         } catch (error) {
             toast.error("something went wrong")
           console.error('Error marking attendance:', error);
@@ -83,6 +85,7 @@ useEffect(()=>{
           });
           toast.success("Punch Out Successfully")
           console.log(response.data.message);
+          fetchAttendance()
         } catch (error) {
             toast.error("something went wrong")
           console.error('Error marking attendance:', error);
