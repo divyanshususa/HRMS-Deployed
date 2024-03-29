@@ -45,6 +45,11 @@ import EmpPaySlip from './components/EmpPaySlip';
 import UploadPolicy from './components/UploadPolicy';
 import EmployeePolicyView from './pages/EmployeePolicyView';
 import MarkAttendance from './components/MarkAttendance';
+import CreateProject from './components/CreateProject';
+import Projects from './pages/Projects';
+import ManagerProtectRout from './Globalcomponents/ManagerProtectRout';
+import Managerteam from './components/Mangerteam';
+import ManagerProjects from './pages/ManagerProjects';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -99,6 +104,27 @@ function App() {
             <Route path='/hr/policy' element={<UploadPolicy />} />
             <Route path='/hr/attendance' element={<MarkAttendance />} />
           </Route>
+
+
+          <Route
+            path="/manager"
+            element={
+              <ManagerProtectRout Component={MainLayout} />
+            }
+          >
+            <Route index element={<ProfileView />} />
+            {/* <Route index element={<Dashbaord />} /> */}
+            <Route path='/manager/apply-leaves' element={<ApplyLeave />} />
+            <Route path='/manager/payslip' element={<EmpPaySlip />} />
+            <Route path='/manager/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
+            <Route path='/manager/attendance' element={<MarkAttendance />} />
+            <Route path='/manager/policy' element={<EmployeePolicyView />} />
+            <Route path='/manager/team' element={<Managerteam />} />
+            <Route path='/manager/projects' element={<ManagerProjects />} />
+          </Route>
+
+
+
           <Route
             path="/admin"
             element={
@@ -135,6 +161,8 @@ function App() {
             <Route path='/admin/procurement' element={<Procurement />} />
             <Route path='/admin/procurement/procurement-request' element={<ProcurementReq />} />
             <Route path='/admin/departments' element={<CreateDepartment />} />
+            <Route path='/admin/projects' element={<Projects />} />
+            <Route path='/admin/projects/create-project' element={<CreateProject />} />
           </Route>
         </Routes>
       </Router>

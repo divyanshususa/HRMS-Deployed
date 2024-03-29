@@ -90,7 +90,8 @@ const EmpPaySlip = ()=>{
             <span
                     className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
                     
-                  onClick={()=>navigate( currUser?.role.toLowerCase()=== 'employee' ? `/employee/payslip/created-payslip/${record.employee}/${record.month}/${record.year}`:  `/hr/payslip/created-payslip/${record.employee}/${record.month}/${record.year}`)}
+                  onClick={()=>navigate( currUser?.role.toLowerCase()=== 'employee' ? `/employee/payslip/created-payslip/${record.employee}/${record.month}/${record.year}`:
+                  currUser?.role.toLowerCase()=== 'hr' ?  `/hr/payslip/created-payslip/${record.employee}/${record.month}/${record.year}`: `/manager/payslip/created-payslip/${record.employee}/${record.month}/${record.year}`)}
                 >
                     {console.log("inside view butotn", record)}
                     View more

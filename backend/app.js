@@ -31,6 +31,7 @@ const departmentRoute = require("./Routes/deparmentRoute")
 const CsvUploadRoute= require("./Routes/uploadCsvRoute")
 const attendanceRoute= require('./Routes/attendanceRoute')
 const policyRoute= require('./Routes/policyRoute')
+const projectRoute= require('./Routes/projectRoute')
 const path = require('path')
 app.use(cors()); // to follow cors policy
 app.use(xss()); // safety against XSS attack or Cross Site Scripting attacks
@@ -74,6 +75,7 @@ app.use("/LogisticCards", LogisticCardsRoute);
 app.use("/Logistic",LogisticRoutes );
 app.use("/budget", budgetRoutes);
 app.use("/policy", policyRoute)
+app.use("/projects", projectRoute)
 app.use("/stocks", stockRoutes);
 app.use("/capacitybuilding", capacityBuildingRoutes);
 

@@ -101,7 +101,9 @@ let EmployeeSchemas = mongoose.Schema({
         bankCode: {type : String, required: false},
         branchName: {type : String, required: false},
         accountNumber: {type : Number, required: false}
-    }
+    },
+
+    project:{type: mongoose.Schema.Types.ObjectId, ref: 'projects'}
 });
 
 

@@ -61,6 +61,12 @@ const [adminitem, setadminitem]=useState(
       icon: <FcDepartment className="fs-4" />,
       label: "Departments",
     },
+    {
+      key: "projects",
+      icon: <RiCouponLine className="fs-4" />,
+      label: "Projects",
+
+    },
 
     
     {
@@ -213,6 +219,53 @@ const [Hritem, setHRitem]=useState([
   },
 
 ])
+
+
+const [Manageritem, setManageritem]=useState([
+
+  {
+    key: "",
+    icon: <AiOutlineUser className="fs-4" />,
+    label: " Profile",
+  },
+  {
+    key: "team",
+    icon: <AiOutlineUser className="fs-4" />,
+    label: "Team",
+  },
+  {
+    key: "projects",
+    icon: <AiOutlineDashboard  className="fs-4" />,
+    label: "Projects",
+  },
+  {
+    key: "attendance",
+    icon: <RiPresentationFill   className="fs-4" />,
+    label: "Attendance",
+  },
+  {
+    key: "apply-leaves",
+    icon: <AiOutlineUser className="fs-4" />,
+    label: "Apply Leaves",
+  },
+ 
+  {
+    key: "payslip",
+    icon: <FaMoneyBills  className="fs-4" />,
+    label: "PaySlip",
+  },
+  {
+    key: "policy",
+    icon: <AiOutlineDashboard  className="fs-4" />,
+    label: "Policy",
+  },
+  {
+    key: "signout",
+    icon: <AiOutlineLogout className="fs-4" />,
+    label: "Sign Out",
+  },
+
+])
   return (
     <div>
       <Layout  >
@@ -241,7 +294,7 @@ const [Hritem, setHRitem]=useState([
             items={
               currUser?.role?.toLowerCase() === 'admin' ? adminitem  : 
               currUser?.role?.toLowerCase() === 'employee' ? empitem :
-              currUser?.role?.toLowerCase() === 'hr' ? Hritem : null
+              currUser?.role?.toLowerCase() === 'hr' ? Hritem : Manageritem
           }
 
 

@@ -53,7 +53,9 @@ const ApplyLeave = () => {
   }, []);
 
   const fetchleaveHistory =async()=>{
-     const  response = await axios.get(`${config.baseURL}/api/leave/empleave/${currUser?._id}`)
+
+    const user =JSON.parse(localStorage.getItem('user'))
+     const  response = await axios.get(`${config.baseURL}/api/leave/empleave/${user?._id}`)
      console.log(response.data)
      setData(response.data)
     //  console.log("inside leaves", response.data)

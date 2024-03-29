@@ -450,4 +450,23 @@ router.put('/:id/account-details', async (req, res) => {
   }
 });
 
+
+router.get('/get-team/:managerId', async(req, res)=>{
+  try {
+    const { managerId } = req.params;
+
+    // Find employees with the given reporting manager ID
+    const employees = await EmployeeSchemas.find({ reporting_manager: managerId }).populate('department');
+
+    if (!employees) {
+      return res.status(404).json({ error: 'Employees not found for the specified manager' });
+    }
+
+    res.status(200).json(employees);
+  } catch (error) {
+    console.error('Error fetching employees by manager:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+})
+
 module.exports = router;
