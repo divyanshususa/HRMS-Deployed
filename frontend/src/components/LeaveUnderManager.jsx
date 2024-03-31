@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import "react-toastify/dist/ReactToastify.css";
 
-const LeavesStatus=()=>{
+const LeaveUnderManager=()=>{
     const[tableData , setTableData]= useState([])
     const [refreshFlag, setRefreshFlag] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
@@ -41,10 +41,9 @@ const LeavesStatus=()=>{
           key: "endDate",
         },
         {
-          title: "Leave Type",
-          dataIndex: "leaveType",
-          key: "leaveType",
-        },
+            title: 'Leave Type',
+            dataIndex: 'leaveType',
+          },
         {
             title: "Status",
             dataIndex: "status",
@@ -86,7 +85,8 @@ const LeavesStatus=()=>{
       ];
       
       const fetchData= async()=>{
-            const response = await axios.get(`${config.baseURL}/api/leave/allLeaves`)
+        const user = JSON.parse(localStorage.getItem('user'))
+            const response = await axios.get(`${config.baseURL}/api/leave/leavesUnderManager/${user?._id}`)
             // console.log("this is response", response)
             setTableData(response.data)
       }
@@ -207,4 +207,4 @@ const LeavesStatus=()=>{
     )
 }
 
-export default LeavesStatus
+export default LeaveUnderManager

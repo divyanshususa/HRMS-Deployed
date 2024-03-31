@@ -133,3 +133,17 @@ exports.changeProjectStatus = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+exports.getProjectsOfEmployee = async (req, res) => {
+  try {
+      const { employeeId } = req.params;
+
+      const projects = await Project.find({ teamAssign: employeeId }).populate('manager');
+
+      res.json(projects);
+  } catch (error) {
+      console.error('Error fetching projects by employee:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};

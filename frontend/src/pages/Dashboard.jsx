@@ -2,17 +2,20 @@ import { useState, useCallback, useEffect } from "react";
 import UserDropdown from "./UserDropdown";
 import MemoTable from "../components/MemoTable";
 import StaffListTable from "../components/StaffListTable";
-import PaymentVouchersTable from "../components/PaymentVouchersTable";
+import PaymentVouchersTable from "../components/ProjectTable";
 import { FaLongArrowAltDown, FaLongArrowAltUp } from "react-icons/fa";
 import axios from "axios";
 import config from "../configuration/config";
+import ProjectTable from "../components/ProjectTable";
 // import PortalPopup from "./portal-popup";
 
 const Dashbaord = () => {
     const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
     const [memoList , setMemoList]=useState()
+    const [appList , setAppList]=useState()
     const [stafflist , setStafflist]=useState()
     const [depList, setDepList]= useState([])
+    const [projectList, setProjectList]= useState([])
     const [empApplications , setempApplication]=useState()
 
     useEffect(()=>{
@@ -20,12 +23,25 @@ const Dashbaord = () => {
         fetchstaff();
         fetchApplication()
         fetchdepart()
+        fetchprojects()
+        fetchempApplicaiton()
     },[])
+
+    const fetchempApplicaiton= async()=>{
+        const response = await axios.get(`${config.baseURL}/api/user/employee-requests`)
+        setAppList(response.data.data)
+  }
 
   
       const fetchdepart= async()=>{
         const res = await axios.get(`${config.baseURL}/department/all/departments`)
         setDepList(res.data.departments)
+
+      }
+
+      const fetchprojects= async()=>{
+        const res = await axios.get(`${config.baseURL}/projects/get-projects`)
+        setProjectList(res.data)
 
       }
 
@@ -113,7 +129,7 @@ console.log("inside..", memoList)
                     <div className=" rounded-xl shadow-md">
                         <div className="flex gap-3 p-5 items-start justify-start ">
                             <div>
-                                <div className=" font-extrabold">10</div>
+                                <div className=" font-extrabold">{projectList?.length}</div>
                                 <div className=" text-base leading-[24px]">
                                     Total Projects
                                 </div>
@@ -167,7 +183,7 @@ console.log("inside..", memoList)
                     <div className="grid grid-cols-1 md:grid-cols-2 md:mt-5 md:justify-items-stretch gap-5  mt-5 ">
                         <MemoTable memoList={memoList} />
                         <StaffListTable stafflist={stafflist} />
-                        <PaymentVouchersTable />
+                        <ProjectTable  data={projectList} />
 
                         <div className=" text-xl text-relia-energy-black mt-8">
 
@@ -178,7 +194,7 @@ console.log("inside..", memoList)
                                 <div className=" w-[412px] h-[152px] text-base">
                                     <div className=" flex flex-col items-start justify-start gap-[24px_0px]">
                                         <div className="font-extrabold">
-                                            500 Total applications
+                                            13 Total applications
                                         </div>
                                         <div className="flex  gap-10">
 
@@ -187,21 +203,21 @@ console.log("inside..", memoList)
                                                 <div className="flex flex-row items-center justify-start gap-[0px_8px]">
                                                     <div className="w-1.5 relative rounded-21xl bg-accent-orange h-5" />
                                                     <div className="relative">
-                                                        <span className="font-extrabold">80</span>
+                                                        <span className="font-extrabold">{appList?.length}</span>
                                                         <span className="text-xs leading-[20px]"> Pending</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-row items-center justify-start gap-[0px_8px]">
                                                     <div className="w-1.5 relative rounded-21xl bg-accent-green h-5" />
                                                     <div className="relative">
-                                                        <span className="font-extrabold">370</span>
+                                                        <span className="font-extrabold">{stafflist?.length}</span>
                                                         <span className="text-xs leading-[20px]"> Approved</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-row items-center justify-start gap-[0px_8px]">
                                                     <div className="w-1.5 relative rounded-21xl bg-secondary-shades-60 h-5" />
                                                     <div className="relative">
-                                                        <span className="font-extrabold">50</span>
+                                                        <span className="font-extrabold">1</span>
                                                         <span className="text-xs leading-[20px]"> Rejected</span>
                                                     </div>
                                                 </div>
@@ -209,11 +225,11 @@ console.log("inside..", memoList)
 
                                             </div>
                                             <div className=" w-[150px] h-[150px] text-black">
-                                                    <img
+                                                    {/* <img
                                                         className=" w-[150px] h-[150px]"
                                                         alt=""
                                                         src="/group-22.svg"
-                                                    />
+                                                    /> */}
                                                     <div className="hidden flex-col items-center justify-start">
                                                         <div className="relative font-extrabold">60%</div>
                                                         <div className="relative text-sm leading-[24px] mt-[-6px]">

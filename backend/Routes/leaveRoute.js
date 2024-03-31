@@ -9,5 +9,6 @@ router.get('/allLeaves', leaveController.allLeaves);
 router.get('/empleave/:employeeId', leaveController.Empleave);
 router.put('/approve', leaveController.approveLeave);
 router.put('/reject', leaveController.rejectLeave);
+router.get('/leavesUnderManager/:managerId', leaveController.getLeaveRequeststoManager);
 
 module.exports = router;

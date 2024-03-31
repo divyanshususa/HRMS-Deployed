@@ -103,7 +103,26 @@ let EmployeeSchemas = mongoose.Schema({
         accountNumber: {type : Number, required: false}
     },
 
-    project:{type: mongoose.Schema.Types.ObjectId, ref: 'projects'}
+    project:{type: mongoose.Schema.Types.ObjectId, ref: 'Project'},
+    leaveQuota: {
+        annualLeaves: {
+            type: Number,
+            default: 15
+        },
+        casualLeaves: {
+            type: Number,
+            default: 12 
+        },
+        sickLeaves: {
+            type: Number,
+            default: 12
+        },
+        UnPaidLeaves: {
+            type: Number,
+            default: 365
+        },
+       
+    }
 });
 
 

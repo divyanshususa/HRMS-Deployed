@@ -112,7 +112,7 @@ const ManagerProjects = () => {
 
                     <button
                         className="w-[205px] cursor-pointer  focus:outline-none focus:ring focus:ring-violet-300 md:hover:bg-sky-700 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[46px] flex flex-row items-center justify-center p-2.5 box-border text-white"
-                        onClick={() => navigate("/admin/projects/create-project")}
+                        onClick={() => navigate("/manager/projects/create-project")}
                     >
                        Create New Project
                     </button>

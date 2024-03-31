@@ -1,6 +1,8 @@
 const StockSchema= require('../Schemas/stock')
-
+const HolidaySchema = require('../Schemas/holidaySchema')
 const csv= require('csvtojson')
+
+
 exports.uploadStockCsv=async(req, res)=>{
     try {
         const filedsData=[]
@@ -22,6 +24,33 @@ exports.uploadStockCsv=async(req, res)=>{
             }
 
           await   StockSchema.insertMany(filedsData)
+        })
+        res.status(200).send("CSV Imported.")
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("internal server error")
+    }
+}
+
+
+
+exports.uploadHolidayCsv=async(req, res)=>{
+    try {
+        const filedsData=[]
+        csv()
+        .fromFile(req.file.path)
+        .then(async(response)=>{
+            console.log(response)
+            for(var i=0;i<response.length; i++){
+                filedsData.push({
+                    day: response[i].Day,
+                    month:response[i].Month,
+                    year:response[i].Year,
+                    holidayName:response[i].HolidayName
+                })
+            }
+
+          await   HolidaySchema.insertMany(filedsData)
         })
         res.status(200).send("CSV Imported.")
     } catch (error) {

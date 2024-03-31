@@ -68,7 +68,14 @@ router.post('/login', async (req, res) => {
 
     console.log(jwtkey)
 
-    const user = await EmployeeSchemas.findOne({ email }).populate('documents');
+    const user = await EmployeeSchemas.findOne({ email }).populate('documents').populate('department')
+    .populate({
+      path: 'project',
+      populate: {
+          path: 'manager',
+          model: 'employees'
+      }
+  });
 
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password' });

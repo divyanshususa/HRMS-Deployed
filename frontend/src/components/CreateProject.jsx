@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const CreateProject = () => {
     const navigate= useNavigate()
+    const[currUser, setCurrUser]=useState()
     const [formData, setFormData] = useState({
         projectName: "",
         projectTitle: "",
@@ -25,7 +26,7 @@ const CreateProject = () => {
     const [managers, setManagers] = useState([]);
 
     useEffect(()=>{
-       
+       setCurrUser(JSON.parse(localStorage.getItem('user')))
         fetchMangers();
      
       },[])
@@ -70,7 +71,7 @@ const CreateProject = () => {
 
             <div className="shadow-md  p-4 ">
             <div className="flex items-center cursor-pointer">
-                    <span onClick={() => { navigate('/admin/projects') }}>
+                    <span onClick={() => { currUser?.role.toLowerCase()==='admin' ? navigate('/admin/projects') : navigate('/manager/projects') }}>
                         <FaLongArrowAltLeft />Back
                     </span>
 

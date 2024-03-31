@@ -355,7 +355,7 @@ setTotalGrossSalary(totalGrossSal)
         <tbody className="border-center">
           <tr>
             <th>
-              Attend/ Absence
+              Attend
             </th>
             <th>
               Days in Month
@@ -375,13 +375,13 @@ setTotalGrossSalary(totalGrossSal)
             <td ></td>
            
           </tr >
-          <tr>
+          {/* <tr>
             <th >Current Month</th>
             <td >31.0</td>
             <td >31.0</td>
             <td >31.0</td>
            
-          </tr >
+          </tr > */}
    
      
         

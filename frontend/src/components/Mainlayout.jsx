@@ -47,6 +47,11 @@ const [adminitem, setadminitem]=useState(
       label: "Staff",
     },
     {
+      key: "attendance",
+      icon: <RiPresentationFill   className="fs-4" />,
+      label: "Attendance",
+    },
+    {
       key: "employee-forms",
       icon: <AiOutlineUser className="fs-4" />,
       label: "Employee Form",
@@ -159,6 +164,11 @@ const[empitem, setempitem]=useState([
     icon: <AiOutlineUser className="fs-4" />,
     label: "Apply Leaves",
   },
+  {
+    key: "projects",
+    icon: <AiOutlineDashboard  className="fs-4" />,
+    label: "Projects",
+  },
       
   {
     key: "payslip",
@@ -247,6 +257,11 @@ const [Manageritem, setManageritem]=useState([
     key: "apply-leaves",
     icon: <AiOutlineUser className="fs-4" />,
     label: "Apply Leaves",
+  },
+  {
+    key: "leaves-request",
+    icon: <RiCouponLine className="fs-4" />,
+    label: "Leaves Requests",
   },
  
   {

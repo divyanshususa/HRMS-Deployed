@@ -37,6 +37,7 @@ const ApplyLeave = () => {
   const [numberOfDays, setnumberOfDays] = useState(null);
   const [currUser, setCurrUser] = useState();
 
+
   // Function to fetch leave types
   const refreshgetAllLeaveType = () => {
     // Your logic to fetch leave types and setLeaveType
@@ -114,6 +115,10 @@ const ApplyLeave = () => {
       dataIndex: 'numberOfDays',
     },
     {
+      title: 'Leave Type',
+      dataIndex: 'leaveType',
+    },
+    {
       title: 'Reason',
       dataIndex: 'reason',
     },
@@ -140,6 +145,7 @@ const ApplyLeave = () => {
         reason,
          startDate,
          endDate,
+         leaveType,
          employeeId: currUser?._id,
       }
    
@@ -152,6 +158,7 @@ const ApplyLeave = () => {
       setStartDate(null)
       setnumberOfDays(null)
       setReason('')
+      fetchleaveHistory()
     } catch (error) {
       toast.error("something went wrong")
       console.error('Error requesting leave:', error);
@@ -229,6 +236,21 @@ const ApplyLeave = () => {
                         />
                 </Form.Item>
             </Col>
+
+            <Col id="responsive-input3" span={6}>
+  <Form.Item hasFeedback label="Type of Leave" layout="vertical">
+    <Select
+      placeholder="Select type of leave"
+      onChange={value => setLeaveType(value)}
+      value={leaveType}
+    >
+      <Option value="annualLeaves">Annual Leave</Option>
+      <Option value="casualLeaves">Casual Leave</Option>
+      <Option value="sickLeaves">Sick Leave</Option>
+      <Option value="UnPaidLeaves">Unpaid Leave</Option>
+    </Select>
+  </Form.Item>
+</Col>
           </Row>
         </InputGroup>
         {/* Your JSX for applying leave */}
@@ -276,45 +298,48 @@ const ApplyLeave = () => {
         {/* Second column */}
         <Col id="responsive-div2" span={8}>
           {/* Your JSX for available leave and carry forward leave request */}
-          <Breadcrumb style={{ margin: '16px 0' }}>
+          <Breadcrumb style={{ margin: '1px 0' }}>
             <Breadcrumb.Item>Available Leave</Breadcrumb.Item>
           </Breadcrumb>
           <div style={{ padding: 24, background: '#fff', minHeight: 50 }}>
             {/* Your JSX for available leave and carry forward leave request */}
-            <Row>
+            {/* <Row>
               <Col span={8}>
-                {/* Your JSX for available leave and carry forward leave request */}
                 <Statistic title="Annual" value={10} suffix="/ 10" />
               </Col>
               <Col span={8}>
-                {/* Your JSX for available leave and carry forward leave request */}
                 <Statistic title="Casual" value={5} suffix="/ 5" />
               </Col>
               <Col span={8}>
-                {/* Your JSX for available leave and carry forward leave request */}
                 <Statistic title="Medical" value={7} suffix="/ 7" />
               </Col>
-            </Row>
+            </Row> */}
           </div>
         
-          <div style={{ padding: 24, background: '#fff', minHeight: 50, marginTop: '20px' }}>
+          <div style={{ padding:1, background: '#fff', minHeight: 50, marginTop: '1px' }}>
             {/* Your JSX for available leave and carry forward leave request */}
             <Row>
               <Col span={24}>
                 {/* Your JSX for available leave and carry forward leave request */}
                 <Form.Item layout="vertical" label="Remaining days of Annual Leave">
                   <div>
-                    <Input defaultValue="0" disabled />
+                    <input
+                     className="mt-2 w-full w- h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    defaultValue={currUser?.leaveQuota?.annualLeaves} disabled />
                   </div>
                 </Form.Item>
                 <Form.Item layout="vertical" label="Remaining days of Casual Leave">
                   <div>
-                    <Input defaultValue="0" disabled />
+                    <input 
+                    className="mt-2 w-full w- h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    defaultValue={currUser?.leaveQuota?.casualLeaves}  disabled />
                   </div>
                 </Form.Item>
                 <Form.Item layout="vertical" label="Remaining days of Medical Leave">
                   <div>
-                    <Input defaultValue="0" disabled />
+                    <input
+                    className="mt-2 w-full w- h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500"
+                    defaultValue={currUser?.leaveQuota?.sickLeaves}  disabled />
                   </div>
                 </Form.Item>
                 

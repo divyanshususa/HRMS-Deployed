@@ -23,6 +23,10 @@ const LeaveSchema = mongoose.Schema({
         required:false
 
     },
+    leaveType:{
+        type: String,
+        required: false
+    },
     numberOfDays:{
   type:Number,
   required: false

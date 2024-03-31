@@ -1,8 +1,20 @@
 const Attendance = require('../Schemas/attendanceSchema');
 const EmployeeSchemas = require('../Schemas/employee');
+const HolidaySchema= require('../Schemas/holidaySchema')
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
-
-
+exports.getAllattendance = async (req, res) => {
+    try {
+        // Retrieve all attendance records
+        const attendance = await Attendance.find().populate('employee');
+        attendance.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        res.json(attendance);
+    } catch (error) {
+        console.error('Error fetching attendance:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
 
 exports.MarkAttendance = async (req, res) => {
     try {
@@ -14,6 +26,8 @@ exports.MarkAttendance = async (req, res) => {
         }
         
         const today = new Date().toLocaleDateString('en-GB');
+        // const today = new Date()
+        
         const currentTime = new Date().toLocaleTimeString([], { hour12: true });
         let attendance = await Attendance.findOne({ employee: employeeId, date: today });
        
@@ -60,14 +74,19 @@ exports.MonthwiseAttendance=async (req, res) => {
 
         const startDateString = `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getFullYear()}`;
         const endDateString = `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}`;
+
+        
         console.log(startDateString, endDateString)
+
         const attendance = await Attendance.find({
             employee: employeeId,
             date: { $gte: startDateString, $lte: endDateString }
         });
 
-        const totalDaysInMonth = endDate.getDate();
 
+      
+        const totalDaysInMonth = endDate.getDate();
+console.log(attendance)
         // Calculate total days attended
         const totalDaysAttended = attendance.filter(day => day.status === 'Present').length;
 
@@ -76,13 +95,14 @@ exports.MonthwiseAttendance=async (req, res) => {
 
         // Calculate attendance percentage
         const attendancePercentage = (totalDaysAttended / totalDaysInMonth) * 100;
+        const totalWorkingDays = totalDaysInMonth - getNumberOfHolidays(month, year);
 
         res.status(200).json({ 
             totalDaysAttended,
             totalDaysAbsent,
             totalDaysInMonth,
             attendancePercentage,
-            // totalWorkingDays
+            totalWorkingDays
         });
     } catch (error) {
         console.error('Error fetching month-wise attendance:', error);
@@ -90,6 +110,28 @@ exports.MonthwiseAttendance=async (req, res) => {
     }
 }
 
+
+async function getNumberOfHolidays(month, year) {
+    try {
+
+        console.log(month,year)
+        // Query holidays from the database for the given month and year
+        const holidays = await HolidaySchema.find({ month, year });
+    //   console.log(holidays)
+        // Filter out holidays falling on weekends (Saturday and Sunday)
+        const workingDayHolidays = holidays.filter(holiday => {
+            const holidayDate = new Date(year, month, holiday.day);
+            const dayOfWeek = holidayDate.getDay(); // 0: Sunday, 1: Monday, ..., 6: Saturday
+            return dayOfWeek !== 0 && dayOfWeek !== 6; // Exclude weekends
+        });
+console.log(workingDayHolidays.length)
+        // Return the count of working day holidays
+        return workingDayHolidays.length;
+    } catch (error) {
+        console.error('Error fetching holidays:', error);
+        throw error;
+    }
+}
 
 exports.getAttendanceByEmployeeId = async (req, res) => {
     try {

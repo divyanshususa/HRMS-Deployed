@@ -97,7 +97,7 @@ const ProfileView=() =>{
 
         <div>
         <h6 className="mb-5 text-primary text-[22px]">Documents</h6>
-        <div className="mt-2 flex mb-2">
+        <div className="mt-2 grid md:grid-cols-3 grid-cols-2 mb-2">
                 {
                     currUser && currUser?.documents?.docs?.map((doc, index)=>{
                         return(

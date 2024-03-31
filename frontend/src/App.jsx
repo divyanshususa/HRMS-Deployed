@@ -50,6 +50,9 @@ import Projects from './pages/Projects';
 import ManagerProtectRout from './Globalcomponents/ManagerProtectRout';
 import Managerteam from './components/Mangerteam';
 import ManagerProjects from './pages/ManagerProjects';
+import LeaveUnderManager from './components/LeaveUnderManager';
+import EmpProjects from './components/EmpProjects';
+import AllAttendance from './components/AllAttendance';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -88,6 +91,7 @@ function App() {
             <Route path='/employee/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
             <Route path='/employee/policy' element={<EmployeePolicyView />} />
             <Route path='/employee/attendance' element={<MarkAttendance />} />
+            <Route path='/employee/projects' element={<EmpProjects />} />
           </Route>
 
           <Route
@@ -121,6 +125,8 @@ function App() {
             <Route path='/manager/policy' element={<EmployeePolicyView />} />
             <Route path='/manager/team' element={<Managerteam />} />
             <Route path='/manager/projects' element={<ManagerProjects />} />
+            <Route path='/manager/projects/create-project' element={<CreateProject />} />
+            <Route path='/manager/leaves-request' element={<LeaveUnderManager />} />
           </Route>
 
 
@@ -163,6 +169,7 @@ function App() {
             <Route path='/admin/departments' element={<CreateDepartment />} />
             <Route path='/admin/projects' element={<Projects />} />
             <Route path='/admin/projects/create-project' element={<CreateProject />} />
+            <Route path='/admin/attendance' element={<AllAttendance />} />
           </Route>
         </Routes>
       </Router>
