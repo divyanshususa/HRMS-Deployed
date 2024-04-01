@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 exports.getAllPaySlips = async (req, res) => {
   try {
     const paySlips = await PaySlip.find();
+    paySlips.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     res.json(paySlips);
   } catch (error) {
     console.error(error);

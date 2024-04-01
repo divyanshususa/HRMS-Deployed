@@ -34,11 +34,13 @@ const LeaveUnderManager=()=>{
           title: "Start Date",
           dataIndex: "startDate",
           key: "startDate",
+          render: (startDate) => new Date(startDate).toLocaleDateString()
         },
         {
           title: "End Date",
           dataIndex: "endDate",
           key: "endDate",
+          render: (endDate) => new Date(endDate).toLocaleDateString()
         },
         {
             title: 'Leave Type',

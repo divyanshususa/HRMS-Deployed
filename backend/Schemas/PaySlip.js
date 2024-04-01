@@ -28,7 +28,7 @@ const paySlipSchema = new mongoose.Schema({
     totalDeduction: { type: Number, required: true },
   },
   netSalary: { type: Number, required: true },
-});
+},{timestamps:true});
 
 
 

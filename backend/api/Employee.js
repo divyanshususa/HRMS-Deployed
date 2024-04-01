@@ -457,6 +457,20 @@ router.put('/:id/account-details', async (req, res) => {
   }
 });
 
+router.get('/getEmployee/:id', async(req, res)=>{
+  try {
+    const employeeId = req.params.id;
+    let employee = await EmployeeSchemas.findById(employeeId);
+
+    if (!employee) {
+        return res.status(404).json({ message: 'Employee not found' });
+    }
+   res.json(employee)
+  } catch (error) {
+    console.error('Error :', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+})
 
 router.get('/get-team/:managerId', async(req, res)=>{
   try {

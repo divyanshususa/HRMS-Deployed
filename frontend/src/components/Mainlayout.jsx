@@ -72,7 +72,12 @@ const [adminitem, setadminitem]=useState(
       label: "Projects",
 
     },
+    {
+      key: "upload-holiday",
+      icon: <RiCouponLine className="fs-4" />,
+      label: "Upload Holidays",
 
+    },
     
     {
       key: "payroll",

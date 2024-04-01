@@ -27,7 +27,7 @@ const MarkAttendance = ()=>{
         {
           title: "Date",
           dataIndex: "date",
-          key: "lastname",
+          render: (date) => new Date(date).toLocaleDateString()
         },
         {
           title: "Status",

@@ -228,13 +228,14 @@ const staffDetailsCol=[
       render: (basicSalary) => `₹${basicSalary.toFixed(2)}`, // Format the salary as needed
   },
   {
-      title: "Allowance",
-      dataIndex: "salaryStructure", // Display all allowance fields together
-      key: "allowance",
-      render: (salaryStructure) => {
-          const allowances = Object.values(salaryStructure).reduce((total, allowance) => total + allowance, 0);
-          return `₹${allowances.toFixed(2)}`; // Format the total allowance as needed
-      },
+    title: "Allowance",
+    dataIndex: "salaryStructure",
+    key: "allowance",
+    render: (salaryStructure) => {
+      const { basicSalary, ...allowances } = salaryStructure; // Exclude basicSalary
+      const totalAllowance = Object.values(allowances).reduce((total, allowance) => total + allowance, 0);
+      return `₹${totalAllowance.toFixed(2)}`; // Format the total allowance as needed
+    },
   },
   {
       title: "Gross Salary",
@@ -244,13 +245,14 @@ const staffDetailsCol=[
      
   },
   {
-      title: "Deductions",
-      dataIndex: "deductions", // Display all deduction fields together
-      key: "deductions",
-      render: (deductions) => {
-          const totalDeductions = Object.values(deductions).reduce((total, deduction) => total + deduction, 0);
-          return `₹${totalDeductions.toFixed(2)}`; // Format the total deductions as needed
-      },
+    title: "Deductions",
+    dataIndex: "deductions",
+    key: "deductions",
+    render: (deductions) => {
+      const { totalDeduction, ...otherDeductions } = deductions; // Exclude totalDeduction
+      const totalDeductions = Object.values(otherDeductions).reduce((total, deduction) => total + deduction, 0);
+      return `₹${totalDeductions.toFixed(2)}`; // Format the total deductions as needed
+    },
   },
   {
       title: "Net Salary",

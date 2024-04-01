@@ -6,11 +6,11 @@ const LeaveSchema = mongoose.Schema({
         ref: 'employees'
     },
     startDate: {
-        type: String,
+        type: Date,
         required: true
     },
     endDate: {
-        type: String,
+        type: Date,
         required: true
     },
     status: {
@@ -35,7 +35,11 @@ const LeaveSchema = mongoose.Schema({
     reject_reason:{
         type:String,
         required: false
-    }
+    },
+    // createdAt: {
+    //     type: Date,
+    //     default: Date.now // Automatically populate createdAt field with current timestamp
+    // }
    
 },
 {

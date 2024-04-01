@@ -105,10 +105,12 @@ const ApplyLeave = () => {
     {
       title: 'Start Date',
       dataIndex: 'startDate',
+      render: (startDate) => new Date(startDate).toLocaleDateString()
     },
     {
       title: 'End Date',
       dataIndex: 'endDate',
+      render: (endDate) => new Date(endDate).toLocaleDateString()
     },
     {
       title: 'Number of Days',

@@ -139,3 +139,64 @@ exports.getLeaveRequeststoManager = async (req, res) => {
         console.error('Error fetching leave requests by manager:', error);
         res.status(500).json({ error: 'Ienternal server error' });
     }}
+
+
+    exports.getMonthwiseUnpaidLeaves= async (req,res)=>{
+        try {
+            const { employeeId } = req.params;
+            const { year, month } = req.query;
+    
+            // Calculate the start and end dates for the given month
+            const startDate = new Date(year, month - 1, 1); // First day of the month
+            const endDate = new Date(year, month, 0); // Last day of the month
+    
+            // Find unpaid leaves for the employee within the given month
+            const unpaidLeaves = await Leave.find({
+                employee: employeeId,
+                status: 'Approved',
+                leaveType: 'UnPaidLeaves',
+                createdAt: {
+                    $gte: new Date(year, month - 1, 1), // First day of the month
+                    $lt: new Date(year, month, 1) // First day of the next month
+                }
+            });
+
+            const paidLeaves = await Leave.find({
+                employee: employeeId,
+                status: 'Approved',
+                leaveType: { $in: ['annualLeaves', 'casualLeaves', 'sickLeaves'] },
+                createdAt: {
+                    $gte: new Date(year, month - 1, 1), // First day of the month
+                    $lt: new Date(year, month, 1) // First day of the next month
+                }
+            });
+    
+            // Calculate the total number of leaves for each leave type
+            const totalPaidLeaves = paidLeaves.reduce((total, leave) => total + leave.numberOfDays, 0);
+
+            console.log(unpaidLeaves)
+            const sandwichLeaves = unpaidLeaves.filter((leave, index, arr) => {
+                if (index === 0 || index === arr.length - 1) {
+                    return false;
+                }
+                const prevLeaveEndDate = new Date(arr[index - 1].endDate);
+                const nextLeaveStartDate = new Date(arr[index + 1].startDate);
+                return (
+                    prevLeaveEndDate.getTime() < leave.startDate.getTime() &&
+                    nextLeaveStartDate.getTime() > leave.endDate.getTime()
+                );
+            });
+    
+            // Calculate the total number of unpaid leaves
+            const totalUnpaidLeaves = unpaidLeaves.reduce((total, leave) => total + leave.numberOfDays,0);
+            const totalSandwichLeaves = sandwichLeaves.reduce((total, leave) => total + leave.numberOfDays, 0);
+            res.status(200).json({
+                totalSandwichLeaves,
+                totalUnpaidLeaves,
+                totalPaidLeaves
+            });
+        } catch (error) {
+            console.error('Error fetching unpaid leaves:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }

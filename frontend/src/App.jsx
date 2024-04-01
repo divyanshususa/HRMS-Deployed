@@ -53,6 +53,8 @@ import ManagerProjects from './pages/ManagerProjects';
 import LeaveUnderManager from './components/LeaveUnderManager';
 import EmpProjects from './components/EmpProjects';
 import AllAttendance from './components/AllAttendance';
+import UploadHoliday from './components/UploadHoliday';
+import EmpProfile from './pages/EmpProfile';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -142,7 +144,7 @@ function App() {
             <Route path='/admin/employee-forms' element={<Employeeform />} />
             <Route path='/admin/leaves-status' element={<LeavesStatus />} />
             <Route path='/admin/staff' element={<Staff />} />
-            <Route path='/admin/staff/staff-profile' element={<ProfileView />} />
+            <Route path='/admin/staff/staff-profile/:employeeId' element={<EmpProfile />} />
             <Route path='/admin/staff/add-staff' element={<AddStaffForm />} />
             <Route path='/admin/paymentvoucher' element={<PaymentVoucherTable />} />
             <Route path='/admin/paymentvoucher/create' element={<CreatePaymentVoucher />} />
@@ -170,6 +172,7 @@ function App() {
             <Route path='/admin/projects' element={<Projects />} />
             <Route path='/admin/projects/create-project' element={<CreateProject />} />
             <Route path='/admin/attendance' element={<AllAttendance />} />
+            <Route path='/admin/upload-holiday' element={<UploadHoliday />} />
           </Route>
         </Routes>
       </Router>

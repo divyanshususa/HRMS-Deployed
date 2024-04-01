@@ -3,8 +3,10 @@ import { Table ,Input } from "antd";
 import axios from "axios";
 import config from "../configuration/config";
 import {SearchOutlined } from '@ant-design/icons'
+import { useNavigate } from "react-router-dom";
 
 const AllStaffTable = ({EmpList}) => {
+  const navigate = useNavigate()
 //  const [EmpList, setEmplist]= useState()
  const [searchText, setSearchText] = useState("");
   // useEffect(()=>{
@@ -115,7 +117,7 @@ const AllStaffTable = ({EmpList}) => {
       render: (_, record) => (
         <span
           className="text-transparent !bg-clip-text [background:linear-gradient(135deg,_#14add5,_#384295)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] cursor-pointer"
-          // onClick={() => onViewMoreTextClick(record)}
+          onClick={() => navigate(`/admin/staff/staff-profile/${record._id}`)}
         >
           View more
         </span>

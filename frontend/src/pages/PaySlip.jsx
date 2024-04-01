@@ -12,12 +12,17 @@ const PaySlip = ({ payslip }) => {
 
   const { employeeId, month, year } = useParams();
   const [empData, setEmpData]= useState()
+  const [empAttendData, setEmpAttendData]= useState()
   const [payslipdata, setpayslipdata]= useState()
+  const [leavesdata, setleavesdata]= useState()
+
   const[totalGrossSalary, setTotalGrossSalary]= useState();
   const[totalNetSalary, setTotalNetSalary]= useState();
   
   useEffect(()=>{
     fetchpayslipdata()
+    fetchattendance()
+    fetchleavesdata()
   },[])
   const fetchpayslipdata = async()=>{
     const res = await axios.get(`${config.baseURL}/payslips/pay-slip/${employeeId}/${month}/${year}`)
@@ -47,6 +52,29 @@ setTotalNetSalary(totalGrossSal-payslipdata?.deductions?.totalDeduction)
 setTotalGrossSalary(totalGrossSal)
    
   }
+
+  const fetchattendance= async()=>{
+    try {
+      const res = await axios.get(`${config.baseURL}/attendance/attendance-monthwise/${employeeId}?month=${month}&&year=${year}`)
+      console.log(res.data)
+      setEmpAttendData(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const fetchleavesdata= async()=>{
+    try {
+      const res = await axios.get(`${config.baseURL}/api/leave/unpaid-leaves/${employeeId}?month=${month}&&year=${year}`)
+      setleavesdata(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  
+
+  }
+
   const getMonthName = (month) => {
     const monthNames = [
       'January', 'February', 'March', 'April', 'May', 'June',
@@ -55,6 +83,12 @@ setTotalGrossSalary(totalGrossSal)
     return monthNames[month - 1]; // Month index starts from 0
   };
 
+  const getFinalAmount= ()=>{
+    // const finalAmount = Math.floor((payslipdata?.salaryStructure?.basicSalary / empAttendData?.totalWorkingDays) * (leavesdata?.totalUnpaidLeaves + leavesdata?.totalPaidLeaves));
+    const finalAmount = Math.floor((payslipdata?.salaryStructure?.basicSalary / empAttendData?.totalWorkingDays) * (empAttendData?.totalDaysAttended + leavesdata?.totalPaidLeaves) * 100) / 100;
+
+    return finalAmount
+  }
   
   return (
     //         <div classNameName="w-full">
@@ -241,7 +275,13 @@ setTotalGrossSalary(totalGrossSal)
           
           {payslipdata?.salaryStructure?.transportAllowance}
           </td>
-      
+          {/* <th colSpan="2" >
+            Unpaid Leaves Deduction
+          </th >
+          <td></td>
+          <td className="myAlign">
+          {payslipdata?.deductions?.tax}
+          </td> */}
         </tr >
         <tr>
           <th colSpan="2">
@@ -327,7 +367,7 @@ setTotalGrossSalary(totalGrossSal)
           <td  className="  table-border-bottom">
           </td>
           <td  className="table-border-right  table-border-bottom myAlign">
-          {totalNetSalary & totalNetSalary}
+          {totalNetSalary && totalNetSalary }
           </td>
         </tr >
         <tr>
@@ -361,28 +401,38 @@ setTotalGrossSalary(totalGrossSal)
               Days in Month
             </th>
             <th>
-              Days Paid
+            Paid Leaves
             </th>
             <th>
-              Days Not Paid
+               UnPaid Leaves
            
                          </th>
+
           </tr>
           <tr>
-            <td >12</td>
-            <td ></td>
-            <td ></td>
-            <td ></td>
+            <td >{empAttendData?.totalDaysAttended}</td>
+            <td >{empAttendData?.totalDaysInMonth}</td>
+            <td >{leavesdata?.totalPaidLeaves}</td>
+            <td >{leavesdata?.totalUnpaidLeaves}</td>
            
+           
+            <th colSpan="2" className="table-border-bottom" >
+           Final Amount
+          </th >
+          <td  className="  table-border-bottom">
+          </td>
+          <td  className="table-border-right  table-border-bottom myAlign">
+         {getFinalAmount()}
+          </td>
           </tr >
           {/* <tr>
-            <th >Current Month</th>
+            <th >Final Amount</th>
             <td >31.0</td>
             <td >31.0</td>
             <td >31.0</td>
            
-          </tr > */}
-   
+          </tr >
+    */}
      
         
         </tbody>

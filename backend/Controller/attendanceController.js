@@ -16,6 +16,58 @@ exports.getAllattendance = async (req, res) => {
     }
 };
 
+// exports.MarkAttendance = async (req, res) => {
+//     try {
+//         const { employeeId, action } = req.body;
+        
+//         const employee = await EmployeeSchemas.findById(employeeId);
+//         if (!employee) {
+//             return res.status(404).json({ error: 'Employee not found' });
+//         }
+        
+//         // const today = new Date().toLocaleDateString('en-GB');
+//         // console.log(today)
+//         const today = new Date()
+//         const isoDateString = today.toISOString();
+//         // const formatteddate = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+        
+//         const currentTime = new Date().toLocaleTimeString([], { hour12: true });
+//         let attendance = await Attendance.findOne({ employee: employeeId, date: isoDateString });
+       
+//         if (!attendance) {
+//             // If no attendance record exists for today, create a new one
+//             attendance = new Attendance({
+//                 employee: employeeId,
+//                 date: isoDateString
+//             });
+//         }
+        
+//         if (action === 'punchIn') {
+//             if (attendance.punchIn) {
+//                 return res.status(200).json({ error: 'Already punched in' });
+//             }
+//             attendance.punchIn = currentTime;
+//             attendance.status = "Present";
+//         } else if (action === 'punchOut') {
+//             if (!attendance.punchIn) {
+//                 return res.status(400).json({ error: 'Cannot punch out without punching in' });
+//             }
+//             attendance.punchOut = currentTime;
+//         } else {
+//             return res.status(400).json({ error: 'Invalid action' });
+//         }
+        
+//         // Save the updated attendance record
+//         await attendance.save();
+        
+//         res.status(200).json({ message: 'Attendance marked successfully' });
+//     } catch (error) {
+//         console.error('Error marking attendance:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// }
+
+
 exports.MarkAttendance = async (req, res) => {
     try {
         const { employeeId, action } = req.body;
@@ -25,17 +77,16 @@ exports.MarkAttendance = async (req, res) => {
             return res.status(404).json({ error: 'Employee not found' });
         }
         
-        const today = new Date().toLocaleDateString('en-GB');
-        // const today = new Date()
+        const today = new Date(); // Get current date and time
+        const currentTime = today.toLocaleTimeString([], { hour12: true });
         
-        const currentTime = new Date().toLocaleTimeString([], { hour12: true });
-        let attendance = await Attendance.findOne({ employee: employeeId, date: today });
+        let attendance = await Attendance.findOne({ employee: employeeId, date: { $gte: today.setHours(0, 0, 0, 0) } });
        
         if (!attendance) {
             // If no attendance record exists for today, create a new one
             attendance = new Attendance({
                 employee: employeeId,
-                date: today
+                date: today // Store the current date directly
             });
         }
         
@@ -76,17 +127,21 @@ exports.MonthwiseAttendance=async (req, res) => {
         const endDateString = `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}`;
 
         
-        console.log(startDateString, endDateString)
+        console.log(startDate.toISOString(), endDate.toISOString())
 
         const attendance = await Attendance.find({
             employee: employeeId,
-            date: { $gte: startDateString, $lte: endDateString }
+            date: { $gte: startDate, $lte: endDate, }
         });
+  
+     
+       
+        console.log(attendance)
 
 
       
         const totalDaysInMonth = endDate.getDate();
-console.log(attendance)
+        // console.log(attendance)
         // Calculate total days attended
         const totalDaysAttended = attendance.filter(day => day.status === 'Present').length;
 
@@ -95,8 +150,10 @@ console.log(attendance)
 
         // Calculate attendance percentage
         const attendancePercentage = (totalDaysAttended / totalDaysInMonth) * 100;
-        const totalWorkingDays = totalDaysInMonth - getNumberOfHolidays(month, year);
-
+      
+        const noofHolidays= await getNumberOfHolidays(month, year);
+        const totalWorkingDays = totalDaysInMonth - noofHolidays
+            console.log(totalWorkingDays)
         res.status(200).json({ 
             totalDaysAttended,
             totalDaysAbsent,
