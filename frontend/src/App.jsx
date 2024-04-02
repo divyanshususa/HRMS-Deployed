@@ -86,9 +86,9 @@ function App() {
               <EmployeeProtectRoute Component={MainLayout} />
             }
           >
-            <Route index element={<Dashbaord />} />
+            <Route index element={<ProfileView />} />
+            {/* <Route index element={<Dashbaord />} /> */}
             <Route path='/employee/apply-leaves' element={<ApplyLeave />} />
-            <Route path='/employee/profile' element={<ProfileView />} />
             <Route path='/employee/payslip' element={<EmpPaySlip />} />
             <Route path='/employee/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
             <Route path='/employee/policy' element={<EmployeePolicyView />} />
@@ -102,9 +102,9 @@ function App() {
               <HrProtectRoutes Component={MainLayout} />
             }
           >
-            <Route index element={<Dashbaord />} />
+            {/* <Route index element={<Dashbaord />} /> */}
+            <Route index element={<ProfileView />} />
             <Route path='/hr/apply-leaves' element={<ApplyLeave />} />
-            <Route path='/hr/profile' element={<ProfileView />} />
             <Route path='/hr/payslip' element={<EmpPaySlip />} />
             <Route path='/hr/payslip/created-payslip/:employeeId/:month/:year' element={<PaySlip />} />
             <Route path='/hr/policy' element={<UploadPolicy />} />

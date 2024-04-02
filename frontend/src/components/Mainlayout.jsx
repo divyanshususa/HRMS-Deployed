@@ -128,11 +128,11 @@ const [adminitem, setadminitem]=useState(
       ]
     },
   
-    {
-      key: "capacity",
-      icon: <MdOutlineReduceCapacity className="fs-4" />,
-      label: "Capacity Building",
-    },
+    // {
+    //   key: "capacity",
+    //   icon: <MdOutlineReduceCapacity className="fs-4" />,
+    //   label: "Capacity Building",
+    // },
     {
       key: "procurement",
       icon: <FaClipboardList className="fs-4" />,
@@ -148,13 +148,13 @@ const [adminitem, setadminitem]=useState(
 
 
 const[empitem, setempitem]=useState([
+  // {
+  //   key: "",
+  //   icon: <AiOutlineDashboard className="fs-4" />,
+  //   label: "Dashboard",
+  // },
   {
     key: "",
-    icon: <AiOutlineDashboard className="fs-4" />,
-    label: "Dashboard",
-  },
-  {
-    key: "profile",
     icon: <AiOutlineUser className="fs-4" />,
     label: " Profile",
   },
@@ -196,13 +196,13 @@ const[empitem, setempitem]=useState([
 ])
 
 const [Hritem, setHRitem]=useState([
+  // {
+  //   key: "",
+  //   icon: <AiOutlineDashboard className="fs-4" />,
+  //   label: "Dashboard",
+  // },
   {
     key: "",
-    icon: <AiOutlineDashboard className="fs-4" />,
-    label: "Dashboard",
-  },
-  {
-    key: "profile",
     icon: <AiOutlineUser className="fs-4" />,
     label: " Profile",
   },
