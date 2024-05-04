@@ -12,47 +12,100 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const handleLogin = async () => {
+  // const handleLogin = async () => {
+  //   try {
+
+  //     const response = await axios.post(`${config.baseURL}/api/user/login`, {
+  //       email,
+  //       password,
+  //     });
+
+  //     const data = response.data;
+  //     console.log(data)
+  //     if (response.status === 200) {
+  //       toast.success("login successfully")
+  //       console.log("when login",data.user)
+  //       // Login successful, store token and user data
+  //       localStorage.setItem("token", data.token);
+  //       localStorage.setItem("user", JSON.stringify(data.user));
+  //       // Redirect to dashboard or desired route
+  //       if (data.user.role.toLowerCase() === 'admin') {
+  //         navigate("/admin");
+  //       } else if (data.user.role.toLowerCase() == 'manager') {
+  //         navigate("/manager");
+  //       } else if (data.user.role.toLowerCase() == 'hr') {
+  //         navigate("/hr");
+  //       } else if (data.user.role.toLowerCase() == 'employee') {
+  //         if (data.user.approved) {
+  //           navigate("/employee");
+  //         }
+
+  //       }
+
+  //     } else {
+  //       setError(data.error);
+  //       toast.error("Something went wrong")
+  //     }
+  //   } catch (error) {
+  //     console.error("Error logging in:", error);
+  //     toast.error("Something went wrong")
+  //     setError("Internal Server Error");
+  //   }
+  // };
+
+
+  const handleLogin = async (useGoogleSignIn) => {
     try {
+      if (useGoogleSignIn) {
+        // Redirect to Google OAuth 2.0 authentication
+        // window.location.href = `${config.baseURL}/auth/google`;
 
-      const response = await axios.post(`${config.baseURL}/api/user/login`, {
-        email,
-        password,
-      });
+        window.open(`${config.baseURL}/auth/google`, "_self")
+        // const response = await axios.get(`${config.baseURL}/auth/google`);
+     
+    
+        // // Handle the response data (e.g., store user data in localStorage)
+        // console.log('Google OAuth response:', response);
 
-      const data = response.data;
-      console.log(data)
-      if (response.status === 200) {
-        toast.success("login successfully")
-        console.log("when login",data.user)
-        // Login successful, store token and user data
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        // Redirect to dashboard or desired route
-        if (data.user.role.toLowerCase() === 'admin') {
-          navigate("/admin");
-        } else if (data.user.role.toLowerCase() == 'manager') {
-          navigate("/manager");
-        } else if (data.user.role.toLowerCase() == 'hr') {
-          navigate("/hr");
-        } else if (data.user.role.toLowerCase() == 'employee') {
-          if (data.user.approved) {
-            navigate("/employee");
-          }
-
-        }
 
       } else {
-        setError(data.error);
-        toast.error("Something went wrong")
+        // Perform email/password login
+        const response = await axios.post(`${config.baseURL}/api/user/login`, {
+          email,
+          password,
+        });
+
+        const data = response.data;
+        console.log(data);
+        if (response.status === 200) {
+          toast.success("Login successful");
+          console.log("Logged in user:", data.user);
+
+          // Store token and user data in localStorage
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+
+          // Redirect user based on role
+          if (data.user.role.toLowerCase() === 'admin') {
+            navigate("/admin");
+          } else if (data.user.role.toLowerCase() === 'manager') {
+            navigate("/manager");
+          } else if (data.user.role.toLowerCase() === 'hr') {
+            navigate("/hr");
+          } else if (data.user.role.toLowerCase() === 'employee' && data.user.approved) {
+            navigate("/employee");
+          }
+        } else {
+          setError(data.error);
+          toast.error("Something went wrong");
+        }
       }
     } catch (error) {
       console.error("Error logging in:", error);
-      toast.error("Something went wrong")
+      toast.error("Something went wrong");
       setError("Internal Server Error");
     }
   };
-
 
   return (
     <>
@@ -141,11 +194,17 @@ const Login = () => {
               </div>
 
               <button className="w-[50%] mt-4 rounded-3xs [background:linear-gradient(135deg,_#14add5,_#384295)] h-[50px] flex flex-row items-center justify-center p-2.5 box-border text-white"
-                onClick={handleLogin}
+                onClick={()=>handleLogin(false)}
               >
                 <div className="relative leading-[24px]">Sign In</div>
               </button>
 
+              <button
+          className="w-[50%] mt-4 rounded-3xs bg-blue-600 text-white h-[50px] flex items-center justify-center p-2.5 box-border"
+          onClick={() => handleLogin(true)} // Pass true to indicate Google sign-in
+        >
+          Sign In with Google
+        </button>
             </div>
 
 

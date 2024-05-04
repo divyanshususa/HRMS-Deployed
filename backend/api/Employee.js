@@ -13,6 +13,11 @@ const upload = require('../middleware/multerMiddleware');
 const Departments = require('../Schemas/department');
 const jwtkey = process.env.JWT_KEY
 
+
+const passport = require('passport');
+
+// Google OAuth 2.0 configuration
+
 router.post('/signup', async (req, res) => {
   try {
     const {
@@ -62,13 +67,58 @@ router.post('/signup', async (req, res) => {
 });
 
 
+// router.post('/login', async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     console.log(jwtkey)
+
+//     const user = await EmployeeSchemas.findOne({ email }).populate('documents').populate('department')
+//     .populate({
+//       path: 'project',
+//       populate: {
+//           path: 'manager',
+//           model: 'employees'
+//       }
+//   });
+
+//     if (!user) {
+//       return res.status(401).json({ error: 'Invalid email or password' });
+//     }
+
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+
+//     if (!isPasswordValid) {
+//       return res.status(401).json({ error: 'Invalid email or password' });
+//     }
+
+
+//     const token = jwt.sign({ userId: user._id }, jwtkey, {
+//       expiresIn: '1h', // Token expiration time
+//     });
+
+//     res.status(200).json({ token, user });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+
+
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, useGoogleSignIn } = req.body;
 
-    console.log(jwtkey)
+    let user;
 
-    const user = await EmployeeSchemas.findOne({ email }).populate('documents').populate('department')
+    if (useGoogleSignIn) {
+      // Redirect to Google OAuth 2.0 authentication
+      return res.redirect('/auth/google');
+    } else {
+      // Handle login with email and password
+      // user = await EmployeeSchemas.findOne({ email });
+           user = await EmployeeSchemas.findOne({ email }).populate('documents').populate('department')
     .populate({
       path: 'project',
       populate: {
@@ -76,18 +126,16 @@ router.post('/login', async (req, res) => {
           model: 'employees'
       }
   });
+      if (!user) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
 
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
     }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
-
-
+console.log(user)
     const token = jwt.sign({ userId: user._id }, jwtkey, {
       expiresIn: '1h', // Token expiration time
     });
@@ -213,8 +261,11 @@ router.post('/request-form', upload.fields([
 router.post('/req-form', async(req, res)=>{
   try {
     
-    const { firstname, lastname, gender, email, mobile, image, docs, aadhar_number,pan_number,bankName,bankCode ,branchName,accountNumber} = req.body;
-// console.log("asdf",req.body)
+    const { firstname, lastname, gender, email, mobile, image, docs, aadhar_number,pan_number,
+      // ,bankName,bankCode ,branchName,accountNumber
+      accountDetails
+    } = req.body;
+console.log("asdf",req.body)
     // Create a new employee document
     const newEmployee = new EmpRequest({
         firstname,
@@ -226,10 +277,11 @@ router.post('/req-form', async(req, res)=>{
         docs,
         aadhar_number,
         pan_number,
-        bankName,
-        bankCode,
-        branchName,
-        accountNumber,
+        // bankName,
+        // bankCode,
+        // branchName,
+        // accountNumber,
+        accountDetails
     });
 
     // Save the new employee document to the database
@@ -316,7 +368,7 @@ router.post('/create-employee', async (req, res) => {
       docs
     } = req.body;
 
-    console.log(docs)
+    console.log(req.body)
     const hashedPassword = await bcrypt.hash("pass", 10);
 
     // Create a new employee using data from EmpRequestForm
@@ -329,6 +381,8 @@ router.post('/create-employee', async (req, res) => {
       createdAt: new Date().toISOString(),
       
     };
+
+    console.log(newEmployeeData)
       const checkuser= await EmployeeSchemas.findOne({ email: email });
       if(checkuser){
        return  res.status(400).send("employee already exists")

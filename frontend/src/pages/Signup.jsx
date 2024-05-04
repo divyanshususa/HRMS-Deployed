@@ -25,10 +25,13 @@ const Signup = () => {
     experience: "",
     education: "",
     docs:[],
-    bankName:'',
-    bankCode:'',
-    branchName:'',
-    accountNumber:'',
+    accountDetails:{
+      bankName:'',
+      bankCode:'',
+      branchName:'',
+      accountNumber:'',
+    }
+    
   });
 
   const handleSubmit = async (e) => {
@@ -61,10 +64,13 @@ const Signup = () => {
         image: imageURL,
         aadhar_number: Data.aadhar,
         pan_number:Data.pan,
+       accountDetails:{
         bankName:Data.bankName,
         bankCode:Data.bankCode,
         branchName:Data.branchName,
         accountNumber:Data.accountNumber,
+       }
+       
         // docs:[],
         // Add other user data fields as needed
       };
@@ -123,7 +129,7 @@ const Signup = () => {
       // Handle error
     }
   };
-  const handleChange = (e) => {
+  const   handleChange = (e) => {
     if (e.target.type === 'file') {
       setFormData({ ...Data });
       setFiles(Array.from(e.target.files));

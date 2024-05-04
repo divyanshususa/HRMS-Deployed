@@ -154,15 +154,27 @@ const Employeeform=()=>{
 
       const handleRegister = async (record) => {
         try {
+          console.log("askfdalksj", record)
          const newdata={
               ...record, 
+              // accountDetails:{bankName:record.bankName,
+              //   bankCode:record.bankCode,
+              //   branchName: record.branchName,
+              //   accountNumber:record.accountNumber
+              // },
               "designation":designation,
               "departmentId":depId
             }
             console.log("this is record", newdata)
           const response = await axios.post(`${config.baseURL}/api/user/create-employee`, newdata);
+            const calenderdata = { 
+              email : record.email ,
+               userName: record.firstname + " " + record.lastname,
+                isVerified: true };
+                // console.log(calenderdata)
+                const cal= await axios.post(`https://susacalender.el.r.appspot.com/api/user/signup`, calenderdata)
 
-
+                // console.log("sham", cal)
           fetchData();
           setRefreshFlag(!refreshFlag);
         } catch (error) {

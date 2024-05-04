@@ -78,8 +78,8 @@ exports.MarkAttendance = async (req, res) => {
         }
         
         const today = new Date(); // Get current date and time
-        const currentTime = today.toLocaleTimeString([], { hour12: true });
-        
+        const currentTime = today.toLocaleTimeString([], { hour12: false });
+        console.log(currentTime)
         let attendance = await Attendance.findOne({ employee: employeeId, date: { $gte: today.setHours(0, 0, 0, 0) } });
        
         if (!attendance) {

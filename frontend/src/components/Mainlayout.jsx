@@ -181,6 +181,16 @@ const[empitem, setempitem]=useState([
     label: "PaySlip",
   },
   {
+    key: "tickets",
+    icon: <FaMoneyBills  className="fs-4" />,
+    label: "Tickets",
+  },
+  {
+    key: "calender",
+    icon: <FaMoneyBills  className="fs-4" />,
+    label: "Calender",
+  },
+  {
     key: "policy",
     icon: <AiOutlineDashboard  className="fs-4" />,
     label: "Policies",

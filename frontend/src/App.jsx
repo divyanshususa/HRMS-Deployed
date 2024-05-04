@@ -55,6 +55,9 @@ import EmpProjects from './components/EmpProjects';
 import AllAttendance from './components/AllAttendance';
 import UploadHoliday from './components/UploadHoliday';
 import EmpProfile from './pages/EmpProfile';
+import DashboardRoute from './Globalcomponents/DashboardRoute';
+import Tickets from './components/Tickets';
+import Calender from './components/Calender';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -74,6 +77,7 @@ function App() {
           />
 
           <Route path='/forget-password' element={<ForgetPassword />} />
+          <Route path='/dashboard' element={< DashboardRoute/>} />
           <Route path='/verify-email' element={<VerifyEmail />} />
           <Route path='/reset-password' element={<ResetPassword />} />
           <Route path='/signup' element={<Signup />} />
@@ -94,6 +98,8 @@ function App() {
             <Route path='/employee/policy' element={<EmployeePolicyView />} />
             <Route path='/employee/attendance' element={<MarkAttendance />} />
             <Route path='/employee/projects' element={<EmpProjects />} />
+            <Route path='/employee/tickets' element={<Tickets />} />
+            <Route path='/employee/calender' element={<Calender />} />
           </Route>
 
           <Route
