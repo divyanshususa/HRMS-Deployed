@@ -212,9 +212,9 @@ const Login = () => {
           {/* image div  */}
           <div className="col-span-1">
             <img
-              className=" hidden w-[80%] rounded-sm   object-cover md:block "
+              className=" hidden w-[90%] rounded-sm   object-cover md:block "
               alt=""
-              src="/images/loginimg.png"
+              src="/images/hrmsbanner.webp"
             />
           </div>
         </div>

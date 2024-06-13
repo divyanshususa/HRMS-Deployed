@@ -63,45 +63,23 @@ const ApplyLeave = () => {
   }
 
   const handleStartDateChange = (date) => {
+    console.log(" this is deisred date",     date.toDate() 
+  )
     // Convert the date to a string with the desired format
     const formattedDate = date ? date.format(dateFormat) : null;
-    setStartDate(formattedDate);
+    setStartDate(date.toDate() );
     // calculateNumberOfDays(dateString, endDate);
   };
   const handleEndDateChange = (date) => {
     // Convert the date to a string with the desired format
     const formattedDate = date ? date.format(dateFormat) : null;
-    setEndDate(formattedDate);
-    calculateNumberOfDays(startDate, endDate)
+    setEndDate(date.toDate() );
+    // calculateNumberOfDays(startDate, endDate)
     // calculateNumberOfDays(startDate, dateString);
   };
   // Columns configuration for the leave history table
   const columns = [
-    // {
-    //   title: 'Leave Type',
-    //   key: 'tags',
-    //   dataIndex: 'tags',
-    //   render: tags => (
-    //     <span>
-    //       {tags.map(tag => {
-    //         let color = tag;
-    //         if (tag === 'Medical') {
-    //           color = 'volcano';
-    //         } else if (tag === 'Annual') {
-    //           color = 'green';
-    //         } else if (tag === 'Casual') {
-    //           color = 'geekblue';
-    //         }
-
-    //         return (
-    //           <Tag color={color} key={tag}>
-    //             {tag.toUpperCase()}
-    //           </Tag>
-    //         );
-    //       })}
-    //     </span>
-    //   ),
-    // },
+   
     {
       title: 'Start Date',
       dataIndex: 'startDate',

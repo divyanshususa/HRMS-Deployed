@@ -75,6 +75,13 @@ const Managerteam=()=>{
           dataIndex: "project",
           key: "project",
           render: (_, record) => (
+            <>       
+
+{record.project.map(proname => (
+                <div key={proname._id}>
+                    {proname.projectName}
+                </div>
+            ))}
             <Select
             //   defaultValue={record.firstname}
               onChange={(value) => setprojectId(value)}
@@ -87,6 +94,36 @@ const Managerteam=()=>{
                 </option>
               ))}
             </Select>
+
+            </>
+          ),
+        },
+        {
+          title: " Backup Project",
+          dataIndex: "project",
+          key: "project",
+          render: (_, record) => (
+            <>       
+
+{record.project.map(proname => (
+                <div key={proname._id}>
+                    {proname.projectName}
+                </div>
+            ))}
+            <Select
+            //   defaultValue={record.firstname}
+              onChange={(value) => setprojectId(value)}
+              style={{ width: 120 }}
+            >
+              {projectList.map((dep, index) => (
+                <option key={index} value={dep._id}>
+                  {dep.projectName}
+                 
+                </option>
+              ))}
+            </Select>
+
+            </>
           ),
         },
         // {
@@ -163,10 +200,11 @@ const Managerteam=()=>{
             console.log("this is record", newdata)
           const response = await axios.post(`${config.baseURL}/projects/assign-employee`, newdata);
           toast.success("Project is assign to the employee")
-
+              console.log(response.status)
           fetchData();
           setRefreshFlag(!refreshFlag);
         } catch (error) {
+          toast.error("Project is already assign to the employee")
           console.error('Error registering employee:', error);
         //   message.error('Failed to register employee');
         }

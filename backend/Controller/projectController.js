@@ -79,9 +79,9 @@ exports.getProjects = async (req, res) => {
       const updatedProject = await project.save();
       const updatesemp= await EmployeeSchemas.findOneAndUpdate(
         { _id: employeeId },
-        { $set: { project: projectId 
-         
-        } },
+        // { $set: { project: projectId     
+        // } },
+        { $push: { project: projectId } }, 
         { new: true }
       );
 
@@ -101,7 +101,7 @@ exports.getProjects = async (req, res) => {
     try {
         const { managerId } = req.params;
 
-        const projects = await Project.find({ manager: managerId }).populate('manager');
+        const projects = await Project.find({ manager: managerId }).populate('manager').populate('teamAssign');
 
         res.status(200).json(projects);
     } catch (error) {

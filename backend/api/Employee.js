@@ -302,15 +302,18 @@ router.post('/add-staff', upload.single('image'), async (req, res) => {
     // console.log(req)
     // console.log(image)
     const url = await uploadOnCloudinary([image]);
+    const hashedPassword = await bcrypt.hash("pass", 10);
 
     // Create a new employee object with data from the request body
     const newEmployee = new EmployeeSchemas({
       ...req.body, // Form data
       photo: url[0] ,
-      approved: true,
+      approved:true ,
+      password:hashedPassword,
       department:req.body.department
     });
 
+    console.log(newEmployee)
     // Save the new employee to the database
     const savedEmployee = await newEmployee.save();
     const updatedEmployee = await Departments.findOneAndUpdate(
@@ -531,7 +534,7 @@ router.get('/get-team/:managerId', async(req, res)=>{
     const { managerId } = req.params;
 
     // Find employees with the given reporting manager ID
-    const employees = await EmployeeSchemas.find({ reporting_manager: managerId }).populate('department');
+    const employees = await EmployeeSchemas.find({ reporting_manager: managerId }).populate('department').populate('project');
 
     if (!employees) {
       return res.status(404).json({ error: 'Employees not found for the specified manager' });

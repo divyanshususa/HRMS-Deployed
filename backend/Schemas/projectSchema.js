@@ -34,8 +34,9 @@ const projectSchema = new mongoose.Schema({
     //     required: false
     // },
     teamAssign: {
-        type: [mongoose.Schema.Types.ObjectId], // Changed to array of ObjectIds
-        required: false
+        type: [mongoose.Schema.Types.ObjectId],
+        ref:'employees' // Changed to array of ObjectIds
+        
     },
     manager: {
         type: mongoose.Schema.Types.ObjectId, // Assuming manager is referenced by their ID
@@ -44,7 +45,7 @@ const projectSchema = new mongoose.Schema({
     }
 },{
     timestamps: true,
-});
+}); 
 
 const Project = mongoose.model('Project', projectSchema);
 
