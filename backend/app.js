@@ -36,13 +36,15 @@ const policyRoute= require('./Routes/policyRoute')
 const projectRoute= require('./Routes/projectRoute')
 const GoogleAuthRoute= require('./api/auth')
 const path = require('path')
-
+const Employee = require("./api/Employee");
 const FRONTEND = process.env.FRONTEND_URL || 'http://localhost:5173'
 // app.use(cors()); // to follow cors policy
-app.use(cors({
-  origin: `${FRONTEND}`,
-  credentials: true // Allow credentials (cookies, authorization headers) to be sent
-}));
+app.use(
+  cors({
+    origin: [`${FRONTEND}`, "http://localhost:5174","*"],
+    credentials: true,
+  })
+);
 app.use(xss()); // safety against XSS attack or Cross Site Scripting attacks
 app.use(helmet()); // safety against XSS attack
 app.use(express.json({ extended: false }));
@@ -111,6 +113,7 @@ app.use("/payslips", paySlipRoutes);
 app.use("/paymenthistory", paymentRoutes);
 app.use('/api/leave',leaveRoutes );
 app.use('/department', departmentRoute)
+app.use("/getuser", Employee);
 app.get("/", (req, res) => {
   // console.log("hello");
   res.json("working");

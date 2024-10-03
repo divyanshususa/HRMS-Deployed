@@ -15,6 +15,7 @@ const jwtkey = process.env.JWT_KEY
 
 
 const passport = require('passport');
+const employee = require('../Schemas/employee');
 
 // Google OAuth 2.0 configuration
 
@@ -146,6 +147,16 @@ console.log(user)
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+router.get("/", async (req, res) => {
+  try {
+    let user = await employee.find({});
+    res.json(user)
+  } catch (err) {
+    res.send(500).json(`msg: ${err}`)
+  }
+})
 
 
 router.post('/forget-password', async (req, res) => {
