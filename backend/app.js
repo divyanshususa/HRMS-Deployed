@@ -41,7 +41,7 @@ const FRONTEND = process.env.FRONTEND_URL || 'http://localhost:5173'
 // app.use(cors()); // to follow cors policy
 app.use(
   cors({
-    origin: ["*"],
+    origin: ["https://hrms-d8480.web.app"],
     credentials: true,
   })
 );
