@@ -41,7 +41,7 @@ const FRONTEND = process.env.FRONTEND_URL || 'http://localhost:5173'
 // app.use(cors()); // to follow cors policy
 app.use(
   cors({
-    origin: [`${FRONTEND}`, "http://localhost:5174","*"],
+    origin: ["*"],
     credentials: true,
   })
 );
