@@ -33,7 +33,8 @@ const departmentRoute = require("./Routes/deparmentRoute")
 const CsvUploadRoute= require("./Routes/uploadCsvRoute")
 const attendanceRoute= require('./Routes/attendanceRoute')
 const policyRoute= require('./Routes/policyRoute')
-const projectRoute= require('./Routes/projectRoute')
+const projectRoute = require('./Routes/projectRoute')
+const taxOverviewRoutes = require('./Routes/taxOverviewRoutes')
 const GoogleAuthRoute= require('./api/auth')
 const path = require('path')
 const Employee = require("./api/Employee");
@@ -41,7 +42,7 @@ const FRONTEND = process.env.FRONTEND_URL || 'http://localhost:5173'
 // app.use(cors()); // to follow cors policy
 app.use(
   cors({
-    origin: [`${FRONTEND}`, "http://localhost:5174","*"],
+    origin: ["http://localhost:5173"],
     credentials: true,
   })
 );
@@ -83,7 +84,7 @@ try {
 app.use("/dashboardcards", DashboardCardsRoute);
 
 app.use("/dashboardmemos", dashboardMemoRoutes);
-
+console.log("port", port);
 app.use("/dashboardstaf", dashboardStaffRoutes);
 
 app.use("/staff", staffRoutes);
@@ -114,6 +115,7 @@ app.use("/paymenthistory", paymentRoutes);
 app.use('/api/leave',leaveRoutes );
 app.use('/department', departmentRoute)
 app.use("/getuser", Employee);
+app.use("/api/taxoverview", taxOverviewRoutes);
 app.get("/", (req, res) => {
   // console.log("hello");
   res.json("working");

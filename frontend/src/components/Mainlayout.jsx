@@ -34,117 +34,119 @@ const MainLayout = () => {
   }, [])
 
   console.log("this is ", currUser)
-  const [adminitem, setadminitem] = useState(
-    [
-      {
-        key: "",
-        icon: <AiOutlineDashboard className="fs-4" />,
-        label: "Dashboard",
-      },
-      {
-        key: "staff",
-        icon: <AiOutlineUser className="fs-4" />,
-        label: "Staff",
-      },
-      {
-        key: "attendance",
-        icon: <RiPresentationFill className="fs-4" />,
-        label: "Attendance",
-      },
-      {
-        key: "employee-forms",
-        icon: <AiOutlineUser className="fs-4" />,
-        label: "Employee Form",
-      },
-      {
-        key: "leaves-status",
-        icon: <RiCouponLine className="fs-4" />,
-        label: "Leaves status",
-      },
-      {
-        key: "departments",
-        icon: <FcDepartment className="fs-4" />,
-        label: "Departments",
-      },
-      {
-        key: "projects",
-        icon: <RiCouponLine className="fs-4" />,
-        label: "Projects",
+  const [adminitem, setadminitem] = useState([
+    {
+      key: "",
+      icon: <AiOutlineDashboard className="fs-4" />,
+      label: "Dashboard",
+    },
+    {
+      key: "staff",
+      icon: <AiOutlineUser className="fs-4" />,
+      label: "Staff",
+    },
+    {
+      key: "attendance",
+      icon: <RiPresentationFill className="fs-4" />,
+      label: "Attendance",
+    },
+    {
+      key: "employee-forms",
+      icon: <AiOutlineUser className="fs-4" />,
+      label: "Employee Form",
+    },
+    {
+      key: "leaves-status",
+      icon: <RiCouponLine className="fs-4" />,
+      label: "Leaves status",
+    },
+    {
+      key: "departments",
+      icon: <FcDepartment className="fs-4" />,
+      label: "Departments",
+    },
+    {
+      key: "projects",
+      icon: <RiCouponLine className="fs-4" />,
+      label: "Projects",
+    },
+    {
+      key: "upload-holiday",
+      icon: <RiCouponLine className="fs-4" />,
+      label: "Upload Holidays",
+    },
 
-      },
-      {
-        key: "upload-holiday",
-        icon: <RiCouponLine className="fs-4" />,
-        label: "Upload Holidays",
+    {
+      key: "payroll",
+      icon: <FaMoneyBills className="fs-4" />,
+      label: "Payroll",
+    },
+    {
+      key: "memo",
+      icon: <RiCouponLine className="fs-4" />,
+      label: "Memo",
+    },
+    {
+      key: "circular",
+      icon: <FaBloggerB className="fs-4" />,
+      label: "Circulars",
+    },
+    {
+      key: "Form16",
+      icon: <AiOutlineDashboard className="fs-4" />,
+      label: "TaxOverview",
+    },
+    {
+      key: "uploadTaxOverview",
+      icon: <AiOutlineDashboard className="fs-4" />,
+      label: "uploadTaxOverview",
+    },
 
-      },
+    {
+      key: "logistics",
+      icon: <BsPersonVcard className="fs-4" />,
+      label: "Logistics",
+    },
+    {
+      key: "budget",
+      icon: <GrMoney className="fs-4" />,
+      label: "Office Budget",
+    },
+    {
+      key: "stockandinventory",
+      icon: <MdOutlineInventory className="fs-4" />,
+      label: "Stocks and Inventory",
+      children: [
+        {
+          key: "stock",
+          icon: <FaClipboardList className="fs-4" />,
+          label: "Stocks",
+        },
+        // {
+        //   key: "inventory",
+        //   icon: <MdOutlineInventory   className="fs-4" />,
+        //   label: "Inventory",
 
-      {
-        key: "payroll",
-        icon: <FaMoneyBills className="fs-4" />,
-        label: "Payroll",
-      },
-      {
-        key: "memo",
-        icon: <RiCouponLine className="fs-4" />,
-        label: "Memo",
+        // }
+      ],
+    },
 
-      },
-      {
-        key: "circular",
-        icon: <FaBloggerB className="fs-4" />,
-        label: "Circulars",
-
-      },
-
-
-      {
-        key: "logistics",
-        icon: <BsPersonVcard className="fs-4" />,
-        label: "Logistics",
-      },
-      {
-        key: "budget",
-        icon: <GrMoney className="fs-4" />,
-        label: "Office Budget",
-      },
-      {
-        key: "stockandinventory",
-        icon: <MdOutlineInventory className="fs-4" />,
-        label: "Stocks and Inventory",
-        children: [
-          {
-            key: "stock",
-            icon: <FaClipboardList className="fs-4" />,
-            label: "Stocks",
-
-          },
-          // {
-          //   key: "inventory",
-          //   icon: <MdOutlineInventory   className="fs-4" />,
-          //   label: "Inventory",
-
-          // }
-        ]
-      },
-
-      // {
-      //   key: "capacity",
-      //   icon: <MdOutlineReduceCapacity className="fs-4" />,
-      //   label: "Capacity Building",
-      // },
-      {
-        key: "procurement",
-        icon: <FaClipboardList className="fs-4" />,
-        label: "Procurements",
-      },
-      {
-        key: "signout",
-        icon: <AiOutlineLogout className="fs-4" />,
-        label: "Sign Out",
-      },
-    ]
-  )
+    // {
+    //   key: "capacity",
+    //   icon: <MdOutlineReduceCapacity className="fs-4" />,
+    //   label: "Capacity Building",
+    // },
+    {
+      key: "procurement",
+      icon: <FaClipboardList className="fs-4" />,
+      label: "Procurements",
+    },
+    {
+      key: "signout",
+      icon: <AiOutlineLogout className="fs-4" />,
+      label: "Sign Out",
+    },
+  ]);
 
 
   const [empitem, setempitem] = useState([
@@ -195,15 +197,14 @@ const MainLayout = () => {
       icon: <AiOutlineDashboard className="fs-4" />,
       label: "Policies",
     },
+   
 
     {
       key: "signout",
       icon: <AiOutlineLogout className="fs-4" />,
       label: "Sign Out",
     },
-
-
-  ])
+  ]);
 
   const [Hritem, setHRitem] = useState([
     // {
@@ -247,7 +248,6 @@ const MainLayout = () => {
 
 
   const [Manageritem, setManageritem] = useState([
-
     {
       key: "",
       icon: <AiOutlineUser className="fs-4" />,
@@ -290,12 +290,17 @@ const MainLayout = () => {
       label: "Policy",
     },
     {
+      key: "Form16",
+      icon: <AiOutlineDashboard className="fs-4" />,
+      label: "Form16",
+    },
+
+    {
       key: "signout",
       icon: <AiOutlineLogout className="fs-4" />,
       label: "Sign Out",
     },
-
-  ])
+  ]);
   return (
     <div>
       <Layout  >

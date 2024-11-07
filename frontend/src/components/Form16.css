@@ -1,0 +1,97 @@
+/* Basic reset for margins and paddings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5; /* Light background for better visibility in the app */
+}
+
+/* Main container for Form 16 */
+.form16-container {
+  width: 210mm; /* A4 width */
+  min-height: 297mm; /* A4 height */
+  padding: 20mm;
+  margin: auto;
+  background-color: #ffffff; /* White background for the form */
+  border: 1px solid #000; /* Solid border for the form */
+  border-radius: 5px; /* Slightly rounded corners */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow for a 3D effect */
+}
+
+/* Header styling */
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333; /* Dark text color for headers */
+}
+
+h2 {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* Form group styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Label styling */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold; /* Bold text for labels */
+}
+
+/* Input styling */
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+  width: calc(100% - 10px); /* Full width minus padding */
+  padding: 5px;
+  border: 1px solid #ccc; /* Light border for inputs */
+  border-radius: 4px; /* Slightly rounded corners for inputs */
+  font-size: 14px; /* Font size for inputs */
+  color: #333; /* Dark text color for inputs */
+}
+
+/* Input focus effect */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #007bff; /* Blue border on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Textarea styling */
+textarea {
+  height: 60px; /* Fixed height for textarea */
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  margin-right: 10px; /* Space between checkbox and label */
+}
+
+/* Button styling */
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #ffffff; /* White text color for button */
+  background-color: #007bff; /* Blue background for button */
+  border: none;
+  border-radius: 4px; /* Rounded corners for button */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
